@@ -1,0 +1,996 @@
+<?xml version='1.0' encoding='utf-8'?>
+<repository increment='1349546780827' name='Local' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.amdatu.web.rest.wink'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='58268436a61b3138258a063fc94a6e41b3158a676623d95c996d78b45552a91e'/>
+      <attribute name='url' value='org.amdatu.web.rest.wink/org.amdatu.web.rest.wink-1.0.0.jar'/>
+      <attribute name='size' type='Long' value='750442'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.amdatu.web.rest.wink'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.amdatu.web.rest.wink'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.activation)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet.http)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=javax.ws.rs)(version&gt;=1.1.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=javax.ws.rs.core)(version&gt;=1.1.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=javax.ws.rs.ext)(version&gt;=1.1.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.bind)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.bind.annotation)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.bind.attachment)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.datatype)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.namespace)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.parsers)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.stream)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform.dom)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform.sax)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform.stream)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.amdatu.web.rest.jaxrs)(version&gt;=1.0.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.cm)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.log)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.w3c.dom)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.xml.sax)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.xml.sax.ext)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.xml.sax.helpers)'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='jackson-core-asl'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='901f5efb04ad0bd95e7190c8ab04370731133ccb5414130be4ce24e2d355782f'/>
+      <attribute name='url' value='jackson-core-asl/jackson-core-asl-1.9.0.jar'/>
+      <attribute name='size' type='Long' value='228286'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.format'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.io'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.util,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.sym'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.util'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.util'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.impl,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.annotate'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.impl'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.format,org.codehaus.jackson.io,org.codehaus.jackson.sym,org.codehaus.jackson.util,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.format,org.codehaus.jackson.sym,org.codehaus.jackson.annotate,org.codehaus.jackson.impl,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.util'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.type'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-core-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.annotate)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.format)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.impl)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.io)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.sym)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.type)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.util)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.ee'>
+      <directive name='filter' value='(|(osgi.ee=J2SE-1.5)(osgi.ee=JavaSE-1.6))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.apache.felix.dependencymanager'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='3.0.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='f74009d73d7ea48ecbdbaf94919a5d38903220e1e9a678a406de007f8472cf5c'/>
+      <attribute name='url' value='org.apache.felix.dependencymanager/org.apache.felix.dependencymanager-3.0.0.jar'/>
+      <attribute name='size' type='Long' value='161274'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.apache.felix.dependencymanager'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.apache.felix.dependencymanager'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.felix.dm'/>
+      <attribute name='version' type='Version' value='3.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.apache.felix.dependencymanager'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+      <directive name='uses' value='org.osgi.framework'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.felix.dm.tracker'/>
+      <attribute name='version' type='Version' value='3.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.apache.felix.dependencymanager'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+      <directive name='uses' value='org.osgi.framework,org.apache.felix.dm'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm.tracker)(version&gt;=3.0.0)(!(version&gt;=3.1.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.cm)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.metatype)(version&gt;=1.1.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='jackson-mapper-asl'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='88e16cd034f7ee3d428290e90e0753295a94717663e718b0dad69ae4d8099dd5'/>
+      <attribute name='url' value='jackson-mapper-asl/jackson-mapper-asl-1.9.0.jar'/>
+      <attribute name='size' type='Long' value='764075'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.schema'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.annotate,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.deser.impl'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.map.deser,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.util,org.codehaus.jackson.map.deser.std,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.exc'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.annotate'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map,org.codehaus.jackson.annotate'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser.impl'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.map.ser.std,org.codehaus.jackson,org.codehaus.jackson.map.ser,org.codehaus.jackson.type'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser.std'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.ser.impl,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.map.ser'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.type'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.type'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.module'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map.deser,org.codehaus.jackson.map,org.codehaus.jackson.map.type,org.codehaus.jackson,org.codehaus.jackson.type'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.node'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.impl,org.codehaus.jackson'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.format,org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.map.ser,org.codehaus.jackson.map.jsontype.impl'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.deser'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map.exc,org.codehaus.jackson.map.deser.impl,org.codehaus.jackson.map.annotate,org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.map.deser.std'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.introspect'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.ser.std,org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.map,org.codehaus.jackson.map.jsontype,org.codehaus.jackson.map.util,org.codehaus.jackson.map.jsontype.impl'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.jsontype'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map,org.codehaus.jackson.annotate,org.codehaus.jackson.map.introspect,org.codehaus.jackson.type'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.util'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.map.type,org.codehaus.jackson.map.introspect,org.codehaus.jackson,org.codehaus.jackson.type'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.deser.std'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.map.deser.impl,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson,org.codehaus.jackson.map.util'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.jsontype.impl'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson,org.codehaus.jackson.map.util'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.ser.impl,org.codehaus.jackson.map.ser.std,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.node,org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson.map.util,org.codehaus.jackson'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.datatype)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.namespace)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.parsers)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.annotate)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.format)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.impl)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.io)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.type)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.util)(version&gt;=1.9.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.w3c.dom)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.xml.sax)'/>
+    </requirement>
+    <requirement namespace='osgi.ee'>
+      <directive name='filter' value='(|(osgi.ee=J2SE-1.5)(osgi.ee=JavaSE-1.6))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.amdatu.core.config.filebased'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='12e91ac9fcde507e09434500d3896f2231792f4b5fee9c75a8667ce9a47a39c6'/>
+      <attribute name='url' value='org.amdatu.core.config.filebased/org.amdatu.core.config.filebased-0.2.1.jar'/>
+      <attribute name='size' type='Long' value='14669'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.amdatu.core.config.filebased'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.amdatu.core.config.filebased'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.amdatu.core.config.filebased.service'/>
+      <attribute name='version' type='Version' value='0.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.core.config.filebased'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+      <directive name='uses' value='org.osgi.service.log,org.osgi.framework,org.osgi.service.cm'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.amdatu.core.config.filebased.osgi'/>
+      <attribute name='version' type='Version' value='0.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.core.config.filebased'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+      <directive name='uses' value='org.osgi.service.log,org.amdatu.core.config.filebased.service,org.apache.felix.dm,org.osgi.framework,org.osgi.service.cm'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.amdatu.core.config.filebased.osgi)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.amdatu.core.config.filebased.service)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm)(version&gt;=3.0.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.cm)(version&gt;=1.3.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.log)(version&gt;=1.3.0))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.amdatu.core.fileinstall.metatype'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='0.3.0.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='47c89ad4f1eaacc0386e203842faa4a21b95c1319cc0f4bba972c1347bfbe06c'/>
+      <attribute name='url' value='org.amdatu.core.fileinstall.metatype/org.amdatu.core.fileinstall.metatype-0.3.0.jar'/>
+      <attribute name='size' type='Long' value='22198'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.amdatu.core.fileinstall.metatype'/>
+      <attribute name='bundle-version' type='Version' value='0.3.0.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.amdatu.core.fileinstall.metatype'/>
+      <attribute name='bundle-version' type='Version' value='0.3.0.SNAPSHOT'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.fileinstall)(version&gt;=3.1.0)(!(version&gt;=4.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.metatype)(version&gt;=1.0.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.cm)(version&gt;=1.2.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.log)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.metatype)(version&gt;=1.1.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.util.tracker)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.apache.felix.http.whiteboard'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='2.2.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='1d185bafd62e3d50a6d46af5f870f06ee9a978489b34f81721a6ae7149cefae9'/>
+      <attribute name='url' value='org.apache.felix.http.whiteboard/org.apache.felix.http.whiteboard-2.2.0.jar'/>
+      <attribute name='size' type='Long' value='75163'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.apache.felix.http.whiteboard'/>
+      <attribute name='bundle-version' type='Version' value='2.2.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.apache.felix.http.whiteboard'/>
+      <attribute name='bundle-version' type='Version' value='2.2.0'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet.http)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.http.api)(version&gt;=2.0.0))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.3.0))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.http)(version&gt;=1.2.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.log)(version&gt;=1.3.0))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.util.tracker)(version&gt;=1.3.0))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='822a73afcee4445ae1fa59d758676c8e4a4f3a1c861e8ba46746ded354c77774'/>
+      <attribute name='url' value='org.amdatu.web.rest.jaxrs/org.amdatu.web.rest.jaxrs-1.0.0.jar'/>
+      <attribute name='size' type='Long' value='52877'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.ws.rs'/>
+      <attribute name='version' type='Version' value='1.1.1'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+      <directive name='uses' value='javax.ws.rs.core'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.ws.rs.ext'/>
+      <attribute name='version' type='Version' value='1.1.1'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+      <directive name='uses' value='javax.ws.rs.core,javax.ws.rs'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.ws.rs.core'/>
+      <attribute name='version' type='Version' value='1.1.1'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+      <directive name='uses' value='javax.ws.rs.ext,javax.ws.rs'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.annotation.security'/>
+      <attribute name='version' type='Version' value='1.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='version' type='Version' value='1.0.0'/>
+      <attribute name='bundle-symbolic-name' value='org.amdatu.web.rest.jaxrs'/>
+      <attribute name='bundle-version' type='Version' value='1.0.0'/>
+    </capability>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.apache.felix.dependencymanager.shell'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='3.0.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='e18acc92939c4a054ad14ff32e43aa6af6190ae30285c7c28d44b494b4a65b7b'/>
+      <attribute name='url' value='org.apache.felix.dependencymanager.shell/org.apache.felix.dependencymanager.shell-3.0.0.jar'/>
+      <attribute name='size' type='Long' value='17230'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.apache.felix.dependencymanager.shell'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.apache.felix.dependencymanager.shell'/>
+      <attribute name='bundle-version' type='Version' value='3.0.0'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm)(version&gt;=3.0.0)(!(version&gt;=4.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.service.command)(version&gt;=0.6.0)(!(version&gt;=1.0.0)))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.shell)(version&gt;=1.0.0)(!(version&gt;=2.0.0)))'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.eclipse.osgi.framework.console)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='59f758a999bca5e3fe98313a5d97d1f522df9547964f8a5db19eca60eb4345e4'/>
+      <attribute name='url' value='com.springsource.org.apache.commons.codec/com.springsource.org.apache.commons.codec-1.3.0.jar'/>
+      <attribute name='size' type='Long' value='47583'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.codec'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+      <attribute name='bundle-symbolic-name' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.codec.binary'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+      <attribute name='bundle-symbolic-name' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+      <directive name='uses' value='org.apache.commons.codec'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.codec.digest'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+      <attribute name='bundle-symbolic-name' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.codec.language'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+      <attribute name='bundle-symbolic-name' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+      <directive name='uses' value='org.apache.commons.codec'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.codec.net'/>
+      <attribute name='version' type='Version' value='1.3.0'/>
+      <attribute name='bundle-symbolic-name' value='com.springsource.org.apache.commons.codec'/>
+      <attribute name='bundle-version' type='Version' value='1.3.0'/>
+      <directive name='uses' value='org.apache.commons.codec'/>
+    </capability>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='172091d4f71d817a75627f4b04f2fb6359390068839b7ab4cbf62369ab82fe1e'/>
+      <attribute name='url' value='nl.limesco.cserv.lib.quartz.wrappedlibrary/nl.limesco.cserv.lib.quartz.wrappedlibrary-2.1.6.jar'/>
+      <attribute name='size' type='Long' value='593271'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.impl.matchers,org.quartz.utils,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.core'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.management.openmbean,org.quartz.impl,javax.management,org.quartz.impl.matchers,org.quartz.core.jmx,org.quartz,org.quartz.spi,org.quartz.listeners'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.core.jmx'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.management.openmbean,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.ee.jta'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.transaction,org.quartz.core,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.ee.servlet'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.impl,org.quartz,javax.servlet,javax.servlet.http'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.helpers'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.impl'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.management,org.quartz.impl.matchers,org.quartz.core,org.quartz,org.quartz.spi,org.quartz.listeners'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.impl.calendar'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.impl.jdbcjobstore'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.impl.matchers,javax.transaction,org.quartz.utils,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.impl.matchers'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.utils,org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.impl.triggers'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.jobs'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.jobs.ee.ejb'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.jobs.ee.jms'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.naming,org.quartz,javax.jms'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.jobs.ee.jmx'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.jobs.ee.mail'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.mail.internet,javax.mail,org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.listeners'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.plugins'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='javax.transaction,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.plugins.history'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.plugins.management'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.plugins.xml'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.jobs,javax.transaction,org.quartz.plugins,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.simpl'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.impl.matchers,org.quartz,org.quartz.spi'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.spi'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.impl.matchers,org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.utils'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='com.mchange.v2.c3p0,org.quartz'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.utils.counter'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.utils.counter.sampled'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.quartz.utils,org.quartz.utils.counter'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.quartz.xml'/>
+      <attribute name='version' type='Version' value='2.1.6'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='2.1.6'/>
+      <directive name='uses' value='org.xml.sax,javax.xml.xpath,javax.xml.parsers,org.quartz,org.quartz.spi,org.w3c.dom'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=com.mchange.v2.c3p0)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.ejb)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.mail)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.mail.internet)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.jms)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.rmi)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.naming)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.management)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.management.openmbean)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.servlet.http)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.sql)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.transaction)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.bind)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.namespace)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.parsers)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.xpath)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.service.log)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.w3c.dom)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=org.xml.sax)'/>
+    </requirement>
+  </resource>
+</repository>
