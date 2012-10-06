@@ -1,0 +1,3 @@
+Private-Package: nl.limesco.cserv.lib.quartz.scheduler
+Bundle-Activator: nl.limesco.cserv.lib.quartz.scheduler.Activator
+Bundle-Version: 1.0.0

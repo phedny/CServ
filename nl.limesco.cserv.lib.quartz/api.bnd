@@ -1,0 +1,5 @@
+Export-Package: nl.limesco.cserv.lib.quartz.annotations,\
+	nl.limesco.cserv.lib.quartz.annotations.cron,\
+	nl.limesco.cserv.lib.quartz.annotations.dailytimeinterval,\
+	nl.limesco.cserv.lib.quartz.annotations.simple
+Bundle-Version: 1.0.0

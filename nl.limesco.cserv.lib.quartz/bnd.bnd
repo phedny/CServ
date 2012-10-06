@@ -1,0 +1,15 @@
+-buildpath: lib/quartz-2.1.6.jar;version=file,\
+	lib/slf4j-api-1.5.6.jar;version=file,\
+	lib/slf4j-osgi-1.0.jar;version=file,\
+	osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager
+Import-Package: com.mchange.v2.c3p0;resolution:=optional,\
+	javax.ejb;resolution:=optional,\
+	javax.mail;resolution:=optional,\
+	javax.mail.internet;resolution:=optional,\
+	javax.jms;resolution:=optional,\
+	javax.rmi;resolution:=optional,\
+	javax.naming;resolution:=optional,\
+	*
+-sub: *.bnd
