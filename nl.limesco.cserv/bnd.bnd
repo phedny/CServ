@@ -10,33 +10,35 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.ideal.rest)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.http.jetty)',\
 	osgi.identity;filter:='(osgi.identity=org.amdatu.web.rest.wink)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.felix.http.whiteboard)'
+	osgi.identity;filter:='(osgi.identity=org.apache.felix.http.whiteboard)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.account.rest)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.6
--runbundles: jackson-mapper-asl;version='[1.9.0,1.9.1)',\
-	org.apache.felix.gogo.shell;version='[0.10.0,0.10.1)',\
-	com.google.guava;version='[12.0.1,12.0.2)',\
+-runbundles: org.apache.felix.metatype;version='[1.0.4,1.0.5)',\
+	nl.limesco.cserv.ideal.targetpay;version=latest,\
 	org.apache.felix.dependencymanager;version='[3.0.0,3.0.1)',\
 	nl.limesco.cserv.lib.quartz.api;version=latest,\
-	nl.limesco.cserv.ideal.targetpay;version=latest,\
-	org.apache.felix.gogo.runtime;version='[0.10.0,0.10.1)',\
-	org.apache.felix.http.whiteboard;version='[2.2.0,2.2.1)',\
-	org.apache.felix.gogo.command;version='[0.12.0,0.12.1)',\
-	nl.limesco.cserv.ideal.rest;version=latest,\
-	org.apache.felix.http.jetty;version='[2.2.0,2.2.1)',\
-	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
-	org.amdatu.web.rest.jaxrs;version='[1.0.0,1.0.1)',\
-	org.amdatu.web.rest.wink;version='[1.0.0,1.0.1)',\
-	org.apache.felix.configadmin;version='[1.4.0,1.4.1)',\
-	org.apache.felix.metatype;version='[1.0.4,1.0.5)',\
-	org.apache.felix.fileinstall;version='[3.2.4,3.2.5)',\
-	org.apache.felix.log;version='[1.0.1,1.0.2)',\
-	nl.limesco.cserv.ideal.api;version=latest,\
-	javax.servlet;version='[2.5.0,2.5.1)',\
-	org.apache.felix.dependencymanager.shell;version='[3.0.0,3.0.1)',\
-	nl.limesco.cserv.lib.quartz.wrappedlibrary;version=latest,\
+	org.apache.felix.gogo.shell;version='[0.10.0,0.10.1)',\
+	com.google.guava;version='[12.0.1,12.0.2)',\
 	org.amdatu.core.fileinstall.metatype;version='[0.3.0,0.3.1)',\
-	jackson-core-asl;version='[1.9.0,1.9.1)'
+	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
+	javax.servlet;version='[2.5.0,2.5.1)',\
+	org.apache.felix.fileinstall;version='[3.2.4,3.2.5)',\
+	org.amdatu.web.rest.jaxrs;version='[1.0.0,1.0.1)',\
+	jackson-core-asl;version='[1.9.0,1.9.1)',\
+	org.apache.felix.http.whiteboard;version='[2.2.0,2.2.1)',\
+	org.apache.felix.configadmin;version='[1.4.0,1.4.1)',\
+	org.amdatu.web.rest.wink;version='[1.0.0,1.0.1)',\
+	nl.limesco.cserv.ideal.api;version=latest,\
+	org.apache.felix.gogo.runtime;version='[0.10.0,0.10.1)',\
+	nl.limesco.cserv.ideal.rest;version=latest,\
+	nl.limesco.cserv.lib.quartz.wrappedlibrary;version=latest,\
+	org.apache.felix.dependencymanager.shell;version='[3.0.0,3.0.1)',\
+	org.apache.felix.http.jetty;version='[2.2.0,2.2.1)',\
+	nl.limesco.cserv.account.rest;version=latest,\
+	org.apache.felix.gogo.command;version='[0.12.0,0.12.1)',\
+	jackson-mapper-asl;version='[1.9.0,1.9.1)',\
+	org.apache.felix.log;version='[1.0.1,1.0.2)'
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\

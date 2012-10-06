@@ -1,0 +1,5 @@
+-sub: *.bnd
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager,\
+	org.amdatu.web.rest.jaxrs
