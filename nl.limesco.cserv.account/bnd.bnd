@@ -2,4 +2,10 @@
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\
-	org.amdatu.web.rest.jaxrs
+	org.amdatu.web.rest.jaxrs,\
+	com.mongodb,\
+	org.amdatu.mongo,\
+	net.vz.mongodb.jackson.mongo-jackson-mapper,\
+	jackson-core-asl,\
+	jackson-mapper-asl,\
+	com.google.guava

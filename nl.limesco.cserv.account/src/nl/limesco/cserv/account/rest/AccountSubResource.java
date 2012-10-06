@@ -5,19 +5,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-public class Account {
+import nl.limesco.cserv.account.api.Account;
+
+public class AccountSubResource {
 	
-	private final int id;
+	private final Account account;
 	
-	public Account(int id) {
-		this.id = id;
+	public AccountSubResource(Account account) {
+		this.account = account;
 	}
 
 	@GET
 	@Path("invoices")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getInvoices() {
-		return Integer.toString(id);
+		return account.getId();
 	}
 	
 }
