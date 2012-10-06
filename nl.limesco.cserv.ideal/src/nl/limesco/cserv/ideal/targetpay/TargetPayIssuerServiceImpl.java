@@ -59,7 +59,7 @@ public class TargetPayIssuerServiceImpl implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
-			updateIssuerList();
+			updateIssuerList(ISSUER_LIST_URL);
 		} catch (ParserConfigurationException e) {
 			throw new JobExecutionException(e);
 		} catch (SAXException e) {
@@ -71,10 +71,10 @@ public class TargetPayIssuerServiceImpl implements Job {
 		}
 	}
 
-	private synchronized void updateIssuerList() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+	private synchronized void updateIssuerList(String issuerListUrl) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-		final Document issuerDocument = documentBuilder.parse(ISSUER_LIST_URL);
+		final Document issuerDocument = documentBuilder.parse(issuerListUrl);
 		final NodeList issuerNodes = (NodeList) ISSUER_XPATH_EXPR.evaluate(issuerDocument, XPathConstants.NODESET);
 		
 		final Set<String> issuerIds = new HashSet<String>();
