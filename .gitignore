@@ -3,6 +3,7 @@
 */generated/
 
 .metadata/
+**/.settings
 
 cnf/cache
 
