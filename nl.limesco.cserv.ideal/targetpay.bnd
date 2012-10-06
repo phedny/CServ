@@ -1,0 +1,2 @@
+Private-Package: nl.limesco.cserv.ideal.targetpay
+Bundle-Activator: nl.limesco.cserv.ideal.targetpay.Activator
