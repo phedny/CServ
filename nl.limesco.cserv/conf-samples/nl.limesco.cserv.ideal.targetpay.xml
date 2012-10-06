@@ -1,0 +1,12 @@
+<MetaData xmlns:metatype='http://www.osgi.org/xmlns/metatype/v1.0.0'> 
+  <OCD name='ocd' id='ocd'>
+    <AD id='layout_code' type='STRING' cardinality='0' />
+  </OCD>
+  <Designate pid='nl.limesco.cserv.ideal.targetpay' bundle="osgi-dp:nl.limesco.cserv.ideal.targetpay">
+    <Object ocdref='ocd'>
+      <Attribute adref='layout_code'>
+        <Value><![CDATA[]]></Value>
+      </Attribute>
+    </Object>
+  </Designate>
+</MetaData>
