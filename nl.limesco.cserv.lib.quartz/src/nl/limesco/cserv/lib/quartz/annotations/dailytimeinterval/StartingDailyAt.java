@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2012 Lopexs.
- * All rights reserved.
- ******************************************************************************/
 package nl.limesco.cserv.lib.quartz.annotations.dailytimeinterval;
 
 import java.lang.annotation.ElementType;

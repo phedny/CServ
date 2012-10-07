@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2012 Lopexs.
- * All rights reserved.
- ******************************************************************************/
 package nl.limesco.cserv.lib.quartz.wrappedlibrary.osgi;
 
 import org.osgi.framework.BundleActivator;
