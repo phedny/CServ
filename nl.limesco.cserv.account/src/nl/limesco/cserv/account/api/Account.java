@@ -12,9 +12,9 @@ public interface Account {
 
 	public void setCompanyName(String companyName);
 
-	public String getFullName();
+	public Name getFullName();
 
-	public void setFullName(String fullName);
+	public void setFullName(Name fullName);
 
 	public Address getAddress();
 

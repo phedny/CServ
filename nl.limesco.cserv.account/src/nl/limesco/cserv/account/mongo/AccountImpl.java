@@ -3,6 +3,7 @@ package nl.limesco.cserv.account.mongo;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.Address;
+import nl.limesco.cserv.account.api.Name;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -14,7 +15,7 @@ public class AccountImpl implements Account {
 	
 	private String companyName;
 	
-	private String fullName;
+	private Name fullName;
 	
 	private Address address;
 
@@ -44,11 +45,11 @@ public class AccountImpl implements Account {
 		this.companyName = companyName;
 	}
 
-	public String getFullName() {
+	public Name getFullName() {
 		return fullName;
 	}
 
-	public void setFullName(String fullName) {
+	public void setFullName(Name fullName) {
 		this.fullName = fullName;
 	}
 
