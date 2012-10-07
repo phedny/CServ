@@ -1,11 +1,7 @@
 package nl.limesco.cserv.ideal.targetpay;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -29,6 +25,8 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 	private final URL IDEAL_START_URL;
 	
 	private final URL IDEAL_CHECK_URL;
+	
+	private final IdealHttpTool idealHttpTool;
 
 	private volatile LogService logService;
 	
@@ -37,6 +35,13 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 	public IdealServiceImpl() throws MalformedURLException {
 		IDEAL_START_URL = new URL("https://www.targetpay.com/ideal/start");
 		IDEAL_CHECK_URL = new URL("https://www.targetpay.com/ideal/check");
+		idealHttpTool = new IdealHttpToolImpl();
+	}
+	
+	public IdealServiceImpl(URL startUrl, URL checkUrl, IdealHttpTool httpTool) {
+		IDEAL_START_URL = startUrl;
+		IDEAL_CHECK_URL = checkUrl;
+		idealHttpTool = httpTool;
 	}
 
 	@Override
@@ -44,12 +49,7 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 		final String parameters = buildCreateParameters(issuer, currency, amount, description, returnUrl);
 
 		try {
-			final HttpURLConnection conn = prepareConnection(IDEAL_START_URL);
-	
-			logService.log(LogService.LOG_DEBUG, "Sending to " + IDEAL_START_URL + ": " + parameters);
-			sendParameters(conn, parameters);
-			final String response = readResponse(conn);
-			logService.log(LogService.LOG_DEBUG, "Received: " + response);
+			final String response = idealHttpTool.doIdeal(IDEAL_START_URL, parameters);
 			return parseCreateResponse(issuer, currency, amount, returnUrl, response);
 		} catch (IOException e) {
 			throw new IdealException(e);
@@ -61,12 +61,7 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 		final String parameters = buildCheckParameters(transaction);
 		
 		try {
-			final HttpURLConnection conn = prepareConnection(IDEAL_CHECK_URL);
-			
-			logService.log(LogService.LOG_DEBUG, "Sending to " + IDEAL_CHECK_URL + ": " + parameters);
-			sendParameters(conn, parameters);
-			final String response = readResponse(conn);
-			logService.log(LogService.LOG_DEBUG, "Received: " + response);
+			final String response = idealHttpTool.doIdeal(IDEAL_CHECK_URL, parameters);
 			return parseCheckResponse(response);
 		} catch (IOException e) {
 			throw new IdealException(e);
@@ -97,41 +92,6 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 		} catch (UnsupportedEncodingException e) {
 			throw Throwables.propagate(e);
 		}
-	}
-
-	private HttpURLConnection prepareConnection(URL url) throws IOException {
-		final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("POST");
-		conn.setDoInput(true);
-		conn.setDoOutput(true);
-		conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		return conn;
-	}
-
-	private void sendParameters(HttpURLConnection conn, String parameters) throws IOException {
-		final OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
-		try {
-			writer.append(parameters);
-			writer.flush();
-		} finally {
-			writer.close();
-		}
-	}
-
-	private String readResponse(HttpURLConnection conn) throws IOException {
-		final int responseCode = conn.getResponseCode();
-		if (responseCode != HttpURLConnection.HTTP_OK) {
-			throw new IOException("Received response code " + responseCode + " " + conn.getResponseMessage());
-		}
-		
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-		final String response;
-		try {
-			response = reader.readLine();
-		} finally {
-			reader.close();
-		}
-		return response;
 	}
 
 	private Transaction parseCreateResponse(Issuer issuer, Currency currency, int amount, URL returnUrl, final String response) throws IdealException {
