@@ -16,7 +16,6 @@ import nl.limesco.cserv.ideal.api.TransactionStatus;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.log.LogService;
 
 import com.google.common.base.Throwables;
 
@@ -27,8 +26,6 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 	private final URL IDEAL_CHECK_URL;
 	
 	private final IdealHttpTool idealHttpTool;
-
-	private volatile LogService logService;
 	
 	private volatile String layoutCode;
 	

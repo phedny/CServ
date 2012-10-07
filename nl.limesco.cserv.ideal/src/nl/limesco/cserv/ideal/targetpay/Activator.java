@@ -19,7 +19,6 @@ public class Activator extends DependencyActivatorBase {
 		manager.add(createComponent()
 				.setInterface(IdealService.class.getName(), null)
 				.setImplementation(IdealServiceImpl.class)
-				.add(createServiceDependency().setService(LogService.class).setRequired(false))
 				.add(createConfigurationDependency().setPid("nl.limesco.cserv.ideal.targetpay")));
 	}
 
