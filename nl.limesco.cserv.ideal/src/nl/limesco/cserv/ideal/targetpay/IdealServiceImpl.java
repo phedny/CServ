@@ -16,6 +16,7 @@ import nl.limesco.cserv.ideal.api.IdealException;
 import nl.limesco.cserv.ideal.api.IdealService;
 import nl.limesco.cserv.ideal.api.Issuer;
 import nl.limesco.cserv.ideal.api.Transaction;
+import nl.limesco.cserv.ideal.api.TransactionStatus;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
@@ -26,6 +27,8 @@ import com.google.common.base.Throwables;
 public class IdealServiceImpl implements IdealService, ManagedService {
 	
 	private final URL IDEAL_START_URL;
+	
+	private final URL IDEAL_CHECK_URL;
 
 	private volatile LogService logService;
 	
@@ -33,26 +36,44 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 	
 	public IdealServiceImpl() throws MalformedURLException {
 		IDEAL_START_URL = new URL("https://www.targetpay.com/ideal/start");
+		IDEAL_CHECK_URL = new URL("https://www.targetpay.com/ideal/check");
 	}
 
 	@Override
 	public Transaction createTransaction(Issuer issuer, Currency currency, int amount, String description, URL returnUrl) throws IdealException {
-		final String parameters = buildParameters(issuer, currency, amount, description, returnUrl);
+		final String parameters = buildCreateParameters(issuer, currency, amount, description, returnUrl);
 
 		try {
-			final HttpURLConnection conn = prepareConnection();
+			final HttpURLConnection conn = prepareConnection(IDEAL_START_URL);
 	
 			logService.log(LogService.LOG_DEBUG, "Sending to " + IDEAL_START_URL + ": " + parameters);
 			sendParameters(conn, parameters);
 			final String response = readResponse(conn);
 			logService.log(LogService.LOG_DEBUG, "Received: " + response);
-			return parseResponse(issuer, currency, amount, returnUrl, response);
+			return parseCreateResponse(issuer, currency, amount, returnUrl, response);
 		} catch (IOException e) {
 			throw new IdealException(e);
 		}
 	}
 
-	private String buildParameters(Issuer issuer, Currency currency, int amount, String description, URL returnUrl) {
+	@Override
+	public TransactionStatus getTransactionStatus(Transaction transaction) throws IdealException {
+		final String parameters = buildCheckParameters(transaction);
+		
+		try {
+			final HttpURLConnection conn = prepareConnection(IDEAL_CHECK_URL);
+			
+			logService.log(LogService.LOG_DEBUG, "Sending to " + IDEAL_CHECK_URL + ": " + parameters);
+			sendParameters(conn, parameters);
+			final String response = readResponse(conn);
+			logService.log(LogService.LOG_DEBUG, "Received: " + response);
+			return parseCheckResponse(response);
+		} catch (IOException e) {
+			throw new IdealException(e);
+		}
+	}
+
+	private String buildCreateParameters(Issuer issuer, Currency currency, int amount, String description, URL returnUrl) {
 		try {
 			StringBuilder parameters = new StringBuilder();
 			parameters.append("rtlo=").append(URLEncoder.encode(layoutCode, "UTF-8"));
@@ -66,9 +87,20 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 			throw Throwables.propagate(e);
 		}
 	}
+	
+	private String buildCheckParameters(Transaction transaction) {
+		try {
+			StringBuilder parameters = new StringBuilder();
+			parameters.append("rtlo=").append(URLEncoder.encode(layoutCode, "UTF-8"));
+			parameters.append("&trxid=").append(URLEncoder.encode(transaction.getTransactionId(), "UTF-8"));
+			return parameters.toString().replaceAll("\\+", "%20");
+		} catch (UnsupportedEncodingException e) {
+			throw Throwables.propagate(e);
+		}
+	}
 
-	private HttpURLConnection prepareConnection() throws IOException {
-		final HttpURLConnection conn = (HttpURLConnection) IDEAL_START_URL.openConnection();
+	private HttpURLConnection prepareConnection(URL url) throws IOException {
+		final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
@@ -102,7 +134,7 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 		return response;
 	}
 
-	private Transaction parseResponse(Issuer issuer, Currency currency, int amount, URL returnUrl, final String response) throws IdealException {
+	private Transaction parseCreateResponse(Issuer issuer, Currency currency, int amount, URL returnUrl, final String response) throws IdealException {
 		// Parse the response
 		if (response.startsWith("000000 ")) {
 			String r2 = response.substring(7);
@@ -116,6 +148,24 @@ public class IdealServiceImpl implements IdealService, ManagedService {
 					throw new IdealException(e);
 				}
 			}
+		} else {
+			throw new IdealException(response);
+		}
+	}
+	
+	private TransactionStatus parseCheckResponse(final String response) throws IdealException {
+		// Parse the response
+		final String resultCode = response.substring(0, 6);
+		if ("000000".equals(resultCode)) {
+			return TransactionStatus.COMPLETED;
+		} else if ("TP0010".equals(resultCode)) {
+			return TransactionStatus.OPEN;
+		} else if ("TP0011".equals(resultCode)) {
+			return TransactionStatus.CANCELLED;
+		} else if ("TP0012".equals(resultCode)) {
+			return TransactionStatus.EXPIRED;
+		} else if ("TP0013".equals(resultCode)) {
+			return TransactionStatus.FAILED;
 		} else {
 			throw new IdealException(response);
 		}

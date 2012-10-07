@@ -19,5 +19,13 @@ public interface IdealService {
 	 * @throws IdealException when creating the transaction fails
 	 */
 	Transaction createTransaction(Issuer issuer, Currency currency, int amount, String description, URL returnUrl) throws IdealException;
+	
+	/**
+	 * Query the status of a transaction.
+	 * @param transaction The transaction to query the status for
+	 * @return the status of the transaction
+	 * @throws IdealException when checking the transaction status fails
+	 */
+	TransactionStatus getTransactionStatus(Transaction transaction) throws IdealException;
 
 }
