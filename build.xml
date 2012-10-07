@@ -1,0 +1,29 @@
+<project name="Limesco CServ" default="test">
+
+	<target name="test" depends="clean,bundles,unit-tests" />
+
+	<macrodef name="run-on-all-projects">
+		<attribute name="target" />
+		<sequential>
+			<subant target="@{target}">
+				<fileset dir=".">
+					<include name="*/build.xml" />
+					<exclude name="cnf/build.xml" />
+				</fileset>
+			</subant>
+		</sequential>
+	</macrodef>
+
+	<target name="clean">
+		<run-on-all-projects target="clean" />
+	</target>
+
+	<target name="bundles">
+		<run-on-all-projects target="build" />
+	</target>
+
+	<target name="unit-tests">
+		<run-on-all-projects target="junit" />
+	</target>
+
+</project>
