@@ -1,8 +1,8 @@
-package nl.limesco.cserv.account.rest;
+package nl.limesco.cserv.invoice.mongo;
 
-import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 
+import org.amdatu.mongo.MongoDBService;
 import org.apache.felix.dm.DependencyActivatorBase;
 import org.apache.felix.dm.DependencyManager;
 import org.osgi.framework.BundleContext;
@@ -12,10 +12,9 @@ public class Activator extends DependencyActivatorBase {
 	@Override
 	public void init(BundleContext context, DependencyManager manager) throws Exception {
 		manager.add(createComponent()
-				.setInterface(Object.class.getName(), null)
-				.setImplementation(AccountsResource.class)
-				.add(createServiceDependency().setService(AccountService.class).setRequired(false).setDefaultImplementation(UnavailableAccountService.class))
-				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableInvoiceService.class)));
+				.setInterface(InvoiceService.class.getName(), null)
+				.setImplementation(InvoiceServiceImpl.class)
+				.add(createServiceDependency().setService(MongoDBService.class).setRequired(true)));
 	}
 
 	@Override

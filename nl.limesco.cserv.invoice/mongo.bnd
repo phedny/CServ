@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.invoice.mongo.Activator
+Private-Package: nl.limesco.cserv.invoice.mongo
