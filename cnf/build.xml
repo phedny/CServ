@@ -23,7 +23,7 @@
 	-->
 
 	<target name="junit" depends="init,compileTests" if="testDirExists">
-		<junit showoutput="false" printsummary="true" failureproperty='stop' errorproperty='stop' fork="true" dir="${basedir}">
+		<junit showoutput="false" printsummary="true" failureproperty='stop' errorproperty='stop' fork="true" haltonfailure="yes" dir="${basedir}">
 			<classpath path="${project.buildpath}:bin_test/:../cnf/lib/junit-4.10.jar" />
 			<formatter type="xml"/>
 			<batchtest todir="${target}">
