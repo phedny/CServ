@@ -173,25 +173,41 @@ public class InvoiceImpl implements Invoice {
 	@JsonIgnore
 	public boolean isSound() {
 		
-		// Compute sum of item lines
+		// Compute sum of tax lines
+		long sumOfTaxLines = 0;
+		long sumOfTaxAmounts = 0;
+		final Map<Double, Long> taxRateMap = Maps.newHashMap();
+		for (TaxLineImpl taxLine : taxLines) {
+			if (!taxLine.isSound()) {
+				return false;
+			}
+			sumOfTaxLines += taxLine.getBaseAmount();
+			sumOfTaxAmounts += taxLine.getTaxAmount();
+			taxRateMap.put(Double.valueOf(taxLine.getTaxRate()), Long.valueOf(taxLine.getBaseAmount()));
+		}
+
+		// Compute sum of item lines and prepare tax line coverage
 		long sumOfItemLines = 0;
 		for (AbstractItemLine itemLine : itemLines) {
 			if (!itemLine.isSound()) {
 				return false;
 			}
 			sumOfItemLines += itemLine.getTotalPrice();
-		}
-		
-		// Compute sum of tax lines
-		long sumOfTaxLines = 0;
-		long sumOfTaxAmounts = 0;
-		final Set<Double> seenTaxRates = Sets.newHashSet();
-		for (TaxLineImpl taxLine : taxLines) {
-			if (!taxLine.isSound() || !seenTaxRates.add(Double.valueOf(taxLine.getTaxRate()))) {
+			
+			try {
+				final Double taxRate = Double.valueOf(itemLine.getTaxRate());
+				taxRateMap.put(taxRate, taxRateMap.get(taxRate).longValue() - itemLine.getTotalPrice());
+			} catch (NullPointerException e) {
+				// This happens when the itemLine has a tax rate for which no matching taxLine exists
 				return false;
 			}
-			sumOfTaxLines += taxLine.getBaseAmount();
-			sumOfTaxAmounts += taxLine.getTaxAmount();
+		}
+		
+		// Test tax line coverage
+		for (Long taxAmount : taxRateMap.values()) {
+			if (taxAmount.longValue() != 0) {
+				return false;
+			}
 		}
 		
 		if (sumOfItemLines != totalWithoutTaxes || sumOfTaxLines != totalWithoutTaxes) {
