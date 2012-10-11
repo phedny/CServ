@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.auth.login.Activator
+Private-Package: nl.limesco.cserv.auth.login
