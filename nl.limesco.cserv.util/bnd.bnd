@@ -1,0 +1,2 @@
+-buildpath: org.amdatu.web.rest.jaxrs
+-sub: *.bnd

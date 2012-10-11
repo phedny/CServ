@@ -9,4 +9,5 @@
 	jackson-mapper-asl,\
 	com.google.guava,\
 	javax.servlet,\
-	org.mockito.mockito-all
+	org.mockito.mockito-all,\
+	nl.limesco.cserv.util.dm;version=latest

@@ -9,4 +9,5 @@
 	jackson-core-asl,\
 	jackson-mapper-asl,\
 	com.google.guava,\
-	nl.limesco.cserv.invoice.api;version=latest
+	nl.limesco.cserv.invoice.api;version=latest,\
+	nl.limesco.cserv.util.dm;version=latest
