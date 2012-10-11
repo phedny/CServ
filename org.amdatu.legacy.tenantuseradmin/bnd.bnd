@@ -1,0 +1,6 @@
+-buildpath: org.apache.felix.dependencymanager,\
+	osgi.core,\
+	osgi.cmpn
+Private-Package: org.amdatu.legacy.tenantuseradmin
+Bundle-Version: 1.0.1
+Bundle-Activator: org.amdatu.legacy.tenantuseradmin.Activator

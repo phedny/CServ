@@ -1,0 +1,10 @@
+Private-Package: net.luminis.useradmin.mongodb,\
+	net.luminis.useradmin.mongodb.osgi
+-buildpath: org.apache.felix.useradmin;version=1.0.2,\
+	com.mongodb,\
+	osgi.core,\
+	org.apache.felix.dependencymanager,\
+	org.amdatu.mongo,\
+	osgi.cmpn
+Bundle-Activator: net.luminis.useradmin.mongodb.osgi.Activator
+Bundle-Version: 1.0.1
