@@ -3,7 +3,7 @@ language: java
 notifications:
   irc:
     channels:
-      - "irc.oftc.net#limesco"
+      - "irc.oftc.net#limesco-travis"
     template:
       - "%{branch}/%{commit} (#%{build_number} by %{author}): %{message} %{build_url}"
 
