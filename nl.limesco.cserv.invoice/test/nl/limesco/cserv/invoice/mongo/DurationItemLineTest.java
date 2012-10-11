@@ -1,16 +1,21 @@
 package nl.limesco.cserv.invoice.mongo;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class DurationItemLineTest extends TestCase {
+import org.junit.Test;
+
+public class DurationItemLineTest {
 
 	private DurationItemLineImpl itemLine = new DurationItemLineImpl();
 	
-	public void testItemLineCanBeZero() {
+	@Test
+	public void itemLineCanBeZero() {
 		assertTrue(itemLine.isSound());
 	}
 	
-	public void testItemLineCanHaveCalls() {
+	@Test
+	public void itemLineCanHaveCalls() {
 		itemLine.setNumberOfCalls(9);
 		itemLine.setPricePerCall(400);
 		itemLine.setTotalPrice();
@@ -18,7 +23,8 @@ public class DurationItemLineTest extends TestCase {
 		assertEquals(3600, itemLine.getTotalPrice());
 	}
 	
-	public void testItemLineCanHaveSeconds() {
+	@Test
+	public void itemLineCanHaveSeconds() {
 		itemLine.setNumberOfSeconds(400);
 		itemLine.setPricePerMinute(1000);
 		itemLine.setTotalPrice();
@@ -26,7 +32,8 @@ public class DurationItemLineTest extends TestCase {
 		assertEquals(6666, itemLine.getTotalPrice());
 	}
 	
-	public void testItemLineCanHaveCallsAndSeconds() {
+	@Test
+	public void itemLineCanHaveCallsAndSeconds() {
 		itemLine.setNumberOfCalls(9);
 		itemLine.setPricePerCall(400);
 		itemLine.setNumberOfSeconds(400);
@@ -36,7 +43,8 @@ public class DurationItemLineTest extends TestCase {
 		assertEquals(10266, itemLine.getTotalPrice());
 	}
 
-	public void testUnsoundItemLineIsDetected() {
+	@Test
+	public void unsoundItemLineIsDetected() {
 		itemLine.setNumberOfCalls(9);
 		itemLine.setPricePerCall(400);
 		itemLine.setTotalPrice(400);

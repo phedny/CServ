@@ -1,20 +1,25 @@
 package nl.limesco.cserv.invoice.mongo;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import nl.limesco.cserv.invoice.api.ItemLine;
 import nl.limesco.cserv.invoice.api.TaxLine;
 
+import org.junit.Test;
+
 import com.google.common.collect.Lists;
 
-public class InvoiceTest extends TestCase {
+public class InvoiceTest {
 
 	private InvoiceImpl invoice = new InvoiceImpl();
 	
-	public void testInvoiceCanBeEmpty() {
+	@Test
+	public void invoiceCanBeEmpty() {
 		assertTrue(invoice.isSound());
 	}
 
-	public void testInvoiceCanHaveNormalItemLine() {
+	@Test
+	public void invoiceCanHaveNormalItemLine() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);
@@ -28,7 +33,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(420001, invoice.getTotalWithTaxes());
 	}
 
-	public void testInvoiceCanHaveDurationItemLine() {
+	@Test
+	public void invoiceCanHaveDurationItemLine() {
 		final DurationItemLineImpl itemLine = new DurationItemLineImpl();
 		itemLine.setNumberOfCalls(9);
 		itemLine.setPricePerCall(400);
@@ -44,7 +50,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(12422, invoice.getTotalWithTaxes());
 	}
 
-	public void testInvoiceCanHaveMultipleItemLines() {
+	@Test
+	public void invoiceCanHaveMultipleItemLines() {
 		final NormalItemLineImpl itemLine1 = new NormalItemLineImpl();
 		itemLine1.setItemPrice(173554);
 		itemLine1.setItemCount(2);
@@ -66,7 +73,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(432423, invoice.getTotalWithTaxes());
 	}
 
-	public void testInvoiceCanHaveMultipleItemLinesWithDifferentTaxRates() {
+	@Test
+	public void invoiceCanHaveMultipleItemLinesWithDifferentTaxRates() {
 		final NormalItemLineImpl itemLine1 = new NormalItemLineImpl();
 		itemLine1.setItemPrice(173554);
 		itemLine1.setItemCount(2);
@@ -88,7 +96,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(430267, invoice.getTotalWithTaxes());
 	}
 
-	public void testInvoiceCannotHaveUnsoundItemLines() {
+	@Test
+	public void invoiceCannotHaveUnsoundItemLines() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);
@@ -100,7 +109,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(false, invoice.isSound());
 	}
 
-	public void testInvoiceCannotHaveUnsoundTaxLines() {
+	@Test
+	public void invoiceCannotHaveUnsoundTaxLines() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);
@@ -119,7 +129,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(false, invoice.isSound());
 	}
 
-	public void testInvoiceItemLinesAndTaxLinesEqualAmount() {
+	@Test
+	public void invoiceItemLinesAndTaxLinesEqualAmount() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);
@@ -138,7 +149,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(false, invoice.isSound());
 	}
 
-	public void testInvoiceItemLinesAndTaxLinesEqualTaxRate() {
+	@Test
+	public void invoiceItemLinesAndTaxLinesEqualTaxRate() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);
@@ -157,7 +169,8 @@ public class InvoiceTest extends TestCase {
 		assertEquals(false, invoice.isSound());
 	}
 
-	public void testInvoiceTotalAmountMustBeSumOfItemLinesAndTaxes() {
+	@Test
+	public void invoiceTotalAmountMustBeSumOfItemLinesAndTaxes() {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setItemPrice(173554);
 		itemLine.setItemCount(2);

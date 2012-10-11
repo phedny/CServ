@@ -5,19 +5,21 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Map;
 
-import nl.limesco.cserv.ideal.api.Issuer;
-
 import org.apache.felix.dm.Component;
 import org.apache.felix.dm.DependencyManager;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit3.JUnit3Mockery;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class TargetPayIssuerServiceTest extends MockObjectTestCase {
+@RunWith(JMock.class)
+public class TargetPayIssuerServiceTest {
 	
-	private Mockery context = new JUnit3Mockery() {{
+	private Mockery context = new JUnit4Mockery() {{
 		setImposteriser(ClassImposteriser.INSTANCE);
 	}};
 	
@@ -25,6 +27,7 @@ public class TargetPayIssuerServiceTest extends MockObjectTestCase {
 	
 	private DependencyManager dependencyManager;
 	
+	@Before
 	public void setUp() throws Exception {
 		service = new TargetPayIssuerServiceImpl();
 		
@@ -34,7 +37,8 @@ public class TargetPayIssuerServiceTest extends MockObjectTestCase {
 		dependencyManagerField.set(service, dependencyManager);
 	}
 
-	public void testIssuerListCanBeInitialized() throws Exception {
+	@Test
+	public void issuerListCanBeInitialized() throws Exception {
 		context.checking(new Expectations() {{
 			Component component = context.mock(Component.class);
 			ignoring (component);
@@ -49,7 +53,8 @@ public class TargetPayIssuerServiceTest extends MockObjectTestCase {
 		updateIssuerList.invoke(service, issuersResource.toString());
 	}
 
-	public void testIssuerCanBeAdded() throws Exception {
+	@Test
+	public void issuerCanBeAdded() throws Exception {
 		final Field issuersField = service.getClass().getDeclaredField("issuers");
 		issuersField.setAccessible(true);
 		final Map<String, Component> issuers = (Map<String, Component>) issuersField.get(service);
@@ -69,7 +74,8 @@ public class TargetPayIssuerServiceTest extends MockObjectTestCase {
 		updateIssuerList.invoke(service, issuersResource.toString());
 	}
 
-	public void testIssuerCanBeRemoved() throws Exception {
+	@Test
+	public void issuerCanBeRemoved() throws Exception {
 		final Field issuersField = service.getClass().getDeclaredField("issuers");
 		issuersField.setAccessible(true);
 		final Map<String, Component> issuers = (Map<String, Component>) issuersField.get(service);
@@ -87,7 +93,8 @@ public class TargetPayIssuerServiceTest extends MockObjectTestCase {
 		updateIssuerList.invoke(service, issuersResource.toString());
 	}
 
-	public void testIssuerCanBeUpdated() throws Exception {
+	@Test
+	public void issuerCanBeUpdated() throws Exception {
 		final Field issuersField = service.getClass().getDeclaredField("issuers");
 		issuersField.setAccessible(true);
 		final Map<String, Component> issuers = (Map<String, Component>) issuersField.get(service);

@@ -1,16 +1,21 @@
 package nl.limesco.cserv.invoice.mongo;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class NormalItemLineTest extends TestCase {
+import org.junit.Test;
+
+public class NormalItemLineTest {
 
 	private NormalItemLineImpl itemLine = new NormalItemLineImpl();
 	
-	public void testItemLineCanBeZero() {
+	@Test
+	public void itemLineCanBeZero() {
 		assertTrue(itemLine.isSound());
 	}
 	
-	public void testItemLineCanBeSet() {
+	@Test
+	public void itemLineCanBeSet() {
 		itemLine.setItemCount(2);
 		itemLine.setItemPrice(21);
 		itemLine.setTotalPrice();
@@ -18,7 +23,8 @@ public class NormalItemLineTest extends TestCase {
 		assertEquals(42, itemLine.getTotalPrice());
 	}
 	
-	public void testUnsoundItemLineIsDetected() {
+	@Test
+	public void unsoundItemLineIsDetected() {
 		itemLine.setItemCount(2);
 		itemLine.setItemCount(21);
 		itemLine.setTotalPrice(14);

@@ -22,9 +22,28 @@
 		</target>
 	-->
 
+	<!-- 
+		JUNIT
+	-->
+	<target name="compileTests" depends="init,build" if="testDirExists">
+		<mkdir dir="bin_test"/>
+		<javac fork="yes" executable="${javac}" srcdir="test" destdir="bin_test" classpath="${project.buildpath}:${project.testpath}:${workspacedir}/cnf/lib/junit-4.10.jar" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
+		<!--
+		  The eclipse compiler copies resources but the Javac compiler does not
+		  If ${src} == ${bin} then this is not necessary, but unfortunately, now
+		  it is.
+		-->
+		<copy todir="bin_test" verbose="${verbose}" preservelastmodified="true">
+			<fileset dir="test">
+				<exclude name="**/*.java" />
+				<exclude name="**/*.class" />
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="junit" depends="init,compileTests" if="testDirExists">
 		<junit showoutput="false" printsummary="true" failureproperty='stop' errorproperty='stop' fork="true" haltonfailure="yes" dir="${basedir}">
-			<classpath path="${project.buildpath}:bin_test/:../cnf/lib/junit-4.10.jar" />
+			<classpath path="${project.buildpath}:bin_test/:${workspacedir}/cnf/lib/junit-4.10.jar" />
 			<formatter type="xml"/>
 			<batchtest todir="${target}">
 				<fileset dir="test">

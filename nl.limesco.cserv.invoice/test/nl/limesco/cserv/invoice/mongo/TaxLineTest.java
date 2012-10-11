@@ -1,16 +1,21 @@
 package nl.limesco.cserv.invoice.mongo;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class TaxLineTest extends TestCase {
+import org.junit.Test;
+
+public class TaxLineTest {
 
 	private TaxLineImpl taxLine = new TaxLineImpl();
 	
-	public void testTaxLineCanBeZero() {
+	@Test
+	public void taxLineCanBeZero() {
 		assertTrue(taxLine.isSound());
 	}
 	
-	public void testTaxLineCanBeSet() {
+	@Test
+	public void taxLineCanBeSet() {
 		taxLine.setTaxRate(0.21);
 		taxLine.setBaseAmount(991322);
 		taxLine.setTaxAmount();
@@ -18,6 +23,7 @@ public class TaxLineTest extends TestCase {
 		assertEquals(208178, taxLine.getTaxAmount());
 	}
 	
+	@Test
 	public void unsoundTaxLineIsDetected() {
 		taxLine.setTaxRate(0.21);
 		taxLine.setBaseAmount(991322);

@@ -1,5 +1,5 @@
 -buildpath: lib/jmock-2.5.1.jar;version=file,\
-	lib/jmock-junit3-2.5.1.jar;version=file,\
+	lib/jmock-junit4-2.5.1.jar;version=file,\
 	lib/jmock-legacy-2.5.1.jar;version=file,\
 	lib/hamcrest-core-1.1.jar;version=file,\
 	lib/hamcrest-library-1.1.jar;version=file,\
@@ -14,7 +14,7 @@ Export-Package: org.jmock;version=${Bundle-Version},\
 	org.jmock.lib.concurrent;version=${Bundle-Version},\
 	org.jmock.lib.concurrent.internal;version=${Bundle-Version},\
 	org.jmock.syntax;version=${Bundle-Version},\
-	org.jmock.integration.junit3;version=${Bundle-Version},\
+	org.jmock.integration.junit4;version=${Bundle-Version},\
 	org.jmock.lib.legacy;version=${Bundle-Version},\
 	org.hamcrest;version=${Hamcrest-Version},\
 	org.hamcrest.core;version=${Hamcrest-Version},\

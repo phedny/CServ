@@ -1,5 +1,8 @@
 package nl.limesco.cserv.ideal.targetpay;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
@@ -11,9 +14,17 @@ import nl.limesco.cserv.ideal.api.Transaction;
 import nl.limesco.cserv.ideal.api.TransactionStatus;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class IdealServiceTest extends MockObjectTestCase {
+@RunWith(JMock.class)
+public class IdealServiceTest {
+	
+	private Mockery context = new JUnit4Mockery();
 	
 	private URL startUrl;
 	
@@ -29,8 +40,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 	
 	private Issuer issuer = new IssuerImpl("0001", "First Bank");
 	
+	@Before
 	public void setUp() throws Exception {
-		httpTool = mock(IdealHttpTool.class);
+		httpTool = context.mock(IdealHttpTool.class);
 		
 		startUrl = new URL("http://start");
 		checkUrl = new URL("http://check");
@@ -43,8 +55,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		service.updated(properties);
 	}
 	
-	public void testCanCreateTransaction() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void canCreateTransaction() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(startUrl, "rtlo=42&bank=0001&description=Test%20description&currency=EUR&amount=1337&returnurl=http://return"); will(returnValue("000000 123|http://redirect"));
 		}});
 		
@@ -56,8 +69,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(returnUrl, tx.getReturnUrl());
 	}
 
-	public void testCannotCreateTransactionWithError() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void cannotCreateTransactionWithError() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(startUrl, "rtlo=42&bank=0001&description=Test%20description&currency=EUR&amount=1337&returnurl=http://return"); will(returnValue("SO1000 Storing in systeem"));
 		}});
 		
@@ -69,8 +83,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		}
 	}
 
-	public void testTransactionCanBeCompleted() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void transactionCanBeCompleted() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("000000 OK"));
 		}});
 		
@@ -78,8 +93,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(TransactionStatus.COMPLETED, service.getTransactionStatus(tx));
 	}
 
-	public void testTransactionCanBeOpen() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void transactionCanBeOpen() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("TP0010 Transactie is nog niet afgerond, probeer het later opnieuw"));
 		}});
 		
@@ -87,8 +103,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(TransactionStatus.OPEN, service.getTransactionStatus(tx));
 	}
 
-	public void testTransactionCanBeCancelled() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void transactionCanBeCancelled() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("TP0011 Transactie is geannuleerd"));
 		}});
 		
@@ -96,8 +113,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(TransactionStatus.CANCELLED, service.getTransactionStatus(tx));
 	}
 
-	public void testTransactionCanExpire() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void transactionCanExpire() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("TP0012 Transactie is verlopen (max. 10 minuten)"));
 		}});
 		
@@ -105,8 +123,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(TransactionStatus.EXPIRED, service.getTransactionStatus(tx));
 	}
 
-	public void testTransactionCanFail() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void transactionCanFail() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("TP0013 De transactie kon niet verwerkt worden"));
 		}});
 		
@@ -114,8 +133,9 @@ public class IdealServiceTest extends MockObjectTestCase {
 		assertEquals(TransactionStatus.FAILED, service.getTransactionStatus(tx));
 	}
 
-	public void testCannotCheckTransactionWithError() throws IOException, IdealException {
-		checking(new Expectations() {{
+	@Test
+	public void cannotCheckTransactionWithError() throws IOException, IdealException {
+		context.checking(new Expectations() {{
 			oneOf (httpTool).doIdeal(checkUrl, "rtlo=42&trxid=123"); will(returnValue("SO1000 Storing in systeem"));
 		}});
 		
