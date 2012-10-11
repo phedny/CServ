@@ -19,53 +19,58 @@
 	osgi.identity;filter:='(osgi.identity=org.amdatu.core.org.amdatu.core.tenantstore.inmem)',\
 	osgi.identity;filter:='(osgi.identity=org.amdatu.auth.tokenstore.mem)',\
 	osgi.identity;filter:='(osgi.identity=net.luminis.useradmin.mongodb)',\
-	osgi.identity;filter:='(osgi.identity=org.amdatu.legacy.tenantuseradmin)'
+	osgi.identity;filter:='(osgi.identity=org.amdatu.legacy.tenantuseradmin)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.auth.service)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.auth.web)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.6
--runbundles: org.amdatu.legacy.tenantuseradmin;version=latest,\
-	nl.limesco.cserv.account.rest;version=latest,\
-	org.amdatu.auth.tokenprovider;version='[0.2.2,0.2.3)',\
-	jackson-mapper-asl;version='[1.9.0,1.9.1)',\
-	nl.limesco.cserv.account.api;version=latest,\
-	org.amdatu.core.tenant;version='[0.2.1,0.2.2)',\
+-runbundles: nl.limesco.cserv.auth.web;version=latest,\
+	nl.limesco.cserv.auth.api;version=latest,\
 	net.vz.mongodb.jackson.mongo-jackson-mapper;version='[1.4.3,1.4.4)',\
-	org.apache.felix.dependencymanager;version='[3.0.0,3.0.1)',\
-	org.amdatu.mongo;version='[1.0.3,1.0.4)',\
-	org.amdatu.core.org.amdatu.core.tenantstore.inmem;version='[0.2.1,0.2.2)',\
-	org.apache.felix.dependencymanager.shell;version='[3.0.0,3.0.1)',\
-	org.amdatu.web.rest.jaxrs;version='[1.0.0,1.0.1)',\
-	org.apache.felix.http.whiteboard;version='[2.2.0,2.2.1)',\
-	com.google.guava;version='[12.0.1,12.0.2)',\
 	org.amdatu.web.rest.wink;version='[1.0.0,1.0.1)',\
-	de.undercouch.bson4jackson;version='[1.3.0,1.3.1)',\
-	org.apache.felix.http.jetty;version='[2.2.0,2.2.1)',\
-	jackson-core-asl;version='[1.9.0,1.9.1)',\
-	org.apache.felix.fileinstall;version='[3.2.4,3.2.5)',\
-	nl.limesco.cserv.util.dm;version=latest,\
-	javax.persistence;version='[2.0.3,2.0.4)',\
-	org.apache.felix.useradmin;version='[1.0.2,1.0.3)',\
-	nl.limesco.cserv.invoice.api;version=latest,\
 	org.apache.felix.gogo.shell;version='[0.10.0,0.10.1)',\
-	nl.limesco.cserv.lib.quartz.api;version=latest,\
+	osgi.cmpn;version='[4.2.0,4.2.1)',\
+	org.amdatu.web.rest.jaxrs;version='[1.0.0,1.0.1)',\
+	nl.limesco.cserv.util.dm;version=latest,\
+	org.apache.felix.dependencymanager.shell;version='[3.0.0,3.0.1)',\
+	org.apache.felix.metatype;version='[1.0.4,1.0.5)',\
 	nl.limesco.cserv.auth.login;version=latest,\
-	org.amdatu.core.fileinstall.metatype;version='[0.3.0,0.3.1)',\
-	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
-	nl.limesco.cserv.ideal.targetpay;version=latest,\
+	org.amdatu.mongo;version='[1.0.3,1.0.4)',\
+	org.apache.felix.useradmin;version='[1.0.2,1.0.3)',\
+	nl.limesco.cserv.invoice.mongo;version=latest,\
 	nl.limesco.cserv.account.mongo;version=latest,\
+	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
+	jackson-mapper-asl;version='[1.9.0,1.9.1)',\
+	org.amdatu.core.org.amdatu.core.tenantstore.inmem;version='[0.2.1,0.2.2)',\
+	nl.limesco.cserv.auth.service;version=latest,\
+	org.apache.felix.fileinstall;version='[3.2.4,3.2.5)',\
+	nl.limesco.cserv.account.api;version=latest,\
+	de.undercouch.bson4jackson;version='[1.3.0,1.3.1)',\
+	org.apache.felix.dependencymanager;version='[3.0.0,3.0.1)',\
+	nl.limesco.cserv.lib.quartz.api;version=latest,\
+	com.mongodb;version='[2.7.3,2.7.4)',\
+	javax.persistence;version='[2.0.3,2.0.4)',\
+	org.amdatu.auth.tokenprovider;version='[0.2.2,0.2.3)',\
+	org.apache.felix.http.jetty;version='[2.2.0,2.2.1)',\
+	com.google.guava;version='[12.0.1,12.0.2)',\
+	org.amdatu.core.fileinstall.metatype;version='[0.3.0,0.3.1)',\
+	nl.limesco.cserv.ideal.rest;version=latest,\
+	jackson-core-asl;version='[1.9.0,1.9.1)',\
+	javax.servlet;version='[2.5.0,2.5.1)',\
+	org.amdatu.legacy.tenantuseradmin;version=latest,\
+	nl.limesco.cserv.account.rest;version=latest,\
+	nl.limesco.cserv.ideal.api;version=latest,\
+	nl.limesco.cserv.lib.quartz.wrappedlibrary;version=latest,\
+	org.apache.felix.configadmin;version='[1.4.0,1.4.1)',\
 	org.apache.felix.log;version='[1.0.1,1.0.2)',\
 	org.amdatu.auth.tokenstore.mem;version='[0.2.1,0.2.2)',\
-	nl.limesco.cserv.lib.quartz.wrappedlibrary;version=latest,\
-	nl.limesco.cserv.invoice.mongo;version=latest,\
-	nl.limesco.cserv.ideal.rest;version=latest,\
-	org.apache.felix.configadmin;version='[1.4.0,1.4.1)',\
-	org.apache.felix.gogo.runtime;version='[0.10.0,0.10.1)',\
-	javax.servlet;version='[2.5.0,2.5.1)',\
-	org.apache.felix.gogo.command;version='[0.12.0,0.12.1)',\
+	nl.limesco.cserv.invoice.api;version=latest,\
 	net.luminis.useradmin.mongodb;version=latest,\
-	org.apache.felix.metatype;version='[1.0.4,1.0.5)',\
-	com.mongodb;version='[2.7.3,2.7.4)',\
-	nl.limesco.cserv.ideal.api;version=latest,\
-	osgi.cmpn;version='[4.2.0,4.2.1)'
+	nl.limesco.cserv.ideal.targetpay;version=latest,\
+	org.apache.felix.http.whiteboard;version='[2.2.0,2.2.1)',\
+	org.amdatu.core.tenant;version='[0.2.1,0.2.2)',\
+	org.apache.felix.gogo.command;version='[0.12.0,0.12.1)',\
+	org.apache.felix.gogo.runtime;version='[0.10.0,0.10.1)'
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\

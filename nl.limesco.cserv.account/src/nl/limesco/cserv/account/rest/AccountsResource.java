@@ -3,16 +3,20 @@ package nl.limesco.cserv.account.rest;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
+import nl.limesco.cserv.auth.api.Role;
+import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 
@@ -26,12 +30,24 @@ import com.google.common.collect.Lists;
 @Path("accounts")
 public class AccountsResource {
 	
+	private volatile WebAuthorizationService authorizationService;
+	
 	private volatile AccountService accountService;
 	
 	private volatile InvoiceService invoiceService;
 
 	@Path("{accountId}")
-	public AccountSubResource getAccount(@PathParam("accountId") String id) {
+	public AccountSubResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
+		authorizationService.requireUserRole(request, Role.ADMIN);
+		return getAccount(id);
+	}
+
+	@Path("~")
+	public AccountSubResource getMyAccount(@Context HttpServletRequest request) {
+		return getAccount(authorizationService.requiredAccountId(request));
+	}
+
+	private AccountSubResource getAccount(String id) {
 		final Optional<? extends Account> account = accountService.getAccountById(id);
 		if (account.isPresent()) {
 			return new AccountSubResource(account.get());
@@ -40,11 +56,6 @@ public class AccountsResource {
 		}
 	}
 	
-	@Path("~")
-	public AccountSubResource getMyAccount() {
-		return new AccountSubResource(accountService.createAccount());
-	}
-
 	public class AccountSubResource {
 		
 		private final Account account;
