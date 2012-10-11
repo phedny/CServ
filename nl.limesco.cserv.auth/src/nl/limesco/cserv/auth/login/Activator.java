@@ -1,5 +1,10 @@
 package nl.limesco.cserv.auth.login;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
+
+import nl.limesco.cserv.util.dm.UnavailableOSGiService;
+
 import org.amdatu.auth.tokenprovider.TokenProvider;
 import org.apache.felix.dm.DependencyActivatorBase;
 import org.apache.felix.dm.DependencyManager;
@@ -19,7 +24,7 @@ public class Activator extends DependencyActivatorBase {
 		manager.add(createComponent()
 				.setInterface(Object.class.getName(), null)
 				.setImplementation(LoginResource.class)
-				.add(createServiceDependency().setService(LoginHelperService.class).setRequired(false).setDefaultImplementation(UnavailableLoginHelperService.class)));
+				.add(createServiceDependency().setService(LoginHelperService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(LoginHelperService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 
 	@Override
