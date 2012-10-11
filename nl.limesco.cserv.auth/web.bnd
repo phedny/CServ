@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.auth.service.web.Activator
+Private-Package: nl.limesco.cserv.auth.service.web
