@@ -1,0 +1,10 @@
+Export-Package: nl.limesco.cserv.sim.api
+-sub: *.bnd
+Private-Package: nl.limesco.cserv.sim.mongo
+-buildpath: com.google.guava,\
+	com.mongodb,\
+	net.vz.mongodb.jackson.mongo-jackson-mapper,\
+	org.amdatu.mongo,\
+	jackson-core-asl,\
+	jackson-mapper-asl,\
+	nl.limesco.cserv.account.api;version=latest
