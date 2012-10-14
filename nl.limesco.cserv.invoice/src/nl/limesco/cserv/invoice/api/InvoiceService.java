@@ -10,4 +10,6 @@ public interface InvoiceService {
 	
 	Collection<? extends Invoice> getInvoicesByAccountId(String accountId);
 	
+	InvoiceBuilder buildInvoice();
+	
 }

@@ -43,4 +43,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return Lists.newArrayList((Iterator<InvoiceImpl>) invoiceCursor);
 	}
 
+	@Override
+	public InvoiceBuilder buildInvoice() {
+		return new InvoiceBuilderImpl();
+	}
+
 }
