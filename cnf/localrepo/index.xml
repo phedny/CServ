@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<repository increment='1349962800438' name='Local' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
+<repository increment='1350214320180' name='Local' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
   <resource>
     <capability namespace='osgi.identity'>
       <attribute name='osgi.identity' value='net.vz.mongodb.jackson.mongo-jackson-mapper'/>
@@ -80,6 +80,108 @@
     </requirement>
     <requirement namespace='osgi.wiring.package'>
       <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson.type)(version&gt;=1.9.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='1.2.0'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='e7046831be29a2d648746f622804a635eda5712dfbbe4c4e1450c0994a3bee2a'/>
+      <attribute name='url' value='nl.limesco.cserv.lib.email.wrappedlibrary/nl.limesco.cserv.lib.email.wrappedlibrary-1.2.0.jar'/>
+      <attribute name='size' type='Long' value='572044'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.apache.commons.mail'/>
+      <attribute name='version' type='Version' value='1.2.0'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+      <directive name='uses' value='javax.mail.internet,javax.naming,javax.mail,javax.activation'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.mail'/>
+      <attribute name='version' type='Version' value='1.4.5'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+      <directive name='uses' value='javax.mail.search,javax.mail.event,javax.activation'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.mail.internet'/>
+      <attribute name='version' type='Version' value='1.4.5'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+      <directive name='uses' value='javax.mail,javax.activation'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.mail.event'/>
+      <attribute name='version' type='Version' value='1.4.5'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+      <directive name='uses' value='javax.mail'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.mail.search'/>
+      <attribute name='version' type='Version' value='1.4.5'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+      <directive name='uses' value='javax.mail'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='javax.activation'/>
+      <attribute name='version' type='Version' value='1.1.1'/>
+      <attribute name='bundle-symbolic-name' value='nl.limesco.cserv.lib.email.wrappedlibrary'/>
+      <attribute name='bundle-version' type='Version' value='1.2.0'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=sun.security.util)'/>
+      <directive name='resolution' value='optional'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.crypto)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.crypto.spec)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=javax.mail.event)(version&gt;=1.4.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=javax.mail.search)(version&gt;=1.4.0)(!(version&gt;=2.0.0)))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.naming)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.net)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.net.ssl)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.security.auth.callback)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.security.auth.x500)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.security.sasl)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.xml.transform.stream)'/>
     </requirement>
   </resource>
   <resource>
@@ -992,6 +1094,36 @@
   </resource>
   <resource>
     <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='a398afb516274dafdf27084f7c86c8e8074e8a4b4d5d2eaf2c184886156ad92b'/>
+      <attribute name='url' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem/org.amdatu.core.org.amdatu.core.tenantstore.inmem-0.2.1.jar'/>
+      <attribute name='size' type='Long' value='10103'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
+      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.amdatu.core.tenant)(version&gt;=1.0.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm)(version&gt;=3.0.0))'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0))'/>
+    </requirement>
+  </resource>
+  <resource>
+    <capability namespace='osgi.identity'>
       <attribute name='osgi.identity' value='nl.limesco.cserv.lib.quartz.wrappedlibrary'/>
       <attribute name='type' value='osgi.bundle'/>
       <attribute name='version' type='Version' value='2.1.6'/>
@@ -1266,36 +1398,6 @@
     </requirement>
     <requirement namespace='osgi.wiring.package'>
       <directive name='filter' value='(osgi.wiring.package=org.xml.sax)'/>
-    </requirement>
-  </resource>
-  <resource>
-    <capability namespace='osgi.identity'>
-      <attribute name='osgi.identity' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
-      <attribute name='type' value='osgi.bundle'/>
-      <attribute name='version' type='Version' value='0.2.1.SNAPSHOT'/>
-    </capability>
-    <capability namespace='osgi.content'>
-      <attribute name='osgi.content' value='a398afb516274dafdf27084f7c86c8e8074e8a4b4d5d2eaf2c184886156ad92b'/>
-      <attribute name='url' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem/org.amdatu.core.org.amdatu.core.tenantstore.inmem-0.2.1.jar'/>
-      <attribute name='size' type='Long' value='10103'/>
-      <attribute name='mime' value='application/vnd.osgi.bundle'/>
-    </capability>
-    <capability namespace='osgi.wiring.bundle'>
-      <attribute name='osgi.wiring.bundle' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
-      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
-    </capability>
-    <capability namespace='osgi.wiring.host'>
-      <attribute name='osgi.wiring.host' value='org.amdatu.core.org.amdatu.core.tenantstore.inmem'/>
-      <attribute name='bundle-version' type='Version' value='0.2.1.SNAPSHOT'/>
-    </capability>
-    <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(&amp;(osgi.wiring.package=org.amdatu.core.tenant)(version&gt;=1.0.0))'/>
-    </requirement>
-    <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.felix.dm)(version&gt;=3.0.0))'/>
-    </requirement>
-    <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.framework)(version&gt;=1.5.0))'/>
     </requirement>
   </resource>
   <resource>

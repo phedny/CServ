@@ -1,0 +1,7 @@
+-buildpath: lib/activation.jar;version=file,\
+	lib/mail.jar;version=file,\
+	lib/commons-email-1.2.jar;version=file,\
+	osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager
+-sub: *.bnd
