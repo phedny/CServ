@@ -2,12 +2,16 @@ package nl.limesco.cserv.account.mongo;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.IOException;
+
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
 
 import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Optional;
 import com.mongodb.BasicDBObject;
@@ -42,6 +46,11 @@ public class AccountServiceImpl implements AccountService {
 	public void updateAccount(Account account) {
 		checkArgument(account instanceof AccountImpl);
 		collection().updateById(account.getId(), (AccountImpl) account);
+	}
+
+	@Override
+	public Account createAccountFromJson(String json) throws IOException {
+		return new ObjectMapper().readValue(json, AccountImpl.class);
 	}
 
 }
