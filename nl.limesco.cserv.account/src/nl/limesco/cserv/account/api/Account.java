@@ -1,7 +1,5 @@
 package nl.limesco.cserv.account.api;
 
-import java.util.List;
-
 public interface Account {
 
 	public String getId();
@@ -21,8 +19,5 @@ public interface Account {
 	public Address getAddress();
 
 	public void setAddress(Address address);
-	
-	public List<String> getSIMs();
-	public void setSIMs(List<String> sims);
 	
 }
