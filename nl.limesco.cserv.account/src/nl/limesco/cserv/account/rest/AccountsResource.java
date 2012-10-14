@@ -56,6 +56,27 @@ public class AccountsResource {
 	public AccountSubResource getMyAccount(@Context HttpServletRequest request) {
 		return getAccount(authorizationService.requiredAccountId(request), false);
 	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createNewAccount(String json, @Context HttpServletRequest request) {
+		authorizationService.requireUserRole(request, Role.ADMIN);
+		
+		try {
+			final Account newAccount = accountService.createAccountFromJson(json);
+			if (newAccount.getId() != null) {
+				// Account must not have an ID
+				throw new WebApplicationException(Status.BAD_REQUEST);
+			}
+			accountService.updateAccount(newAccount);
+			return Response.created(new URI(newAccount.getId())).build();
+		} catch (IOException e) {
+			throw new WebApplicationException(e);
+		} catch (URISyntaxException e) {
+			throw new WebApplicationException(e);
+		}
+	}
+
 
 	private AccountSubResource getAccount(String id, boolean admin) {
 		final Optional<? extends Account> account = accountService.getAccountById(id);
