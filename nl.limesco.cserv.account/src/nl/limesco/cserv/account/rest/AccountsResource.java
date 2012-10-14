@@ -1,16 +1,22 @@
 package nl.limesco.cserv.account.rest;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
@@ -18,9 +24,13 @@ import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.auth.api.Role;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.invoice.api.Invoice;
+import nl.limesco.cserv.invoice.api.InvoiceBuilder;
+import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.ItemLine;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -39,18 +49,18 @@ public class AccountsResource {
 	@Path("{accountId}")
 	public AccountSubResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
 		authorizationService.requireUserRole(request, Role.ADMIN);
-		return getAccount(id);
+		return getAccount(id, true);
 	}
 
 	@Path("~")
 	public AccountSubResource getMyAccount(@Context HttpServletRequest request) {
-		return getAccount(authorizationService.requiredAccountId(request));
+		return getAccount(authorizationService.requiredAccountId(request), false);
 	}
 
-	private AccountSubResource getAccount(String id) {
+	private AccountSubResource getAccount(String id, boolean admin) {
 		final Optional<? extends Account> account = accountService.getAccountById(id);
 		if (account.isPresent()) {
-			return new AccountSubResource(account.get());
+			return new AccountSubResource(account.get(), admin);
 		} else {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
@@ -60,8 +70,11 @@ public class AccountsResource {
 		
 		private final Account account;
 		
-		public AccountSubResource(Account account) {
+		private final boolean admin;
+		
+		public AccountSubResource(Account account, boolean admin) {
 			this.account = account;
+			this.admin = admin;
 		}
 	
 		@GET
@@ -112,6 +125,57 @@ public class AccountsResource {
 			} catch (JsonMappingException e) {
 				throw new WebApplicationException(e);
 			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@POST
+		@Path("invoices")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public Response createNewInvoice(String json) {
+			if (!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				final Invoice inputInvoice = invoiceService.createInvoiceFromJson(json);
+				if (inputInvoice.getId() != null) {
+					// Invoice must not have an ID
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				} else if (inputInvoice.getAccountId() != null && !inputInvoice.getAccountId().equals(account.getId())) {
+					// Invoice must have either no accountId set or the correct one
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				} else if (invoiceService.getInvoiceBySequentialId(inputInvoice.getSequentialId()).isPresent()) {
+					// Invoice must have unique sequentialId
+					throw new WebApplicationException(Status.CONFLICT);
+				}
+				
+				final InvoiceCurrency currency;
+				if (inputInvoice.getCurrency() != null) {
+					currency = inputInvoice.getCurrency();
+				} else {
+					currency = InvoiceCurrency.EUR; // Default currency
+				}
+				
+				// Build the new invoice
+				final InvoiceBuilder builder = invoiceService.buildInvoice()
+						.sequentialId(inputInvoice.getSequentialId())
+						.accountId(account.getId())
+						.currency(currency);
+				
+				if (inputInvoice.getItemLines() != null) {
+					for (ItemLine itemLine : inputInvoice.getItemLines()) {
+						builder.itemLine(itemLine);
+					}
+				}
+				
+				final Invoice invoice = builder.build();
+				invoiceService.storeInvoice(invoice);
+				return Response.created(new URI(account.getId() + "/invoices/" + invoice.getId())).build();
+				
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			} catch (URISyntaxException e) {
 				throw new WebApplicationException(e);
 			}
 		}
