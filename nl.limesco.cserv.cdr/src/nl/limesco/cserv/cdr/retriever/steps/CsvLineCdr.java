@@ -5,11 +5,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 
 public class CsvLineCdr implements Cdr {
 	
@@ -28,6 +30,8 @@ public class CsvLineCdr implements Cdr {
 	private final boolean connected;
 	
 	private final int seconds;
+	
+	private final Map<String, String> unparsedColumns = Maps.newHashMap();
 
 	public CsvLineCdr(String source, String[] fields, String[] values) throws ParseException {
 		checkArgument(fields.length == values.length);
@@ -43,8 +47,8 @@ public class CsvLineCdr implements Cdr {
 		
 		for (int i = 0; i < fields.length; i++) {
 			final String field = fields[i];
+			final String value = values[i];
 			if (!Strings.isNullOrEmpty(field) && !"-".equals(field)) {
-				final String value = values[i];
 				if ("callId".equals(field)) {
 					callId = value;
 				} else if ("account".equals(field)) {
@@ -62,6 +66,8 @@ public class CsvLineCdr implements Cdr {
 				} else {
 					throw new IllegalArgumentException("Unrecognized field name");
 				}
+			} else {
+				unparsedColumns.put(String.valueOf(i), value);
 			}
 		}
 		
@@ -99,7 +105,7 @@ public class CsvLineCdr implements Cdr {
 	public Calendar getTime() {
 		return (Calendar) time.clone();
 	}
-
+	
 	@Override
 	public String getFrom() {
 		return from;
@@ -116,8 +122,17 @@ public class CsvLineCdr implements Cdr {
 	}
 
 	@Override
+	public Type getType() {
+		return Type.UNKNOWN;
+	}
+
+	@Override
 	public long getSeconds() {
 		return seconds;
+	}
+	
+	public Map<String, String> getAdditionalInfo() {
+		return unparsedColumns;
 	}
 
 }

@@ -2,6 +2,7 @@ package nl.limesco.cserv.cdr.transform;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Map;
 
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
@@ -68,8 +69,18 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 				}
 
 				@Override
+				public Type getType() {
+					return input.getType();
+				}
+
+				@Override
 				public long getSeconds() {
 					return input.getSeconds();
+				}
+
+				@Override
+				public Map<String, String> getAdditionalInfo() {
+					return input.getAdditionalInfo();
 				}
 				
 			};
