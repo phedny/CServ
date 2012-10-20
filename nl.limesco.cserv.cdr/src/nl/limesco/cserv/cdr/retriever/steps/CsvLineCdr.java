@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 
@@ -57,6 +58,7 @@ public class CsvLineCdr implements Cdr {
 				} else if (field.startsWith("time ")) {
 					time = value;
 					timePattern = new SimpleDateFormat(field.substring(5));
+					timePattern.setTimeZone(TimeZone.getTimeZone("UTC"));
 				} else {
 					throw new IllegalArgumentException("Unrecognized field name");
 				}

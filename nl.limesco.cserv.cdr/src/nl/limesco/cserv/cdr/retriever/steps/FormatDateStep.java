@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Dictionary;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.http.client.HttpClient;
 import org.osgi.service.cm.ConfigurationException;
@@ -19,6 +20,7 @@ class FormatDateStep extends Step {
 		super(properties, index);
 		inputVar = (String) properties.get(index + "_inputvar");
 		pattern = new SimpleDateFormat((String) properties.get(index + "_pattern"));
+		pattern.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@Override

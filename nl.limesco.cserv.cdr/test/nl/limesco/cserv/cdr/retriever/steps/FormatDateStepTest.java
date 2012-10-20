@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.apache.http.client.HttpClient;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class FormatDateStepTest {
 	@Test
 	public void canFormatDate() throws Exception {
 		assertTrue(step.execute((HttpClient) null, variables));
-		assertEquals("2009-02-14 00:31:30", variables.get("OUT"));
+		assertEquals("2009-02-13 23:31:30", variables.get("OUT"));
 	}
 
 	@Test

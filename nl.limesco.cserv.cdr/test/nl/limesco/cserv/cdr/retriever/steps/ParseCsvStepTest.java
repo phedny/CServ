@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 
@@ -81,7 +82,9 @@ public class ParseCsvStepTest {
 			assertEquals("100", cdr.getFrom());
 			assertEquals("101", cdr.getTo());
 			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(new SimpleDateFormat("y-M-d H:m:s").parse("2002-20-" + (i + 1) + " 20:02:20"));
+			final SimpleDateFormat format = new SimpleDateFormat("y-M-d H:m:s");
+			format.setTimeZone(TimeZone.getTimeZone("UTC"));
+			calendar.setTime(format.parse("2002-20-" + (i + 1) + " 20:02:20"));
 			assertEquals(calendar, cdr.getTime());
 			assertEquals(42, cdr.getSeconds());
 		}
