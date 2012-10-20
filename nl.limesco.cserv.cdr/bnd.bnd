@@ -5,5 +5,10 @@
 	org.apache.httpcomponents.httpclient,\
 	org.apache.httpcomponents.httpcore,\
 	../cnf/lib/opencsv-2.3.jar;version=file,\
-	nl.limesco.cserv.account.api;version=latest
+	nl.limesco.cserv.account.api;version=latest,\
+	jackson-core-asl,\
+	jackson-mapper-asl,\
+	org.amdatu.mongo,\
+	com.mongodb,\
+	net.vz.mongodb.jackson.mongo-jackson-mapper
 -sub: *.bnd
