@@ -45,7 +45,12 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void updateAccount(Account account) {
 		checkArgument(account instanceof AccountImpl);
-		collection().updateById(account.getId(), (AccountImpl) account);
+		final AccountImpl impl = (AccountImpl) account;
+		if(impl.getId() == null) {
+			impl.setId(collection().insert(impl).getSavedId());
+		} else {
+			collection().updateById(impl.getId(), impl);
+		}
 	}
 
 	@Override
