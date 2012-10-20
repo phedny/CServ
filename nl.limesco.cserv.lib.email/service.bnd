@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.lib.email.service.Activator
+Private-Package: nl.limesco.cserv.lib.email.service

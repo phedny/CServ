@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.account.api.Account;
@@ -21,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
 	
 	private static final String COLLECTION = "accounts";
 	
+	private static final Pattern EXTERNAL_SYSTEM_PATTERN = Pattern.compile("[a-z]+");
+	
 	private volatile MongoDBService mongoDBService;
 
 	private JacksonDBCollection<AccountImpl, String> collection() {
@@ -36,6 +39,13 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
+	public Optional<? extends Account> getAccountByExternalAccount(String system, String externalAccount) {
+		checkArgument(EXTERNAL_SYSTEM_PATTERN.matcher(system).matches());
+		checkNotNull(externalAccount);
+		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("externalAccounts." + system, externalAccount)));
+	}
+
+	@Override
 	public Account createAccount() {
 		final AccountImpl account = new AccountImpl();
 		account.setId(collection().insert(account).getSavedId());
@@ -45,6 +55,11 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void updateAccount(Account account) {
 		checkArgument(account instanceof AccountImpl);
+		if (account.getExternalAccounts() != null) {
+			for (String system : account.getExternalAccounts().keySet()) {
+				checkArgument(EXTERNAL_SYSTEM_PATTERN.matcher(system).matches());
+			}
+		}
 		final AccountImpl impl = (AccountImpl) account;
 		if(impl.getId() == null) {
 			impl.setId(collection().insert(impl).getSavedId());
