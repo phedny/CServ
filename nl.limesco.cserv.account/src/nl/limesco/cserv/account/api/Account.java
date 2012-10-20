@@ -1,5 +1,7 @@
 package nl.limesco.cserv.account.api;
 
+import java.util.Map;
+
 public interface Account {
 
 	public String getId();
@@ -19,5 +21,9 @@ public interface Account {
 	public Address getAddress();
 
 	public void setAddress(Address address);
+	
+	public Map<String, String> getExternalAccounts();
+	
+	public void setExternalAccounts(Map<String, String> externalAccounts);
 	
 }

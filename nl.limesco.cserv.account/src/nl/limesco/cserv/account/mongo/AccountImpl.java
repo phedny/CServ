@@ -1,5 +1,7 @@
 package nl.limesco.cserv.account.mongo;
 
+import java.util.Map;
+
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.Address;
@@ -18,6 +20,8 @@ public class AccountImpl implements Account {
 	private Name fullName;
 	
 	private Address address;
+	
+	private Map<String, String> externalAccounts;
 
 	@ObjectId
 	@JsonProperty("_id")
@@ -59,6 +63,16 @@ public class AccountImpl implements Account {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	@Override
+	public Map<String, String> getExternalAccounts() {
+		return externalAccounts;
+	}
+
+	@Override
+	public void setExternalAccounts(Map<String, String> externalAccounts) {
+		this.externalAccounts = externalAccounts;
 	}
 	
 }
