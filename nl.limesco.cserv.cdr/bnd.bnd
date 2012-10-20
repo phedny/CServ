@@ -4,5 +4,6 @@
 	com.google.guava,\
 	org.apache.httpcomponents.httpclient,\
 	org.apache.httpcomponents.httpcore,\
-	../cnf/lib/opencsv-2.3.jar;version=file
+	../cnf/lib/opencsv-2.3.jar;version=file,\
+	nl.limesco.cserv.account.api;version=latest
 -sub: *.bnd
