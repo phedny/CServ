@@ -1,0 +1,4 @@
+Bundle-Activator: nl.limesco.cserv.cdr.retriever.Activator
+Private-Package: nl.limesco.cserv.cdr.retriever,\
+	nl.limesco.cserv.cdr.retriever.steps,\
+	au.com.bytecode.opencsv
