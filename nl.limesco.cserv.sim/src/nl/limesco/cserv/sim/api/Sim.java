@@ -1,11 +1,15 @@
 package nl.limesco.cserv.sim.api;
 
+import java.util.Calendar;
+
 import com.google.common.base.Optional;
 
 public interface Sim {
 	public String getIccid();
+	public String getPuk();
 	
-	public String getPuk(); 
+	public Optional<Calendar> getContractStartDate();
+	public void setContractStartDate(Calendar calendar);
 	
 	public String getPhoneNumber();
 	public void setPhoneNumber(String n);

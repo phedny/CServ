@@ -1,6 +1,9 @@
 package nl.limesco.cserv.sim.mongo;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Calendar;
+
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
 import nl.limesco.cserv.sim.api.SimState;
@@ -19,6 +22,22 @@ public class SimImpl implements Sim {
 	private String owner;
 	private SipSettings sipSettings;
 	private SimApnType apnType;
+	private Calendar contractStartDate;
+
+	@JsonIgnore
+	public Optional<Calendar> getContractStartDate() {
+		return Optional.fromNullable(contractStartDate);
+	}
+	public void setContractStartDate(Calendar contractStartDate) {
+		checkNotNull(contractStartDate);
+		this.contractStartDate = contractStartDate;
+	}
+	public Calendar getNullableContractStartDate() {
+		return contractStartDate;
+	}
+	public void setNullableContractStartDate(Calendar contractStartDate) {
+		this.contractStartDate = contractStartDate;
+	}
 
 	@JsonProperty("_id")
 	public String getIccid() {
