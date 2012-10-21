@@ -58,6 +58,7 @@ public class AccountsResource {
 	}
 	
 	@POST
+	@Path("create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createNewAccount(String json, @Context HttpServletRequest request) {
 		authorizationService.requireUserRole(request, Role.ADMIN);
