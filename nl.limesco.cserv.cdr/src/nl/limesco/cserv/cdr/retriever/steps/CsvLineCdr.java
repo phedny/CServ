@@ -1,6 +1,7 @@
 package nl.limesco.cserv.cdr.retriever.steps;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
@@ -18,8 +20,6 @@ public class CsvLineCdr implements Cdr {
 	private final String source;
 	
 	private final String callId;
-	
-	private final String account;
 	
 	private final Calendar time;
 	
@@ -38,7 +38,6 @@ public class CsvLineCdr implements Cdr {
 		this.source = source;
 		
 		String callId = null;
-		String account = null;
 		String time = null;
 		SimpleDateFormat timePattern = null;
 		String from = null;
@@ -52,7 +51,7 @@ public class CsvLineCdr implements Cdr {
 				if ("callId".equals(field)) {
 					callId = value;
 				} else if ("account".equals(field)) {
-					account = value;
+					unparsedColumns.put("externalAccount", value);
 				} else if ("from".equals(field)) {
 					from = value;
 				} else if ("to".equals(field)) {
@@ -71,8 +70,11 @@ public class CsvLineCdr implements Cdr {
 			}
 		}
 		
+		checkNotNull(callId);
+		checkNotNull(from);
+		checkNotNull(to);
+		
 		this.callId = callId;
-		this.account = account;
 		this.from = from;
 		this.to = to;
 		if (Strings.isNullOrEmpty(seconds)) {
@@ -97,8 +99,8 @@ public class CsvLineCdr implements Cdr {
 	}
 
 	@Override
-	public String getAccount() {
-		return account;
+	public Optional<String> getAccount() {
+		return Optional.absent();
 	}
 
 	@Override
@@ -122,8 +124,8 @@ public class CsvLineCdr implements Cdr {
 	}
 
 	@Override
-	public Type getType() {
-		return Type.UNKNOWN;
+	public Optional<Type> getType() {
+		return Optional.absent();
 	}
 
 	@Override

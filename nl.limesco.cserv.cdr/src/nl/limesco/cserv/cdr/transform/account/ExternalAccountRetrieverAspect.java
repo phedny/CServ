@@ -40,17 +40,28 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 				}
 
 				@Override
-				public String getAccount() {
-					final Optional<? extends Account> account = accountService.getAccountByExternalAccount(input.getSource(), input.getAccount());
+				public Optional<String> getAccount() {
+					final Optional<String> inputAccount = input.getAccount();
+					if (inputAccount.isPresent()) {
+						return inputAccount;
+					}
+					
+					final Map<String, String> info = input.getAdditionalInfo();
+					if (info == null || !info.containsKey("externalAccount")) {
+						return Optional.absent();
+					}
+					
+					final String externalAccount = info.get("externalAccount");
+					final Optional<? extends Account> account = accountService.getAccountByExternalAccount(input.getSource(), externalAccount);
 					if (account.isPresent()) {
-						return account.get().getId();
+						return Optional.of(account.get().getId());
 					} else {
 						final Account newAccount = accountService.createAccount();
 						final Map<String, String> externalAccounts = Maps.newHashMap();
-						externalAccounts.put(input.getSource(), input.getAccount());
+						externalAccounts.put(input.getSource(), externalAccount);
 						newAccount.setExternalAccounts(externalAccounts);
 						accountService.updateAccount(newAccount);
-						return newAccount.getId();
+						return Optional.of(newAccount.getId());
 					}
 				}
 
@@ -75,7 +86,7 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 				}
 
 				@Override
-				public Type getType() {
+				public Optional<Type> getType() {
 					return input.getType();
 				}
 

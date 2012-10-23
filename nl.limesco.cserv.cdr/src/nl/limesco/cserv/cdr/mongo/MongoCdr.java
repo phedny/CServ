@@ -1,5 +1,7 @@
 package nl.limesco.cserv.cdr.mongo;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -8,6 +10,8 @@ import nl.limesco.cserv.cdr.api.Cdr;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.google.common.base.Optional;
 
 public class MongoCdr implements Cdr {
 	
@@ -38,12 +42,12 @@ public class MongoCdr implements Cdr {
 	public MongoCdr(Cdr cdr) {
 		source = cdr.getSource();
 		callId = cdr.getCallId();
-		account = cdr.getAccount();
+		account = cdr.getAccount().orNull();
 		time = cdr.getTime();
 		from = cdr.getFrom();
 		to = cdr.getTo();
 		connected = cdr.isConnected();
-		type = cdr.getType();
+		type = cdr.getType().orNull();
 		seconds = cdr.getSeconds();
 		additionalInfo = cdr.getAdditionalInfo();
 	}
@@ -67,11 +71,22 @@ public class MongoCdr implements Cdr {
 	}
 
 	@Override
-	public String getAccount() {
-		return account;
+	@JsonIgnore
+	public Optional<String> getAccount() {
+		return Optional.fromNullable(account);
 	}
 
 	public void setAccount(String account) {
+		checkNotNull(account);
+		this.account = account;
+	}
+	
+	@JsonProperty("account")
+	public String getNullableAccount() {
+		return account;
+	}
+	
+	public void setNullableAccount(String account) {
 		this.account = account;
 	}
 
@@ -125,11 +140,22 @@ public class MongoCdr implements Cdr {
 	}
 
 	@Override
-	public Type getType() {
-		return type;
+	@JsonIgnore
+	public Optional<Type> getType() {
+		return Optional.fromNullable(type);
 	}
 
 	public void setType(Type type) {
+		checkNotNull(type);
+		this.type = type;
+	}
+	
+	@JsonProperty("type")
+	public Type getNullabelType() {
+		return type;
+	}
+	
+	public void setNullableType(Type type) {
 		this.type = type;
 	}
 

@@ -8,6 +8,7 @@ import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrRetriever;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 
 public class SpeakUpTypeAspect implements CdrRetriever {
@@ -34,7 +35,7 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 				}
 
 				@Override
-				public String getAccount() {
+				public Optional<String> getAccount() {
 					return input.getAccount();
 				}
 
@@ -59,21 +60,21 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 				}
 
 				@Override
-				public Type getType() {
-					final Type inputType = input.getType();
-					if (!Type.UNKNOWN.equals(inputType)) {
+				public Optional<Type> getType() {
+					final Optional<Type> inputType = input.getType();
+					if (inputType.isPresent()) {
 						return inputType;
 					}
 					
 					final Map<String, String> info = input.getAdditionalInfo();
 					if ("out".equals(info.get("10")) && "Netherlands - Fixed - PBX (Mobile-On-PBX)".equals(info.get("9"))) {
-						return Type.MOBILE_BPX;
+						return Optional.of(Type.MOBILE_BPX);
 					} else if ("out".equals(info.get("10"))) {
-						return Type.MOBILE_EXT;
+						return Optional.of(Type.MOBILE_EXT);
 					} else if ("in".equals(info.get("10")) && "Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
-						return Type.EXT_MOBILE;
+						return Optional.of(Type.EXT_MOBILE);
 					} else {
-						return Type.UNKNOWN;
+						return Optional.absent();
 					}
 				}
 

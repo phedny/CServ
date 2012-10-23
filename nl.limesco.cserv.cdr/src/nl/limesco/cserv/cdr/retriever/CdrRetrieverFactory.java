@@ -48,7 +48,6 @@ public class CdrRetrieverFactory implements ManagedServiceFactory {
 
 		final Properties componentProps = new Properties();
 		componentProps.put("source", source);
-		componentProps.put(CdrRetriever.ACCOUNT_TYPE, CdrRetriever.EXTERNAL);
 		
 		final Component component = dependencyManager.createComponent()
 				.setInterface(CdrRetriever.class.getName(), componentProps)
