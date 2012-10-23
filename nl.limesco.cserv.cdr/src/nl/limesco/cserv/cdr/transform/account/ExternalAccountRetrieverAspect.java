@@ -12,6 +12,7 @@ import nl.limesco.cserv.cdr.api.CdrRetriever;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 public class ExternalAccountRetrieverAspect implements CdrRetriever {
 
@@ -44,7 +45,12 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 					if (account.isPresent()) {
 						return account.get().getId();
 					} else {
-						return null;
+						final Account newAccount = accountService.createAccount();
+						final Map<String, String> externalAccounts = Maps.newHashMap();
+						externalAccounts.put(input.getSource(), input.getAccount());
+						newAccount.setExternalAccounts(externalAccounts);
+						accountService.updateAccount(newAccount);
+						return newAccount.getId();
 					}
 				}
 
