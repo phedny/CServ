@@ -6,6 +6,7 @@ import nl.limesco.cserv.cdr.api.CdrService;
 
 import org.amdatu.mongo.MongoDBService;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 
 public class CdrServiceImpl implements CdrService {
@@ -18,6 +19,12 @@ public class CdrServiceImpl implements CdrService {
 		final DBCollection dbCollection = mongoDBService.getDB().getCollection(COLLECTION);
 		final JacksonDBCollection<Cdr, String> collection = JacksonDBCollection.wrap(dbCollection, Cdr.class, String.class);
 		return collection;
+	}
+	
+	public void start() {
+		collection().ensureIndex(
+				new BasicDBObject().append("source", 1).append("callId", 1).append("type", 1),
+				new BasicDBObject().append("unique", true));
 	}
 
 	@Override
