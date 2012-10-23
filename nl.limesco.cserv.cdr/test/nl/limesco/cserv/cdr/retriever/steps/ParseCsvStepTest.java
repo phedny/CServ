@@ -78,7 +78,7 @@ public class ParseCsvStepTest {
 			final Cdr cdr = iterator.next();
 			assertEquals("testcase", cdr.getSource());
 			assertEquals(Integer.toString(i), cdr.getCallId());
-			assertEquals("acct", cdr.getAccount());
+			assertFalse(cdr.getAccount().isPresent());
 			assertEquals("100", cdr.getFrom());
 			assertEquals("101", cdr.getTo());
 			final Calendar calendar = Calendar.getInstance();
@@ -110,13 +110,13 @@ public class ParseCsvStepTest {
 	public static List<Object[]> data() {
 		return Arrays.asList(
 				// Test case with 1 line
-				new Object[] { "callId,time y-M-d H:m:s,seconds,account,to,from", "0;2002-20-01 20:02:20;42;acct;101;100", 1 },
+				new Object[] { "callId,time y-M-d H:m:s,seconds,to,from", "0;2002-20-01 20:02:20;42;101;100", 1 },
 				// Test case with ignorable fields
-				new Object[] { "-,callId,account,time y-M-d H:m:s,seconds,-,from,to,-,-", "a;0;acct;2002-20-01 20:02:20;42;ignore;100;101;13;37", 1 },
+				new Object[] { "-,callId,time y-M-d H:m:s,seconds,-,from,to,-,-", "a;0;2002-20-01 20:02:20;42;ignore;100;101;13;37", 1 },
 				// Test case with multiple lines, without line separator for last line
-				new Object[] { "callId,account,time y-M-d H:m:s,to,from,seconds", "0;acct;2002-20-01 20:02:20;101;100;42\n1;acct;2002-20-02 20:02:20;101;100;42\n2;acct;2002-20-03 20:02:20;101;100;42", 3 },
+				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds", "0;2002-20-01 20:02:20;101;100;42\n1;2002-20-02 20:02:20;101;100;42\n2;2002-20-03 20:02:20;101;100;42", 3 },
 				// Test case with multiple lines, with line separator for last line
-				new Object[] { "callId,account,time y-M-d H:m:s,to,from,seconds", "0;acct;2002-20-01 20:02:20;101;100;42\n1;acct;2002-20-02 20:02:20;101;100;42\n2;acct;2002-20-03 20:02:20;101;100;42\n", 3 });
+				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds", "0;2002-20-01 20:02:20;101;100;42\n1;2002-20-02 20:02:20;101;100;42\n2;2002-20-03 20:02:20;101;100;42\n", 3 });
 	}
 	
 }
