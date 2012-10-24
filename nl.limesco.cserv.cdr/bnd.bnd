@@ -10,5 +10,8 @@
 	jackson-mapper-asl,\
 	org.amdatu.mongo,\
 	com.mongodb,\
-	net.vz.mongodb.jackson.mongo-jackson-mapper
+	net.vz.mongodb.jackson.mongo-jackson-mapper,\
+	nl.limesco.cserv.lib.quartz.wrappedlibrary,\
+	nl.limesco.cserv.lib.quartz.api;version=latest,\
+	org.mockito.mockito-all
 -sub: *.bnd

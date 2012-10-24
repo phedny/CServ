@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.cdr.job.Activator
+Private-Package: nl.limesco.cserv.cdr.job
