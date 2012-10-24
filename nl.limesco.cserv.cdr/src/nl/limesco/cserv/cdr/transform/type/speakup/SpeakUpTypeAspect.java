@@ -67,15 +67,23 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 					}
 					
 					final Map<String, String> info = input.getAdditionalInfo();
-					if ("out".equals(info.get("10")) && "Netherlands - Fixed - PBX (Mobile-On-PBX)".equals(info.get("9"))) {
-						return Optional.of(Type.MOBILE_BPX);
-					} else if ("out".equals(info.get("10"))) {
-						return Optional.of(Type.MOBILE_EXT);
-					} else if ("in".equals(info.get("10")) && "Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
-						return Optional.of(Type.EXT_MOBILE);
-					} else {
-						return Optional.absent();
+					if ("out".equals(info.get("10"))) {
+						if ("Netherlands - Fixed - PBX (Mobile-On-PBX)".equals(info.get("9"))) {
+							return Optional.of(Type.MOBILE_PBX);
+						} else if ("Netherlands - Mobile - Handset (Mobile-On-PBX)".equals(info.get("9"))) {
+							return Optional.of(Type.PBX_MOBILE);
+						} else if ("Netherlands - Mobile - Handset".equals(info.get("9"))) {
+							return Optional.of(Type.PBX_MOBILE);
+						} else {
+							return Optional.of(Type.MOBILE_EXT);
+						}
+					} else if ("in".equals(info.get("10"))) {
+						if ("Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
+							return Optional.of(Type.EXT_PBX);
+						}
 					}
+					
+					return Optional.absent();
 				}
 
 				@Override
