@@ -8,9 +8,9 @@ import com.google.common.base.Optional;
 public interface Cdr {
 	
 	public enum Type {
-		EXT_EXT     ,  BPX_EXT     ,  MOBILE_EXT     ,
-		EXT_PBX     ,  BPX_BPX     ,  MOBILE_BPX     ,
-		EXT_MOBILE  ,  BPX_MOBILE  ,  MOBILE_MOBILE  ,
+		EXT_EXT     ,  PBX_EXT     ,  MOBILE_EXT     ,
+		EXT_PBX     ,  PBX_PBX     ,  MOBILE_PBX     ,
+		EXT_MOBILE  ,  PBX_MOBILE  ,  MOBILE_MOBILE  ,
 	}
 
 	String getSource();
