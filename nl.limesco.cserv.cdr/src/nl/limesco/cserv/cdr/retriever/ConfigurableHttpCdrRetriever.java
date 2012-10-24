@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrRetriever;
@@ -55,6 +56,7 @@ public class ConfigurableHttpCdrRetriever implements CdrRetriever {
 			day.set(Calendar.MINUTE, 0);
 			day.set(Calendar.SECOND, 0);
 			day.set(Calendar.MILLISECOND, 0);
+			day.setTimeZone(TimeZone.getTimeZone("UTC"));
 			variables.put(":DATE", day);
 			
 			final CookieStore cookieStore = new BasicCookieStore();
