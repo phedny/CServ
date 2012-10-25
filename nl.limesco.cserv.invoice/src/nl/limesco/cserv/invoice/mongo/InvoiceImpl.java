@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.ItemLine;
@@ -19,13 +17,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 public class InvoiceImpl implements Invoice {
 
 	private String id;
-	
-	private String sequentialId;
 	
 	private String accountId;
 	
@@ -39,7 +34,6 @@ public class InvoiceImpl implements Invoice {
 	
 	private long totalWithTaxes;
 	
-	@ObjectId
 	@JsonProperty("_id")
 	@Override
 	public String getId() {
@@ -48,15 +42,6 @@ public class InvoiceImpl implements Invoice {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@Override
-	public String getSequentialId() {
-		return sequentialId;
-	}
-
-	public void setSequentialId(String sequentialId) {
-		this.sequentialId = sequentialId;
 	}
 
 	@Override

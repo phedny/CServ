@@ -6,8 +6,6 @@ public interface Invoice {
 
 	String getId();
 	
-	String getSequentialId();
-	
 	String getAccountId();
 	
 	InvoiceCurrency getCurrency();

@@ -28,12 +28,6 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 	}
 
 	@Override
-	public InvoiceBuilder sequentialId(String sequentialId) {
-		invoice.setSequentialId(sequentialId);
-		return this;
-	}
-
-	@Override
 	public InvoiceBuilder accountId(String accountId) {
 		invoice.setAccountId(accountId);
 		return this;

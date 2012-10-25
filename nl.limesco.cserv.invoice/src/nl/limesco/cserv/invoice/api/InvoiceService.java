@@ -9,11 +9,9 @@ public interface InvoiceService {
 
 	Optional<? extends Invoice> getInvoiceById(String id);
 
-	Optional<? extends Invoice> getInvoiceBySequentialId(String sequentialId);
-
 	Collection<? extends Invoice> getInvoicesByAccountId(String accountId);
 	
-	Invoice storeInvoice(Invoice invoice);
+	Invoice storeInvoice(Invoice invoice) throws IdAllocationException;
 	
 	InvoiceBuilder buildInvoice();
 	

@@ -4,27 +4,39 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.DBCursor;
+import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
+import net.vz.mongodb.jackson.WriteResult;
+import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 
 import org.amdatu.mongo.MongoDBService;
-import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
+import com.mongodb.CommandResult;
 import com.mongodb.DBCollection;
+import com.mongodb.WriteConcern;
 
 public class InvoiceServiceImpl implements InvoiceService {
+	
+	private static final Pattern PREFIX_PATTERN = Pattern.compile("[A-Za-z0-9]+");
 
 	private static final String COLLECTION = "invoices";
+	
+	private static final int INVOICE_ID_LENGTH = 9; 
+	
+	private static final int NUMBER_OF_SAVE_TIMES = 5;
 	
 	private volatile MongoDBService mongoDBService;
 
@@ -37,13 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Override
 	public Optional<? extends Invoice> getInvoiceById(String id) {
 		checkNotNull(id);
-		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", new ObjectId(id))));
-	}
-
-	@Override
-	public Optional<? extends Invoice> getInvoiceBySequentialId(String sequentialId) {
-		checkNotNull(sequentialId);
-		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("sequentialId", sequentialId)));
+		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", id)));
 	}
 
 	@Override
@@ -54,19 +60,52 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Invoice storeInvoice(Invoice invoice) {
+	public Invoice storeInvoice(Invoice invoice) throws IdAllocationException {
 		checkNotNull(invoice);
 		checkArgument(invoice instanceof InvoiceImpl);
 		checkArgument(invoice.isSound());
+		
 		final InvoiceImpl invoiceImpl = (InvoiceImpl) invoice;
-		if (invoice.getId() == null) {
-			final String savedId = collection().insert(invoiceImpl).getSavedId();
-			invoiceImpl.setId(savedId);
-			return invoice;
+		
+		if (invoiceImpl.getId() != null) {
+			collection().updateById(invoiceImpl.getId(), invoiceImpl);
 		} else {
-			collection().updateById(invoice.getId(), invoiceImpl);
+			// Try saving the invoice a couple of time
+			final String prefix = getInvoicePrefix();
+			for (int i = 0; i < NUMBER_OF_SAVE_TIMES; i++) {
+				invoiceImpl.setId(allocateInvoiceId(prefix, INVOICE_ID_LENGTH));
+				final WriteResult<InvoiceImpl, String> result = collection().insert(invoiceImpl);
+				final CommandResult lastError = result.getLastError(WriteConcern.FSYNC_SAFE);
+				if (!lastError.containsField("code") || lastError.getInt("code") != 11000 /* dup key */) {
+					return invoiceImpl;
+				}
+			}
+			
+			// Failed to save after several tries
+			throw new IdAllocationException("Failed to allocate ID for invoice");
 		}
-		return null;
+		return invoiceImpl;
+	}
+	
+	private String getInvoicePrefix() {
+		return (Calendar.getInstance().get(Calendar.YEAR) % 100) + "C";
+	}
+
+	private String allocateInvoiceId(String prefix, int length) {
+		checkArgument(PREFIX_PATTERN.matcher(prefix).matches());
+		
+		// Determine highest existing invoice sequence with the required prefix
+		final DBCursor<InvoiceImpl> cursor = collection().find(DBQuery.regex("_id", Pattern.compile("^" + prefix)), DBQuery.is("_id", 1)).
+				sort(DBQuery.is("_id", -1)).limit(1);
+		
+		final int sequenceId;
+		if (cursor.hasNext()) {
+			sequenceId = Integer.parseInt(cursor.next().getId().substring(prefix.length()).replaceFirst("^0+", ""));
+		} else {
+			sequenceId = 0;
+		}
+		
+		return String.format("%s%0" + (length - prefix.length()) + "d", prefix, sequenceId + 1);
 	}
 
 	@Override

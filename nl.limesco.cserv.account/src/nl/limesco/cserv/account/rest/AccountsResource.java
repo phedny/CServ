@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,6 +22,7 @@ import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.auth.api.Role;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
+import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
@@ -30,7 +30,6 @@ import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.ItemLine;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -166,9 +165,6 @@ public class AccountsResource {
 				} else if (inputInvoice.getAccountId() != null && !inputInvoice.getAccountId().equals(account.getId())) {
 					// Invoice must have either no accountId set or the correct one
 					throw new WebApplicationException(Status.BAD_REQUEST);
-				} else if (invoiceService.getInvoiceBySequentialId(inputInvoice.getSequentialId()).isPresent()) {
-					// Invoice must have unique sequentialId
-					throw new WebApplicationException(Status.CONFLICT);
 				}
 				
 				final InvoiceCurrency currency;
@@ -180,7 +176,6 @@ public class AccountsResource {
 				
 				// Build the new invoice
 				final InvoiceBuilder builder = invoiceService.buildInvoice()
-						.sequentialId(inputInvoice.getSequentialId())
 						.accountId(account.getId())
 						.currency(currency);
 				
@@ -198,6 +193,8 @@ public class AccountsResource {
 				throw new WebApplicationException(e);
 			} catch (URISyntaxException e) {
 				throw new WebApplicationException(e);
+			} catch (IdAllocationException e) {
+				throw new WebApplicationException(e, Status.CONFLICT);
 			}
 		}
 		

@@ -21,11 +21,6 @@ public class InvoiceBuilderTest {
 	}
 	
 	@Test
-	public void invoiceCanHaveSequentialId() {
-		assertEquals("id", builder.sequentialId("id").build().getSequentialId());
-	}
-	
-	@Test
 	public void invoiceCanHaveAccountId() {
 		assertEquals("id", builder.accountId("id").build().getAccountId());
 	}
@@ -51,7 +46,7 @@ public class InvoiceBuilderTest {
 	
 	@Test
 	public void complexInvoiceCanBeCreated() {
-		final Invoice invoice = builder.id("id").sequentialId("seq").accountId("acc")
+		final Invoice invoice = builder.id("id").accountId("acc")
 				.currency(InvoiceCurrency.EUR)
 				.normalItemLine("Item 1", 1, 15, 0.21)
 				.normalItemLine("Item 2", 2, 4, 0.21)

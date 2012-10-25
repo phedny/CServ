@@ -4,8 +4,6 @@ public interface InvoiceBuilder {
 
 	InvoiceBuilder id(String id);
 	
-	InvoiceBuilder sequentialId(String sequentialId);
-	
 	InvoiceBuilder accountId(String accountId);
 	
 	InvoiceBuilder currency(InvoiceCurrency currency);

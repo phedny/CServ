@@ -7,8 +7,6 @@ public class SummarizedInvoice {
 
 	private String id;
 	
-	private String sequentialId;
-	
 	private InvoiceCurrency currency;
 
 	private long totalWithoutTaxes;
@@ -20,7 +18,6 @@ public class SummarizedInvoice {
 	
 	public SummarizedInvoice(Invoice invoice) {
 		id = invoice.getId();
-		sequentialId = invoice.getSequentialId();
 		currency = invoice.getCurrency();
 		totalWithoutTaxes = invoice.getTotalWithoutTaxes();
 		totalWithTaxes = invoice.getTotalWithTaxes();
@@ -32,14 +29,6 @@ public class SummarizedInvoice {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getSequentialId() {
-		return sequentialId;
-	}
-
-	public void setSequentialId(String sequentialId) {
-		this.sequentialId = sequentialId;
 	}
 
 	public InvoiceCurrency getCurrency() {
