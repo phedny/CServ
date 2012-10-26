@@ -10,4 +10,5 @@
 	jackson-mapper-asl,\
 	org.amdatu.web.rest.jaxrs,\
 	nl.limesco.cserv.cdr.api;version=latest,\
-	nl.limesco.cserv.sim.api;version=latest
+	nl.limesco.cserv.sim.api;version=latest,\
+	nl.limesco.cserv.util.dm;version=latest
