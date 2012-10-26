@@ -1,1 +1,2 @@
 Private-Package: nl.limesco.cserv.pricing.mongo
+Bundle-Activator: nl.limesco.cserv.pricing.mongo.Activator

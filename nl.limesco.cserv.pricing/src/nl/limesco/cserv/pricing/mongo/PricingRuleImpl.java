@@ -1,5 +1,6 @@
 package nl.limesco.cserv.pricing.mongo;
 
+import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
 import nl.limesco.cserv.pricing.api.Pricing;
@@ -12,12 +13,24 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class PricingRuleImpl implements PricingRule {
 	
+	private String id;
+	
 	private ApplicationConstraintsImpl applicability;
 	
 	private PricingImpl price;
 	
 	private PricingImpl cost;
 
+	@ObjectId
+	@JsonProperty("_id")
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	@Override
 	@JsonIgnore
 	public ApplicationConstraints getApplicability() {
