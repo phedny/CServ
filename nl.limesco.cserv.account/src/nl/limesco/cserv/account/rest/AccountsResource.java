@@ -28,6 +28,9 @@ import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.ItemLine;
+import nl.limesco.cserv.payment.api.Payment;
+import nl.limesco.cserv.payment.api.PaymentBuilder;
+import nl.limesco.cserv.payment.api.PaymentService;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -44,6 +47,8 @@ public class AccountsResource {
 	private volatile AccountService accountService;
 	
 	private volatile InvoiceService invoiceService;
+	
+	private volatile PaymentService paymentService;
 
 	@Path("{accountId}")
 	public AccountSubResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
@@ -212,6 +217,86 @@ public class AccountsResource {
 			}
 		}
 		
+		@GET
+		@Path("payments")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String getPayments() {
+			try {
+				return new ObjectMapper().writeValueAsString(paymentService.getPaymentsByAccountId(account.getId()));
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@GET
+		@Path("payments/{paymentId}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String getPaymentById(@PathParam("paymentId") String id) {
+			final Optional<? extends Payment> optionalPayment = paymentService.getPaymentById(id);
+			if (!optionalPayment.isPresent()) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			final Payment payment = optionalPayment.get();
+			if (!payment.getAccountId().equals(account.getId())) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				return new ObjectMapper().writeValueAsString(payment);
+			} catch (JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch (JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@POST
+		@Path("payments")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public Response createNewPayment(String json) {
+			if (!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				final Payment inputPayment = paymentService.createPaymentFromJson(json);
+				if (inputPayment.getId() != null) {
+					// Object must not have an ID
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				} else if (inputPayment.getAccountId() != null && !inputPayment.getAccountId().equals(account.getId())) {
+					// Invoice must have either no accountId set or the correct one
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				}
+				
+				final InvoiceCurrency currency;
+				if (inputPayment.getCurrency() != null) {
+					currency = inputPayment.getCurrency();
+				} else {
+					currency = InvoiceCurrency.EUR; // Default currency
+				}
+				
+				// Build the new invoice
+				final PaymentBuilder builder = paymentService.buildPayment(inputPayment)
+						.accountId(account.getId())
+						.currency(currency);
+				
+				final Payment payment = builder.build();
+				paymentService.updatePayment(payment);
+				return Response.created(new URI(account.getId() + "/payments/" + payment.getId())).build();
+				
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			} catch (URISyntaxException e) {
+				throw new WebApplicationException(e);
+			}
+		}
 	}
 
 }

@@ -1,0 +1,2 @@
+Private-Package: nl.limesco.cserv.payment.mongo
+Bundle-Activator: nl.limesco.cserv.payment.mongo.Activator

@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response.Status;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.payment.api.PaymentService;
 import nl.limesco.cserv.util.dm.UnavailableOSGiService;
 
 import org.apache.felix.dm.DependencyActivatorBase;
@@ -21,7 +22,8 @@ public class Activator extends DependencyActivatorBase {
 				.setImplementation(AccountsResource.class)
 				.add(createServiceDependency().setService(WebAuthorizationService.class).setRequired(true))
 				.add(createServiceDependency().setService(AccountService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(AccountService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
-				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
+				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
+				.add(createServiceDependency().setService(PaymentService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(PaymentService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 
 	@Override
