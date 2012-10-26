@@ -98,6 +98,20 @@ public class AccountsResource {
 		}
 	
 		@GET
+		@Produces(MediaType.APPLICATION_JSON)
+		public String getAccount() {
+			try {
+				return new ObjectMapper().writeValueAsString(this.account);
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@GET
 		@Path("invoices")
 		@Produces(MediaType.APPLICATION_JSON)
 		public String getInvoices() {
