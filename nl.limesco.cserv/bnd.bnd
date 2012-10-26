@@ -94,3 +94,4 @@
 	nl.limesco.cserv.cdr.api;version=latest,\
 	com.google.guava
 -runproperties: felix.fileinstall.dir=conf/
+-runvm: -ea
