@@ -1,0 +1,13 @@
+-sub: *.bnd
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager,\
+	com.google.guava,\
+	com.mongodb,\
+	net.vz.mongodb.jackson.mongo-jackson-mapper,\
+	org.amdatu.mongo,\
+	jackson-core-asl,\
+	jackson-mapper-asl,\
+	org.amdatu.web.rest.jaxrs,\
+	nl.limesco.cserv.cdr.api;version=latest,\
+	nl.limesco.cserv.sim.api;version=latest
