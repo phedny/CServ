@@ -39,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Optional<? extends Account> getAccountById(String id) {
 		checkNotNull(id);
+		if (!ObjectId.isValid(id)) {
+			return Optional.absent();
+		}
 		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", new ObjectId(id))));
 	}
 
