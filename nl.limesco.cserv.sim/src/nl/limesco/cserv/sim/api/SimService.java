@@ -1,5 +1,6 @@
 package nl.limesco.cserv.sim.api;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -18,4 +19,6 @@ public interface SimService {
 	
 	Sim registerSim(String iccid, String puk);
 	void updateSim(Sim sim);
+	
+	Sim createSimFromJson(String json) throws IOException;
 }

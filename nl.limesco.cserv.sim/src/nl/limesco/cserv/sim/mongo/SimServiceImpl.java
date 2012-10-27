@@ -3,6 +3,7 @@ package nl.limesco.cserv.sim.mongo;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import nl.limesco.cserv.sim.api.SimState;
 
 import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
@@ -78,11 +80,15 @@ public class SimServiceImpl implements SimService {
 		collection().insert(sim);
 		return sim;
 	}
-
+	
 	@Override
 	public void updateSim(Sim sim) {
 		checkArgument(sim instanceof SimImpl);
 		collection().updateById(sim.getIccid(), (SimImpl) sim);
 	}
 
+	@Override
+	public Sim createSimFromJson(String json) throws IOException {
+		return new ObjectMapper().readValue(json, SimImpl.class);
+	}
 }
