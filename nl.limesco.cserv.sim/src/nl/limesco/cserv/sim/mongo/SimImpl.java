@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Calendar;
 
+import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
 import nl.limesco.cserv.sim.api.SimState;
@@ -23,6 +24,8 @@ public class SimImpl implements Sim {
 	private SipSettings sipSettings;
 	private SimApnType apnType;
 	private Calendar contractStartDate;
+	private String activationInvoiceId;
+	private MonthedInvoice lastMonthlyFeesInvoice;
 
 	@JsonIgnore
 	public Optional<Calendar> getContractStartDate() {
@@ -105,5 +108,34 @@ public class SimImpl implements Sim {
 	public void setSimState(SimState state) {
 		this.state = state;
 	}
-
+	
+	@JsonIgnore
+	public Optional<String> getActivationInvoiceId() {
+		return Optional.fromNullable(activationInvoiceId);
+	}
+	public String getNullableActivationInvoiceId() {
+		return activationInvoiceId;
+	}
+	public void setActivationInvoiceId(String id) {
+		checkNotNull(id);
+		this.activationInvoiceId = id;
+	}
+	public void setNullableActivationInvoiceId(String id) {
+		this.activationInvoiceId = id;
+	}
+	
+	@JsonIgnore
+	public Optional<MonthedInvoice> getLastMonthlyFeesInvoice() {
+		return Optional.fromNullable(lastMonthlyFeesInvoice);
+	}
+	public MonthedInvoice getNullableLastMonthlyFeesInvoice() {
+		return lastMonthlyFeesInvoice;
+	}
+	public void setLastMonthlyFeesInvoice(MonthedInvoice invoice) {
+		checkNotNull(invoice);
+		this.lastMonthlyFeesInvoice = invoice;
+	}
+	public void setNullableLastMonthlyFeesInvoice(MonthedInvoice invoice) {
+		this.lastMonthlyFeesInvoice = invoice;
+	}
 }

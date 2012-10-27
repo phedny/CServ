@@ -26,4 +26,10 @@ public interface Sim {
 	
 	public SimApnType getApnType();
 	public void setApnType(SimApnType t);
+	
+	public Optional<String> getActivationInvoiceId();
+	public void setActivationInvoiceId(String string);
+
+	public Optional<MonthedInvoice> getLastMonthlyFeesInvoice();
+	public void setLastMonthlyFeesInvoice(MonthedInvoice invoice);
 }
