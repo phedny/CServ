@@ -1,6 +1,7 @@
 package nl.limesco.cserv.invoice.mongo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import nl.limesco.cserv.invoice.api.DurationItemLine;
@@ -30,6 +31,12 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 	@Override
 	public InvoiceBuilder accountId(String accountId) {
 		invoice.setAccountId(accountId);
+		return this;
+	}
+
+	@Override
+	public InvoiceBuilder creationDate(Calendar creationDate) {
+		invoice.setCreationDate(creationDate);
 		return this;
 	}
 

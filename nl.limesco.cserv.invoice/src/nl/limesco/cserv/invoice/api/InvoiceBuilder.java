@@ -1,10 +1,14 @@
 package nl.limesco.cserv.invoice.api;
 
+import java.util.Calendar;
+
 public interface InvoiceBuilder {
 
 	InvoiceBuilder id(String id);
 	
 	InvoiceBuilder accountId(String accountId);
+	
+	InvoiceBuilder creationDate(Calendar creationDate);
 	
 	InvoiceBuilder currency(InvoiceCurrency currency);
 	

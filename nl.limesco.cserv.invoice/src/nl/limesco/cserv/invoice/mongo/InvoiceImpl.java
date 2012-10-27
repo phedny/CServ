@@ -1,7 +1,11 @@
 package nl.limesco.cserv.invoice.mongo;
 
 import java.util.ArrayList;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +19,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -23,6 +28,8 @@ public class InvoiceImpl implements Invoice {
 	private String id;
 	
 	private String accountId;
+	
+	private Calendar creationDate;
 	
 	private InvoiceCurrency currency;
 	
@@ -53,6 +60,31 @@ public class InvoiceImpl implements Invoice {
 		this.accountId = accountId;
 	}
 
+	@Override
+	@JsonIgnore
+	public Optional<Calendar> getCreationDate() {
+		return Optional.fromNullable(creationDate);
+	}
+	
+	public void setCreationDate(Calendar creationDate) {
+		checkNotNull(creationDate);
+		this.creationDate = creationDate;
+	}
+	
+	@JsonProperty("creationDate")
+	public Date getCreationDateFromCalendar() {
+		return creationDate.getTime();
+	}
+	
+	public void setCreationDateFromCalendar(Calendar creationDateCalendar) {
+		if (creationDateCalendar == null) {
+			Calendar currentDate = Calendar.getInstance();
+			this.creationDate = currentDate;
+		} else {
+			this.creationDate = creationDateCalendar;
+		}
+	}
+	
 	@Override
 	public InvoiceCurrency getCurrency() {
 		return currency;

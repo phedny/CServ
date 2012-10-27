@@ -72,6 +72,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 		} else {
 			// Try saving the invoice a couple of time
 			final String prefix = getInvoicePrefix();
+			invoiceImpl.setCreationDateFromCalendar(null); // set current date as creationDate
 			for (int i = 0; i < NUMBER_OF_SAVE_TIMES; i++) {
 				invoiceImpl.setId(allocateInvoiceId(prefix, INVOICE_ID_LENGTH));
 				final WriteResult<InvoiceImpl, String> result = collection().insert(invoiceImpl);
