@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.sim.rest.Activator
+Private-Package: nl.limesco.cserv.sim.rest
