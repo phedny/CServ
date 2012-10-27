@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
-import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.Cdr.Type;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
@@ -19,8 +18,6 @@ import com.google.common.base.Optional;
 
 public class ApplicationConstraintsImpl implements ApplicationConstraints {
 
-	private String id;
-	
 	private Calendar validFrom;
 	
 	private Calendar validUntil;
@@ -30,16 +27,6 @@ public class ApplicationConstraintsImpl implements ApplicationConstraints {
 	private Set<CallConnectivityType> connectivityTypes;
 	
 	private Set<Cdr.Type> cdrTypes;
-	
-	@ObjectId
-	@JsonProperty("_id")
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
 	
 	@Override
 	@JsonIgnore

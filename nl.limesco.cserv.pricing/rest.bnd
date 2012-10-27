@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.pricing.rest.Activator
+Private-Package: nl.limesco.cserv.pricing.rest

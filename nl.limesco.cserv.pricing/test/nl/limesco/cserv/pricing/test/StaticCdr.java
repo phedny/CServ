@@ -15,15 +15,19 @@ final class StaticCdr implements Cdr {
 	
 	private final boolean connected;
 	
-	private final boolean hasCdrType;
+	private final Cdr.Type cdrType;
 	
 	private final long seconds;
-	
+
 	StaticCdr(Calendar time, String source, boolean connected, boolean hasCdrType, long seconds) {
+		this(time, source, connected, hasCdrType ? Cdr.Type.EXT_EXT : null, seconds);
+	}
+
+	StaticCdr(Calendar time, String source, boolean connected, Cdr.Type cdrType, long seconds) {
 		this.time = time;
 		this.source = source;
 		this.connected = connected;
-		this.hasCdrType = hasCdrType;
+		this.cdrType = cdrType;
 		this.seconds = seconds;
 	}
 
@@ -64,7 +68,7 @@ final class StaticCdr implements Cdr {
 
 	@Override
 	public Optional<Cdr.Type> getType() {
-		return Optional.fromNullable(hasCdrType ? Cdr.Type.EXT_EXT : null);
+		return Optional.fromNullable(cdrType);
 	}
 
 	@Override
