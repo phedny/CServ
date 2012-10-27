@@ -2,6 +2,9 @@ package nl.limesco.cserv.invoice.mongo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Calendar;
+
 import nl.limesco.cserv.invoice.api.ItemLine;
 import nl.limesco.cserv.invoice.api.TaxLine;
 
@@ -182,6 +185,14 @@ public class InvoiceTest {
 		invoice.setTotalWithoutTaxes();
 		invoice.setTotalWithTaxes(173554);
 		assertEquals(false, invoice.isSound());
+	}
+	
+	@Test
+	public void invoiceCreationDateCanBeSetFromCalendar() {
+		final Calendar cal = Calendar.getInstance();
+		invoice.setCreationDateFromCalendar(cal);
+		
+		assertEquals(true, (invoice.getCreationDate() != null));
 	}
 	
 }
