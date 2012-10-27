@@ -11,6 +11,7 @@ import nl.limesco.cserv.pricing.api.PricingRule;
 
 import org.amdatu.mongo.MongoDBService;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -33,6 +34,10 @@ public class PricingServiceHelper {
 				.append("applicability.source", 1)
 				.append("applicability.callConnectivityType", 1)
 				.append("applicability.cdrType", 1));
+	}
+
+	public Optional<? extends PricingRule> getPricingRuleById(String id) {
+		return Optional.fromNullable(collection().findOneById(id));
 	}
 
 	public Collection<? extends PricingRule> getApplicablePricingRules(Calendar day, ApplicabilityFilter filter) {

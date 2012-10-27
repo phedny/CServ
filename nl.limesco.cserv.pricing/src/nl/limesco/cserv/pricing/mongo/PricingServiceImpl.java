@@ -12,6 +12,7 @@ import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
 import nl.limesco.cserv.pricing.api.PricingService;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 
 public class PricingServiceImpl implements PricingService {
@@ -28,6 +29,11 @@ public class PricingServiceImpl implements PricingService {
 	
 	public Object[] getComposition() {
 		return new Object[] { this, helper };
+	}
+
+	@Override
+	public Optional<? extends PricingRule> getPricingRuleById(String id) {
+		return helper.getPricingRuleById(id);
 	}
 
 	@Override

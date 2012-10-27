@@ -73,15 +73,20 @@ public class InvoiceImpl implements Invoice {
 	
 	@JsonProperty("creationDate")
 	public Date getCreationDateFromCalendar() {
-		return creationDate.getTime();
+		if (creationDate == null) {
+			return null;
+		} else {
+			return creationDate.getTime();
+		}
 	}
 	
-	public void setCreationDateFromCalendar(Calendar creationDateCalendar) {
+	public void setCreationDateFromCalendar(Date creationDateCalendar) {
 		if (creationDateCalendar == null) {
-			Calendar currentDate = Calendar.getInstance();
-			this.creationDate = currentDate;
+			this.creationDate = null;
 		} else {
-			this.creationDate = creationDateCalendar;
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(creationDateCalendar);
+			this.creationDate = calendar;
 		}
 	}
 	

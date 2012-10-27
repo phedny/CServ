@@ -42,10 +42,19 @@ public class SimServiceImpl implements SimService {
 		final DBCursor<SimImpl> invoiceCursor = collection().find(new BasicDBObject().append("ownerAccountId", accountId));
 		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
 	}
-	
+
 	@Override
 	public Collection<? extends Sim> getActivatedSimsWithoutActivationInvoice() {
 		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery.and(
+				DBQuery.in("state", SimState.ACTIVATED, SimState.ACTIVATION_REQUESTED),
+				DBQuery.notExists("activationInvoiceId")));
+		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
+	}
+
+	@Override
+	public Collection<? extends Sim> getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(String accountId) {
+		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery
+				.is("ownerAccountId", accountId).and(
 				DBQuery.in("state", SimState.ACTIVATED, SimState.ACTIVATION_REQUESTED),
 				DBQuery.notExists("activationInvoiceId")));
 		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
@@ -56,6 +65,21 @@ public class SimServiceImpl implements SimService {
 		int year = monthCal.get(Calendar.YEAR);
 		int month = monthCal.get(Calendar.MONTH);
 		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery.or(
+				DBQuery.notExists("lastMonthlyFeesInvoice"),
+				DBQuery.lessThan("lastMonthlyFeesInvoice.year", year),
+				DBQuery.and(
+						DBQuery.lessThanEquals("lastMonthlyFeesInvoice.year", year),
+						DBQuery.lessThan("lastMonthlyFeesInvoice.month", month)
+				)
+			));
+		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
+	}
+
+	@Override
+	public Collection<? extends Sim> getActivatedSimsLastInvoicedBeforeByOwnerAccountId(Calendar monthCal, String accountId) {
+		int year = monthCal.get(Calendar.YEAR);
+		int month = monthCal.get(Calendar.MONTH);
+		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery.is("ownerAccountId", accountId).or(
 				DBQuery.notExists("lastMonthlyFeesInvoice"),
 				DBQuery.lessThan("lastMonthlyFeesInvoice.year", year),
 				DBQuery.and(

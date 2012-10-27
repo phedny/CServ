@@ -13,4 +13,6 @@
 	nl.limesco.cserv.util.dm;version=latest,\
 	nl.limesco.cserv.auth.api;version=latest,\
 	nl.limesco.cserv.payment.api;version=latest,\
-	javax.servlet
+	javax.servlet,\
+	org.apache.velocity,\
+	com.springsource.org.apache.commons.collections

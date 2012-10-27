@@ -190,7 +190,7 @@ public class InvoiceTest {
 	@Test
 	public void invoiceCreationDateCanBeSetFromCalendar() {
 		final Calendar cal = Calendar.getInstance();
-		invoice.setCreationDateFromCalendar(cal);
+		invoice.setCreationDateFromCalendar(cal.getTime());
 		
 		assertEquals(true, (invoice.getCreationDate() != null));
 	}

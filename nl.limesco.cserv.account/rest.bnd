@@ -1,2 +1,3 @@
 Bundle-Activator: nl.limesco.cserv.account.rest.Activator
 Private-Package: nl.limesco.cserv.account.rest
+Include-Resource: resources=resources
