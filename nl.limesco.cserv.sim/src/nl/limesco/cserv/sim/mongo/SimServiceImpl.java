@@ -18,7 +18,6 @@ import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -39,7 +38,7 @@ public class SimServiceImpl implements SimService {
 	public Collection<? extends Sim> getSimsByOwnerAccountId(String accountId) {
 		checkNotNull(accountId);
 		final DBCursor<SimImpl> invoiceCursor = collection().find(new BasicDBObject().append("owner", accountId));
-		return Lists.newArrayList((Iterator<SimImpl>) invoiceCursor);
+		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
 	}
 	
 	@Override
