@@ -1,0 +1,53 @@
+\documentclass[a4paper,11pt]{memoir}
+
+
+\usepackage{fullpage}
+\usepackage[fleqn]{amsmath}
+\usepackage{hyperref}
+\usepackage{xspace}
+\usepackage{concmath}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+
+
+\begin{document}
+
+\begin{flushright}
+{\LARGE
+\limescoBVNaam \\
+}
+\limescoBVAdres \\
+\limescoBVPC \limescoBVPlaats \\
+KVK \\
+Rekeningnummer \\
+E-mailadres \\
+\end{flushright}
+
+\begin{flushright}
+Factuurnummer: $invoice.id \\
+Factuurdatum: $invoice.creationDate \\
+\end{flushright}
+
+\begin{flalign*}
+\mbox{Naam}          &: \mbox{\factuurNaam} \\
+\mbox{Adres}         &: \mbox{\factuurAdres} \\
+\mbox{Postcode}      &: \mbox{\factuurPC} \\
+\mbox{Plaats}        &: \mbox{\factuurPlaats} \\
+\end{flalign*}
+
+\begin{center}
+\line(1,0){450}
+\end{center}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\begin{tabularx}{\textwidth}{ | X | X | R | R | R | }
+\hline
+Omschrijving &    & Aantal  & Stuksprijs & BTW \\
+#foreach( $itemLine in $invoice.itemLines )
+$itemLine.description & & $itemLine.itemCount & $itemLine.itemPrice & $itemLine.totalPrice & $itemLine.taxRate%
+#end
+\hline
+\end{tabularx}
+
+
+\end{document}
