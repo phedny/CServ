@@ -17,8 +17,8 @@ public interface Sim {
 	public String getPhoneNumber();
 	public void setPhoneNumber(String n);
 	
-	public SimState getSimState();
-	public void setSimState(SimState state);
+	public SimState getState();
+	public void setState(SimState state);
 	
 	public String getOwnerAccountId();
 	public void setOwnerAccountId(String a);

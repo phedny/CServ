@@ -132,11 +132,11 @@ public class SimImpl implements Sim {
 		this.apnType = t;
 	}
 
-	public SimState getSimState() {
+	public SimState getState() {
 		return state;
 	}
 
-	public void setSimState(SimState state) {
+	public void setState(SimState state) {
 		this.state = state;
 	}
 	
