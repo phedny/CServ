@@ -1,5 +1,6 @@
 package nl.limesco.cserv.account.mongo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.vz.mongodb.jackson.ObjectId;
@@ -23,6 +24,10 @@ public class AccountImpl implements Account {
 	
 	private Map<String, String> externalAccounts;
 
+	public AccountImpl() {
+		this.externalAccounts = new HashMap<String,String>();
+	}
+	
 	@ObjectId
 	@JsonProperty("_id")
 	public String getId() {
