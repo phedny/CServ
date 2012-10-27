@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -294,6 +295,30 @@ public class AccountsResource {
 			} catch (IOException e) {
 				throw new WebApplicationException(e);
 			} catch (URISyntaxException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@POST
+		@Path("addExternalAccounts")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public void addExternalAccounts(String json) {
+			if (!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				ObjectMapper om = new ObjectMapper();
+				Map<String,String> req = om.readValue(json, Map.class);
+				Map<String,String> externalAccounts = account.getExternalAccounts();
+				externalAccounts.putAll(req);
+				account.setExternalAccounts(externalAccounts);
+				accountService.updateAccount(account);
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
 				throw new WebApplicationException(e);
 			}
 		}
