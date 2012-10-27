@@ -69,26 +69,24 @@ public class SimServiceImpl implements SimService {
 	@Override
 	public Optional<? extends Sim> getSimByIccid(String iccid) {
 		checkNotNull(iccid);
-		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", new ObjectId(iccid))));
+		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", iccid)));
 	}
 
 	@Override
-	public Sim registerSim(String iccid, String puk) {
-		final SimImpl sim = new SimImpl();
-		sim.setIccid(iccid);
-		sim.setPuk(puk);
-		collection().insert(sim);
-		return sim;
+	public void storeSim(Sim sim) {
+		checkArgument(sim instanceof SimImpl);
+		checkNotNull(sim.getIccid());
+		checkNotNull(sim.getPuk());
+		if(getSimByIccid(sim.getIccid()).isPresent()) {
+			collection().updateById(sim.getIccid(), (SimImpl) sim);
+		} else {
+			collection().insert((SimImpl) sim);
+		}
 	}
 	
-	@Override
-	public void updateSim(Sim sim) {
-		checkArgument(sim instanceof SimImpl);
-		collection().updateById(sim.getIccid(), (SimImpl) sim);
-	}
-
 	@Override
 	public Sim createSimFromJson(String json) throws IOException {
 		return new ObjectMapper().readValue(json, SimImpl.class);
 	}
+
 }

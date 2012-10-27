@@ -17,8 +17,7 @@ public interface SimService {
 	 */
 	Collection<? extends Sim> getActivatedSimsLastInvoicedBefore(Calendar month);
 	
-	Sim registerSim(String iccid, String puk);
-	void updateSim(Sim sim);
+	void storeSim(Sim sim);
 	
 	Sim createSimFromJson(String json) throws IOException;
 }
