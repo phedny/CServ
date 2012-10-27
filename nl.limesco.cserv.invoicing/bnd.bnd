@@ -1,0 +1,11 @@
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager,\
+	nl.limesco.cserv.invoice.api;version=latest,\
+	nl.limesco.cserv.account.api;version=latest,\
+	nl.limesco.cserv.sim.api;version=latest,\
+	nl.limesco.cserv.pricing.api;version=latest,\
+	nl.limesco.cserv.cdr.api;version=latest,\
+	com.google.guava
+Bundle-Activator: nl.limesco.cserv.invoicing.Activator
+Private-Package: nl.limesco.cserv.invoicing

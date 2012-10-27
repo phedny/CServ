@@ -6,7 +6,11 @@ import java.util.Collection;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
+import com.google.common.base.Optional;
+
 public interface PricingService {
+	
+	Optional<? extends PricingRule> getPricingRuleById(String id);
 
 	Collection<? extends PricingRule> getApplicablePricingRules(Calendar day);
 	
