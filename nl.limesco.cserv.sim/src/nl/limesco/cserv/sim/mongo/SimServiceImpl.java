@@ -37,7 +37,7 @@ public class SimServiceImpl implements SimService {
 	@Override
 	public Collection<? extends Sim> getSimsByOwnerAccountId(String accountId) {
 		checkNotNull(accountId);
-		final DBCursor<SimImpl> invoiceCursor = collection().find(new BasicDBObject().append("owner", accountId));
+		final DBCursor<SimImpl> invoiceCursor = collection().find(new BasicDBObject().append("ownerAccountId", accountId));
 		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
 	}
 	
