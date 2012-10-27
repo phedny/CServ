@@ -1,10 +1,13 @@
 package nl.limesco.cserv.cdr.mongo;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Set;
 
+import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
@@ -13,6 +16,7 @@ import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 
@@ -45,6 +49,16 @@ public class CdrServiceImpl implements CdrService {
 		checkNotNull(source);
 		checkNotNull(callId);
 		return collection().find(new BasicDBObject().append("source", source).append("callId", callId));
+	}
+
+	@Override
+	public Collection<? extends Cdr> getUnpricedCdrs() {
+		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.notExists("pricing")));
+	}
+
+	@Override
+	public Collection<? extends Cdr> getUninvoicedCdrs() {
+		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.notExists("invoice")));
 	}
 
 	@Override
@@ -81,6 +95,29 @@ public class CdrServiceImpl implements CdrService {
 		
 		updateObj.append("$set", doc);
 		collection().update(query, updateObj, true /* upsert */, false);
+	}
+
+	@Override
+	public void storePricingForCdr(Cdr cdr, String pricingRuleId, long price, long cost) {
+		checkArgument(cdr instanceof MongoCdr);
+		checkNotNull(pricingRuleId);
+		
+		final CdrPricingImpl pricing = new CdrPricingImpl();
+		pricing.setPricingRuleId(pricingRuleId);
+		pricing.setComputedPrice(price);
+		pricing.setComputedCost(cost);
+		
+		((MongoCdr) cdr).setNullablePricing(pricing);
+		
+		final BasicDBObject query = new BasicDBObject()
+				.append("_id", new ObjectId(((MongoCdr) cdr).getId()));
+		
+		final BasicDBObject doc = new BasicDBObject()
+				.append("pricing.pricingRuleId", pricingRuleId)
+				.append("pricing.computedPrice", price)
+				.append("pricing.computedCost", cost);
+
+		collection().update(query, new BasicDBObject("$set", doc));
 	}
 
 }
