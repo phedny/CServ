@@ -62,6 +62,11 @@ public class CdrServiceImpl implements CdrService {
 	}
 
 	@Override
+	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account) {
+		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.is("account", account).notExists("invoice")));
+	}
+
+	@Override
 	public void storeCdr(Cdr cdr) {
 		final BasicDBObject query = new BasicDBObject()
 				.append("source", cdr.getSource())

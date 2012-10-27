@@ -14,6 +14,8 @@ public interface CdrService {
 	
 	Collection<? extends Cdr> getUninvoicedCdrs();
 	
+	Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account);
+	
 	void storeCdr(Cdr cdr);
 	
 	void storePricingForCdr(Cdr cdr, String pricingRuleId, long price, long cost);
