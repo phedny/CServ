@@ -14,10 +14,10 @@
 
 \begin{flushright}
 {\LARGE
-\limescoBVNaam \\
+Limesco B.V. \\
 }
-\limescoBVAdres \\
-\limescoBVPC \limescoBVPlaats \\
+Gildeplein 9 \\
+6612 BC  Nederasselt \\
 KVK \\
 Rekeningnummer \\
 E-mailadres \\
@@ -40,12 +40,12 @@ Factuurdatum: $invoice.creationDate \\
 \end{center}
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ | X | X | R | R | R | }
-\hline
-Omschrijving &    & Aantal  & Stuksprijs & BTW \\
-#foreach( $itemLine in $invoice.itemLines )
-$itemLine.description & & $itemLine.itemCount & $itemLine.itemPrice & $itemLine.totalPrice & $itemLine.taxRate%
-#end
+\begin{tabularx}{\textwidth}{ | X | X | R | R | R | R | }
+\hline \\
+Omschrijving &    & Aantal  & Stuksprijs & Totaalbedrag & BTW \\
+#foreach( $itemLine in $invoice.itemLines ) \\
+itemLine.description & & $itemLine.itemCount & $itemLine.itemPrice & $itemLine.totalPrice & $itemLine.taxRate\% \\
+#end \\
 \hline
 \end{tabularx}
 

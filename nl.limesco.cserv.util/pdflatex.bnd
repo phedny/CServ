@@ -1,0 +1,3 @@
+Bundle-Activator: nl.limesco.cserv.util.pdflatex.impl.Activator
+Private-Package: nl.limesco.cserv.util.pdflatex.impl
+Export-Package: nl.limesco.cserv.util.pdflatex

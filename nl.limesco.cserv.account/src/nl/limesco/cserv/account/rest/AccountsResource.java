@@ -36,6 +36,7 @@ import nl.limesco.cserv.invoice.api.ItemLine;
 import nl.limesco.cserv.payment.api.Payment;
 import nl.limesco.cserv.payment.api.PaymentBuilder;
 import nl.limesco.cserv.payment.api.PaymentService;
+import nl.limesco.cserv.util.pdflatex.PdfLatex;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -55,6 +56,8 @@ public class AccountsResource {
 	
 	private volatile WebAuthorizationService authorizationService;
 	
+	private volatile PdfLatex pdfLatex;
+	
 	private volatile AccountService accountService;
 	
 	private volatile InvoiceService invoiceService;
@@ -63,7 +66,7 @@ public class AccountsResource {
 
 	@Path("{accountId}")
 	public AccountSubResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
-//		authorizationService.requireUserRole(request, Role.ADMIN);
+		authorizationService.requireUserRole(request, Role.ADMIN);
 		return getAccount(id, true);
 	}
 
@@ -215,6 +218,14 @@ public class AccountsResource {
 			final StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
+		}
+
+		@GET
+		@Path("invoices/{invoiceId}")
+		@Produces("application/pdf")
+		public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) throws IOException, InterruptedException {
+			final String invoiceAsTex = getInvoiceByIdAsTex(id);
+			return pdfLatex.compile(invoiceAsTex);
 		}
 		
 		public String getFileContents(String filename) throws IOException {

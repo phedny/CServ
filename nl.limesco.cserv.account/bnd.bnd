@@ -15,4 +15,5 @@
 	nl.limesco.cserv.payment.api;version=latest,\
 	javax.servlet,\
 	org.apache.velocity,\
-	com.springsource.org.apache.commons.collections
+	com.springsource.org.apache.commons.collections,\
+	nl.limesco.cserv.util.pdflatex;version=latest

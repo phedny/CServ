@@ -1,2 +1,6 @@
--buildpath: org.amdatu.web.rest.jaxrs
+-buildpath: org.amdatu.web.rest.jaxrs,\
+	osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager,\
+	com.google.guava
 -sub: *.bnd
