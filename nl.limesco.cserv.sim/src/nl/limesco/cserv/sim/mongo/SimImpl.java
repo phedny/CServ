@@ -3,6 +3,7 @@ package nl.limesco.cserv.sim.mongo;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
@@ -35,11 +36,22 @@ public class SimImpl implements Sim {
 		checkNotNull(contractStartDate);
 		this.contractStartDate = contractStartDate;
 	}
-	public Calendar getNullableContractStartDate() {
-		return contractStartDate;
+	@JsonProperty("contractStartDate")
+	public Date getNullableContractStartDate() {
+		if(contractStartDate == null) {
+			return null;
+		} else {
+			return contractStartDate.getTime();
+		}
 	}
-	public void setNullableContractStartDate(Calendar contractStartDate) {
-		this.contractStartDate = contractStartDate;
+	public void setNullableContractStartDate(Date contractStartDate) {
+		if(contractStartDate == null) {
+			this.contractStartDate = null;
+		} else {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(contractStartDate);
+			this.contractStartDate = calendar;
+		}
 	}
 
 	@JsonProperty("_id")
@@ -113,6 +125,7 @@ public class SimImpl implements Sim {
 	public Optional<String> getActivationInvoiceId() {
 		return Optional.fromNullable(activationInvoiceId);
 	}
+	@JsonProperty("activationInvoiceId")
 	public String getNullableActivationInvoiceId() {
 		return activationInvoiceId;
 	}
@@ -128,6 +141,7 @@ public class SimImpl implements Sim {
 	public Optional<MonthedInvoice> getLastMonthlyFeesInvoice() {
 		return Optional.fromNullable(lastMonthlyFeesInvoice);
 	}
+	@JsonProperty("lastMonthlyFeesInvoice")
 	public MonthedInvoice getNullableLastMonthlyFeesInvoice() {
 		return lastMonthlyFeesInvoice;
 	}
