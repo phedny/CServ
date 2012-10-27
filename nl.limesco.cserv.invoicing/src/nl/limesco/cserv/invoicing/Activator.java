@@ -1,5 +1,6 @@
 package nl.limesco.cserv.invoicing;
 
+import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.cdr.api.CdrService;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.InvoiceService;
@@ -20,6 +21,7 @@ public class Activator extends DependencyActivatorBase {
 				.setImplementation(BatchInvoicingServiceImpl.class)
 				.setComposition("getComposition")
 				.add(createServiceDependency().setService(InvoiceService.class).setRequired(true))
+				.add(createServiceDependency().setService(AccountService.class).setRequired(true))
 				.add(createServiceDependency().setService(PricingService.class).setRequired(true))
 				.add(createServiceDependency().setService(SimService.class).setRequired(true))
 				.add(createServiceDependency().setService(CdrService.class).setRequired(true))

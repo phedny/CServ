@@ -61,7 +61,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 		logService.log(LogService.LOG_INFO, "Going to construct invoices for " + accounts.size() + " accounts");
 		for (String account : accounts) {
 			logService.log(LogService.LOG_INFO, "Constructing invoice for " + account);
-			final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(account);
+			final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, account);
 		}
 	}
 
