@@ -12,4 +12,6 @@ Private-Package: nl.limesco.cserv.sim.mongo
 	osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\
-	javax.servlet
+	javax.servlet,\
+	nl.limesco.cserv.auth.api;version=latest,\
+	nl.limesco.cserv.util.dm;version=latest
