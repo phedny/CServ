@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Calendar;
 import java.util.Date;
 
+import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
@@ -19,6 +20,7 @@ import com.google.common.base.Optional;
 public class SimImpl implements Sim {
 	private String iccid;
 	private String puk;
+	private CallConnectivityType callConnectivityType;
 	private String phoneNumber;
 	private SimState state;
 	private String owner;
@@ -68,6 +70,23 @@ public class SimImpl implements Sim {
 	}
 	public void setPuk(String puk) {
 		this.puk = puk;
+	}
+	
+	@JsonIgnore
+	public Optional<CallConnectivityType> getCallConnectivityType() {
+		return Optional.fromNullable(callConnectivityType);
+	}
+	public void setCallConnectivityType(CallConnectivityType callConnectivityType) {
+		checkNotNull(callConnectivityType);
+		this.callConnectivityType = callConnectivityType;
+	}
+	
+	@JsonProperty("callConnectivityType")
+	public CallConnectivityType getNullableCallConnectivityType() {
+		return callConnectivityType;
+	}
+	public void setNullableCallConnectivityType(CallConnectivityType callConnectivityType) {
+		this.callConnectivityType = callConnectivityType;
 	}
 	
 	public String getPhoneNumber() {

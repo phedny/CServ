@@ -11,6 +11,9 @@ public interface Sim {
 	public Optional<Calendar> getContractStartDate();
 	public void setContractStartDate(Calendar calendar);
 	
+	public Optional<CallConnectivityType> getCallConnectivityType();
+	public void setCallConnectivityType(CallConnectivityType callConnectivityType);
+	
 	public String getPhoneNumber();
 	public void setPhoneNumber(String n);
 	

@@ -7,4 +7,7 @@ Private-Package: nl.limesco.cserv.sim.mongo
 	org.amdatu.mongo,\
 	jackson-core-asl,\
 	jackson-mapper-asl,\
-	nl.limesco.cserv.account.api;version=latest
+	nl.limesco.cserv.account.api;version=latest,\
+	osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager
