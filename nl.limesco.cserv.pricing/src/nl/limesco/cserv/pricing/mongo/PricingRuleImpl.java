@@ -89,6 +89,9 @@ public class PricingRuleImpl implements PricingRule {
 
 	@Override
 	public long getCostForCdr(Cdr cdr, CallConnectivityType callConnectivityType) throws PricingRuleNotApplicableException {
+		if (!cdr.isConnected()) {
+			return 0;
+		}
 		if (!applicability.isApplicable(cdr, callConnectivityType)) {
 			throw new PricingRuleNotApplicableException();
 		}

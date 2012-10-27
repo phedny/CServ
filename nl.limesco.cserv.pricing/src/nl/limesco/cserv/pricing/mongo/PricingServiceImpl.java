@@ -69,14 +69,19 @@ public class PricingServiceImpl implements PricingService {
 	}
 
 	@Override
+	public PricingRule getApplicablePricingRule(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException {
+		final Collection<? extends PricingRule> rules = getApplicablePricingRules(cdr, callConnectivityType);
+		if (rules.size() == 1) {
+			return rules.iterator().next();
+		} else {
+			throw new NoApplicablePricingRuleException();
+		}
+	}
+
+	@Override
 	public long getApplicablePrice(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException {
 		try {
-			final Collection<? extends PricingRule> rules = getApplicablePricingRules(cdr, callConnectivityType);
-			if (rules.size() == 1) {
-				return rules.iterator().next().getPriceForCdr(cdr, callConnectivityType);
-			} else {
-				throw new NoApplicablePricingRuleException();
-			}
+			return getApplicablePricingRule(cdr, callConnectivityType).getPriceForCdr(cdr, callConnectivityType);
 		} catch (PricingRuleNotApplicableException e) {
 			throw Throwables.propagate(e);
 		}
@@ -85,12 +90,7 @@ public class PricingServiceImpl implements PricingService {
 	@Override
 	public long getApplicableCost(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException {
 		try {
-			final Collection<? extends PricingRule> rules = getApplicablePricingRules(cdr, callConnectivityType);
-			if (rules.size() == 1) {
-				return rules.iterator().next().getCostForCdr(cdr, callConnectivityType);
-			} else {
-				throw new NoApplicablePricingRuleException();
-			}
+			return getApplicablePricingRule(cdr, callConnectivityType).getCostForCdr(cdr, callConnectivityType);
 		} catch (PricingRuleNotApplicableException e) {
 			throw Throwables.propagate(e);
 		}

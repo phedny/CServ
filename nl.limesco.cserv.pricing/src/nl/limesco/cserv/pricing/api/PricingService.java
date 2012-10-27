@@ -18,6 +18,8 @@ public interface PricingService {
 	
 	ApplicabilityFilterBuilder buildApplicabilityFilter();
 
+	PricingRule getApplicablePricingRule(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException;
+	
 	long getApplicablePrice(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException;
 
 	long getApplicableCost(Cdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException;

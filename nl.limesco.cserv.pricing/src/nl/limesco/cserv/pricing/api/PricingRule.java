@@ -4,6 +4,8 @@ import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 public interface PricingRule {
+	
+	String getId();
 
 	ApplicationConstraints getApplicability();
 	
