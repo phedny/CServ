@@ -13,11 +13,13 @@ public interface CdrService {
 	Collection<? extends Cdr> getUnpricedCdrs();
 	
 	Collection<? extends Cdr> getUninvoicedCdrs();
-	
-	Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account);
-	
+
+	Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder);
+
 	void storeCdr(Cdr cdr);
 	
 	void storePricingForCdr(Cdr cdr, String pricingRuleId, long price, long cost);
+
+	void setInvoiceIdForBuilder(String builder, String invoiceId);
 
 }

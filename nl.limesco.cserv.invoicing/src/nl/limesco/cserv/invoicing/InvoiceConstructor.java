@@ -7,10 +7,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.util.UUID;
 
-import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
@@ -36,15 +37,15 @@ public class InvoiceConstructor {
 	
 	private volatile InvoiceService invoiceService;
 
-	private volatile AccountService accountService;
-	
 	private volatile PricingService pricingService;
 	
 	private volatile CdrService cdrService;
 	
 	private volatile SimService simService;
 
-	public Invoice constructInvoiceForAccount(Calendar day, String accountId) {
+	public Invoice constructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
+		
+		final UUID builderUUID = UUID.randomUUID();
 		
 		// Compute end of subscription period
 		final Calendar endOfSubscriptionPeriod = (Calendar) day.clone();
@@ -53,9 +54,9 @@ public class InvoiceConstructor {
 		endOfSubscriptionPeriod.add(Calendar.DAY_OF_MONTH, -1);
 		
 		// Collect everything we need
-		final Collection<? extends Sim> simActivations = getInvoicableSimActivations(accountId);
-		final Collection<? extends Sim> subscriptionFees = getInvoicableSubscriptionFees(day, accountId);
-		final Collection<? extends Cdr> cdrs = getInvoicableCdrs(accountId);
+		final Collection<? extends Sim> simActivations = simService.getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(accountId);
+		final Collection<? extends Sim> subscriptionFees = simService.getActivatedSimsLastInvoicedBeforeByOwnerAccountId(day, accountId);
+		final Collection<? extends Cdr> cdrs = cdrService.getUninvoicedCdrsForAccount(accountId, builderUUID.toString());
 		
 		// Start building the invoice
 		final InvoiceBuilder builder = invoiceService.buildInvoice()
@@ -133,7 +134,22 @@ public class InvoiceConstructor {
 			builder.durationItemLine("Bellen " + pricingRule.get().getId(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
 		}
 		
-		return builder.build();
+		final Invoice invoice = builder.build();
+		invoiceService.storeInvoice(invoice);
+		
+		for (Sim sim : simActivations) {
+			sim.setActivationInvoiceId(invoice.getId());
+			simService.storeSim(sim);
+		}
+		
+		for (Sim sim : subscriptionFees) {
+			sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
+			simService.storeSim(sim);
+		}
+		
+		cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
+		
+		return invoice;
 	}
 
 	private static long computePartialMonthPrice(int daysInMonth, int days, long monthlyPrice) {
@@ -143,16 +159,4 @@ public class InvoiceConstructor {
 		return monthlyPriceBD.multiply(daysBD).divideToIntegralValue(daysInMonthBD).longValue();
 	}
 
-	private Collection<? extends Sim> getInvoicableSimActivations(String accountId) {
-		return simService.getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(accountId);
-	}
-
-	private Collection<? extends Sim> getInvoicableSubscriptionFees(Calendar day, String accountId) {
-		return simService.getActivatedSimsLastInvoicedBeforeByOwnerAccountId(day, accountId);
-	}
-
-	private Collection<? extends Cdr> getInvoicableCdrs(String accountId) {
-		return cdrService.getUninvoicedCdrsForAccount(accountId);
-	}
-	
 }

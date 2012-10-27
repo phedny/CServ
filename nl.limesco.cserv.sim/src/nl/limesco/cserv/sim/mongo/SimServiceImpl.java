@@ -16,7 +16,6 @@ import nl.limesco.cserv.sim.api.SimService;
 import nl.limesco.cserv.sim.api.SimState;
 
 import org.amdatu.mongo.MongoDBService;
-import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Optional;

@@ -7,6 +7,7 @@ import java.util.Set;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
+import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.pricing.api.NoApplicablePricingRuleException;
@@ -61,7 +62,11 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 		logService.log(LogService.LOG_INFO, "Going to construct invoices for " + accounts.size() + " accounts");
 		for (String account : accounts) {
 			logService.log(LogService.LOG_INFO, "Constructing invoice for " + account);
-			final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, account);
+			try {
+				final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, account);
+			} catch (IdAllocationException e) {
+				logService.log(LogService.LOG_WARNING, "Failed to allocate ID to invoice for " + account);
+			}
 		}
 	}
 

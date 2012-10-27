@@ -36,6 +36,10 @@ public class CdrServiceImpl implements CdrService {
 		collection().ensureIndex(
 				new BasicDBObject().append("source", 1).append("callId", 1).append("type", 1),
 				new BasicDBObject().append("unique", true));
+		
+		collection().ensureIndex(new BasicDBObject().append("account", 1));
+		collection().ensureIndex(new BasicDBObject().append("invoice", 1));
+		collection().ensureIndex(new BasicDBObject().append("invoiceBuilder", 1));
 	}
 	
 	@Override
@@ -62,8 +66,11 @@ public class CdrServiceImpl implements CdrService {
 	}
 
 	@Override
-	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account) {
-		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.is("account", account).notExists("invoice")));
+	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder) {
+		collection().update(DBQuery.is("account", account).notExists("invoice"),
+				new BasicDBObject("$set", new BasicDBObject("invoiceBuilder", builder)),
+				false, true /* multi */);
+		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.is("invoiceBuilder", builder)));
 	}
 
 	@Override
@@ -123,6 +130,16 @@ public class CdrServiceImpl implements CdrService {
 				.append("pricing.computedCost", cost);
 
 		collection().update(query, new BasicDBObject("$set", doc));
+	}
+
+	@Override
+	public void setInvoiceIdForBuilder(String builder, String invoiceId) {
+		checkNotNull(builder);
+		checkNotNull(invoiceId);
+		collection().update(DBQuery.is("invoiceBuilder", builder),
+				new BasicDBObject("$set", new BasicDBObject("invoice", invoiceId))
+						.append("$unset", new BasicDBObject("invoiceBuilder", 1)),
+				false, true /* multi */);
 	}
 
 }
