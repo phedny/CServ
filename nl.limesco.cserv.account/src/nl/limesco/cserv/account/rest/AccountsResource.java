@@ -182,6 +182,7 @@ public class AccountsResource {
 			final Template template = engine.getTemplate("invoice.tex");
 			final VelocityContext context = new VelocityContext();
 			context.put("invoice", invoice);
+			context.put("account", account);
 			
 			final StringWriter writer = new StringWriter();
 			template.merge(context, writer);

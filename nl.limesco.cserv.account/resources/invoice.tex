@@ -29,10 +29,10 @@ Factuurdatum: $invoice.creationDate \\
 \end{flushright}
 
 \begin{flalign*}
-\mbox{Naam}          &: \mbox{\factuurNaam} \\
-\mbox{Adres}         &: \mbox{\factuurAdres} \\
-\mbox{Postcode}      &: \mbox{\factuurPC} \\
-\mbox{Plaats}        &: \mbox{\factuurPlaats} \\
+\mbox{Naam}          &: \mbox{$account.fullName.fullName} \\
+\mbox{Adres}         &: \mbox{$account.address.streetAddress} \\
+\mbox{Postcode}      &: \mbox{$account.address.postalCode} \\
+\mbox{Plaats}        &: \mbox{$account.address.locality} \\
 \end{flalign*}
 
 \begin{center}
