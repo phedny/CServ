@@ -3,6 +3,7 @@ package nl.limesco.cserv.account.rest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,32 @@ public class AccountsResource {
 	@Path("~")
 	public AccountSubResource getMyAccount(@Context HttpServletRequest request) {
 		return getAccount(authorizationService.requiredAccountId(request), false);
+	}
+	
+	@POST
+	@Path("find")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String findAccounts(String json, @Context HttpServletRequest request) {
+		authorizationService.requireUserRole(request, Role.ADMIN);
+		
+		try {
+			ObjectMapper om = new ObjectMapper();
+			Map<String,String> req = om.readValue(json, Map.class);
+			// TODO: understand more keys
+			if(req.size() != 1 || !req.containsKey("email")) {
+				throw new WebApplicationException(Status.BAD_REQUEST);
+			}
+			String email = req.get("email");
+			final Collection<? extends Account> accounts = accountService.getAccountByEmail(email);
+			return om.writeValueAsString(accounts);
+		} catch(JsonGenerationException e) {
+			throw new WebApplicationException(e);
+		} catch(JsonMappingException e) {
+			throw new WebApplicationException(e);
+		} catch(IOException e) {
+			throw new WebApplicationException(e);
+		}
 	}
 	
 	@POST

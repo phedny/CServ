@@ -4,8 +4,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
@@ -15,6 +18,7 @@ import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 
@@ -43,6 +47,13 @@ public class AccountServiceImpl implements AccountService {
 		checkArgument(EXTERNAL_SYSTEM_PATTERN.matcher(system).matches());
 		checkNotNull(externalAccount);
 		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("externalAccounts." + system, externalAccount)));
+	}
+	
+	@Override
+	public Collection<? extends Account> getAccountByEmail(String email) {
+		checkNotNull(email);
+		final DBCursor<AccountImpl> cursor = collection().find(new BasicDBObject().append("email", email));
+		return Sets.newHashSet((Iterator<AccountImpl>) cursor);
 	}
 
 	@Override
