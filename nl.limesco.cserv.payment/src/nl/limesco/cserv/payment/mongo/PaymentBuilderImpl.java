@@ -27,6 +27,7 @@ public class PaymentBuilderImpl implements PaymentBuilder {
 		destination(copy.getDestination());
 		paymentType(copy.getPaymentType());
 		setInvoiceIds(copy.getInvoiceIds());
+		setStatus(copy.getStatus());
 	}
 	
 	@Override
@@ -77,6 +78,12 @@ public class PaymentBuilderImpl implements PaymentBuilder {
 		return this;
 	}
 
+	@Override
+	public PaymentBuilder setStatus(PaymentStatus status) {
+		payment.setStatus(status);
+		return this;
+	}
+	
 	@Override
 	public Payment build() {
 		return payment;

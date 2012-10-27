@@ -12,6 +12,7 @@ public interface PaymentBuilder {
 	PaymentBuilder paymentType(PaymentType type);
 	PaymentBuilder setInvoiceIds(Set<String> invoiceIds);
 	PaymentBuilder addInvoiceId(String invoiceId);
+	PaymentBuilder setStatus(PaymentStatus status);
 
 	Payment build();
 }
