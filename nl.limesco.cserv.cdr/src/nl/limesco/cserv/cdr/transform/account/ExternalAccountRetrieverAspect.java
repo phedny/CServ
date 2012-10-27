@@ -99,6 +99,21 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 				public Map<String, String> getAdditionalInfo() {
 					return input.getAdditionalInfo();
 				}
+
+				@Override
+				public Optional<String> getInvoice() {
+					return input.getInvoice();
+				}
+
+				@Override
+				public Optional<String> getInvoiceBuilder() {
+					return input.getInvoiceBuilder();
+				}
+
+				@Override
+				public Optional<Cdr.Pricing> getPricing() {
+					return input.getPricing();
+				}
 				
 			};
 		}

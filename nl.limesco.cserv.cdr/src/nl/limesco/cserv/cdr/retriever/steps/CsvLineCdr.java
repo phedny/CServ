@@ -137,4 +137,19 @@ public class CsvLineCdr implements Cdr {
 		return unparsedColumns;
 	}
 
+	@Override
+	public Optional<String> getInvoice() {
+		return Optional.absent();
+	}
+
+	@Override
+	public Optional<String> getInvoiceBuilder() {
+		return Optional.absent();
+	}
+
+	@Override
+	public Optional<Cdr.Pricing> getPricing() {
+		return Optional.absent();
+	}
+
 }

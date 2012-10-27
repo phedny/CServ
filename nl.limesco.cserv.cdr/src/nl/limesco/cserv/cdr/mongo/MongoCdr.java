@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -14,6 +15,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.google.common.base.Optional;
 
 public class MongoCdr implements Cdr {
+	
+	private String id;
 	
 	private String source;
 	
@@ -35,6 +38,12 @@ public class MongoCdr implements Cdr {
 	
 	private Map<String, String> additionalInfo;
 	
+	private String invoice;
+	
+	private String invoiceBuilder;
+	
+	private CdrPricingImpl pricing;
+	
 	public MongoCdr() {
 		// Default constructor.
 	}
@@ -52,6 +61,16 @@ public class MongoCdr implements Cdr {
 		additionalInfo = cdr.getAdditionalInfo();
 	}
 
+	@ObjectId
+	@JsonProperty("_id")
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	@Override
 	public String getSource() {
 		return source;
@@ -151,7 +170,7 @@ public class MongoCdr implements Cdr {
 	}
 	
 	@JsonProperty("type")
-	public Type getNullabelType() {
+	public Type getNullableType() {
 		return type;
 	}
 	
@@ -175,6 +194,51 @@ public class MongoCdr implements Cdr {
 
 	public void setAdditionalInfo(Map<String, String> additionalInfo) {
 		this.additionalInfo = additionalInfo;
+	}
+
+	@Override
+	@JsonIgnore
+	public Optional<String> getInvoice() {
+		return Optional.fromNullable(invoice);
+	}
+	
+	@JsonProperty("invoice")
+	public String getNullableInvoice() {
+		return invoice;
+	}
+	
+	public void setNullableInvoice(String invoice) {
+		this.invoice = invoice;
+	}
+
+	@Override
+	@JsonIgnore
+	public Optional<String> getInvoiceBuilder() {
+		return Optional.fromNullable(invoiceBuilder);
+	}
+	
+	@JsonProperty("invoiceBuilder")
+	public String getNullableInvoiceBuilder() {
+		return invoiceBuilder;
+	}
+	
+	public void setNullableInvoiceBuilder(String invoiceBuilder) {
+		this.invoiceBuilder = invoiceBuilder;
+	}
+
+	@Override
+	@JsonIgnore
+	public Optional<Pricing> getPricing() {
+		return Optional.fromNullable((Pricing) pricing);
+	}
+	
+	@JsonProperty("pricing")
+	public CdrPricingImpl getNullablePricing() {
+		return pricing;
+	}
+	
+	public void setNullablePricing(CdrPricingImpl pricing) {
+		this.pricing = pricing;
 	}
 
 }

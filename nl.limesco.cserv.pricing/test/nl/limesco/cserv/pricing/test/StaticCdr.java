@@ -80,4 +80,19 @@ final class StaticCdr implements Cdr {
 	public Map<String, String> getAdditionalInfo() {
 		return null;
 	}
+
+	@Override
+	public Optional<String> getInvoice() {
+		return null;
+	}
+
+	@Override
+	public Optional<String> getInvoiceBuilder() {
+		return null;
+	}
+
+	@Override
+	public Optional<Pricing> getPricing() {
+		return null;
+	}
 }

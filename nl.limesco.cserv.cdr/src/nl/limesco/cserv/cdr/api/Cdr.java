@@ -33,4 +33,20 @@ public interface Cdr {
 	
 	Map<String, String> getAdditionalInfo();
 	
+	Optional<String> getInvoice();
+	
+	Optional<String> getInvoiceBuilder();
+	
+	Optional<Pricing> getPricing();
+	
+	public interface Pricing {
+
+		String getPricingRuleId();
+		
+		long getComputedPrice();
+		
+		long getComputedCost();
+		
+	}
+
 }
