@@ -214,6 +214,7 @@ public class AccountsResource {
 			final VelocityContext context = new VelocityContext();
 			context.put("invoice", invoice);
 			context.put("account", account);
+			context.put("util", VelocityUtils.class);
 			
 			final StringWriter writer = new StringWriter();
 			template.merge(context, writer);

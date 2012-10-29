@@ -25,7 +25,7 @@ E-mailadres \\
 
 \begin{flushright}
 Factuurnummer: $invoice.id \\
-Factuurdatum: $invoice.creationDate \\
+Factuurdatum: $util.formatDate( $invoice.creationDate ) \\
 \end{flushright}
 
 \begin{flalign*}
@@ -43,11 +43,19 @@ Factuurdatum: $invoice.creationDate \\
 \begin{tabularx}{\textwidth}{ | X | X | R | R | R | R | }
 \hline \\
 Omschrijving &    & Aantal  & Stuksprijs & Totaalbedrag & BTW \\
+\hline \\
 #foreach( $itemLine in $invoice.itemLines ) \\
-itemLine.description & & $itemLine.itemCount & $itemLine.itemPrice & $itemLine.totalPrice & $itemLine.taxRate\% \\
-#end \\
+#if( $itemLine.itemPrice )
+$itemLine.description & & $itemLine.itemCount & $util.formatPrice( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) & $itemLine.taxRate\% \\
+#elseif( $itemLine.pricePerCall )
+$itemLine.description & & $itemLine.numberOfCalls + $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPrice( $invoice.currency, $itemLine.pricePerCall ) + $util.formatPrice( $invoice.currency, $itemLine.pricePerMinute ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) & $itemLine.taxRate\% \\
+#end
+#end
 \hline
 \end{tabularx}
 
+Totaal: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithoutTaxes )
+
+Totaal incl. BTW: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithTaxes )
 
 \end{document}
