@@ -1,8 +1,8 @@
 package nl.limesco.cserv.invoice.mongo;
 
-import java.util.ArrayList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -19,7 +19,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -62,8 +61,8 @@ public class InvoiceImpl implements Invoice {
 
 	@Override
 	@JsonIgnore
-	public Optional<Calendar> getCreationDate() {
-		return Optional.fromNullable(creationDate);
+	public Calendar getCreationDate() {
+		return creationDate;
 	}
 	
 	public void setCreationDate(Calendar creationDate) {
