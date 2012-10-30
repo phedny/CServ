@@ -35,6 +35,8 @@ public class InvoiceConstructor {
 	// TODO: Don't use hardcoded prices (issue #42)
 	private static final long ACTIVATION_PRICE = 347107;
 	
+	private static final long CONTRIBUTION_PRICE = 41322;
+	
 	private volatile InvoiceService invoiceService;
 
 	private volatile PricingService pricingService;
@@ -131,7 +133,12 @@ public class InvoiceConstructor {
 			
 			final Pricing price = pricingRule.get().getPrice();
 			final CombinedDuration cd = duration.getValue();
-			builder.durationItemLine("Bellen " + pricingRule.get().getId(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
+			builder.durationItemLine("Bellen " + pricingRule.get().getDescription(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
+		}
+		
+		// Include the cost contribution
+		if (subscriptions.size() > 0) {
+			builder.normalItemLine("Bijdrage vaste kosten", subscriptions.size(), CONTRIBUTION_PRICE, 0.21);
 		}
 		
 		final Invoice invoice = builder.build();
