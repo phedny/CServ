@@ -39,4 +39,8 @@ public class VelocityUtils {
 		return DAY_FORMAT.format(date.getTime());
 	}
 	
+	public static String formatTax(double taxRate) {
+		return String.format("%.1f", 100 * taxRate).replaceAll("\\.", ",");
+	}
+	
 }
