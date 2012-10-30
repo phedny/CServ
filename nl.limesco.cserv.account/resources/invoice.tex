@@ -55,19 +55,22 @@ $itemLine.description & & $itemLine.numberOfCalls gesprekken & $util.formatPrice
 #end
 \end{tabularx}
 
+\begin{flushright}
 Totaal: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithoutTaxes )
+\end{flushright}
 
-\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \begin{tabularx}{\textwidth}{ | X | X | R | }
 \hline
-BTW & Over & BTW-bedrag \\
+Bedrag & BTW & BTW-bedrag \\
 \hline
 #foreach( $taxLine in $invoice.taxLines )
-$util.formatTax( $taxLine.taxRate )\% & $util.formatPrice( $invoice.currency, $taxLine.baseAmount ) & $util.formatPrice( $invoice.currency, $taxLine.taxAmount ) \\
+$util.formatPrice( $invoice.currency, $taxLine.baseAmount ) & $util.formatTax( $taxLine.taxRate )\% & $util.formatPrice( $invoice.currency, $taxLine.taxAmount ) \\
 #end
 \hline
 \end{tabularx}
 
+\begin{flushright}
 Totaal incl. BTW: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithTaxes )
+\end{flushright}
 
 \end{document}
