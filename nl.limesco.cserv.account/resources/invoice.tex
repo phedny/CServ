@@ -54,7 +54,7 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \begin{tabularx}{\textwidth}{ | X | X | R | R | R | }
 \hline
-Omschrijving &    & Aantal  & Stuksprijs & Totaalbedrag \\
+Omschrijving &    & Aantal  & Stuksprijs & Bedrag \\
 \hline
 #foreach( $itemLine in $invoice.itemLines )
 #if( $itemLine.itemPrice )
