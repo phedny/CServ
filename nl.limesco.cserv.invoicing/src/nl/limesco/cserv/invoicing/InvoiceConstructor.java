@@ -137,7 +137,9 @@ public class InvoiceConstructor {
 		}
 		
 		// Include the cost contribution
-		builder.normalItemLine("Bijdrage vaste kosten", subscriptions.size(), CONTRIBUTION_PRICE, 0.21);
+		if (subscriptions.size() > 0) {
+			builder.normalItemLine("Bijdrage vaste kosten", subscriptions.size(), CONTRIBUTION_PRICE, 0.21);
+		}
 		
 		final Invoice invoice = builder.build();
 		invoiceService.storeInvoice(invoice);
