@@ -1,6 +1,5 @@
 \documentclass[a4paper,11pt]{memoir}
 
-
 \usepackage{fullpage}
 \usepackage[fleqn]{amsmath}
 \usepackage{hyperref}
@@ -9,9 +8,17 @@
 \usepackage[T1]{fontenc}
 \usepackage{tabularx}
 
+\newcommand{\totaalbedrag}{\footnotesize{Het totaalbedrag inclusief BTW dient te worden voldaan binnen 14 dagen na factuurdatum ($util.formatDate( $invoice.creationDate)). \\
+Indien er vragen, opmerkingen of klachten zijn over deze factuur, dan deze graag binnen 14 dagen melden
+via \href{mailto:support@limesco.nl}{support@limesco.nl} onder vermelding van het factuurnummer ($invoice.id).}}
+
+\makepagestyle{factuur}
+\makeevenfoot{factuur}{}{\totaalbedrag \\ Pagina \thepage}{}
+\makeoddfoot{factuur}{}{\totaalbedrag \\ Pagina \thepage}{}
+
 
 \begin{document}
-
+\pagestyle{factuur}
 \begin{flushright}
 {\LARGE
 Limesco B.V. \\
