@@ -27,6 +27,17 @@ public class VelocityUtils {
 		}
 		return priceStr.toString();
 	}
+
+	public static String formatPriceFull(InvoiceCurrency currency, long price) {
+		final int digits = currency.hiddenDigits + currency.fractionDigits;
+		StringBuilder priceStr = new StringBuilder(Long.toString(price));
+		if (priceStr.length() > digits) {
+			priceStr.insert(priceStr.length() - digits, ",");
+		} else {
+			return String.format("0,%0" + digits + "d", Integer.parseInt(priceStr.toString()));
+		}
+		return priceStr.toString();
+	}
 	
 	public static String formatDuration(long totalSeconds) {
 		final long hours = totalSeconds / 3600;

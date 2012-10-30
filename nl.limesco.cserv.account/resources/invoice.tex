@@ -40,28 +40,29 @@ Factuurdatum: $util.formatDate( $invoice.creationDate ) \\
 \end{center}
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ | X | X | R | R | R | R | }
-\hline \\
-Omschrijving &    & Aantal  & Stuksprijs & Totaalbedrag & BTW \\
-\hline \\
-#foreach( $itemLine in $invoice.itemLines ) \\
+\begin{tabularx}{\textwidth}{ | X | X | R | R | R | }
+\hline
+Omschrijving &    & Aantal  & Stuksprijs & Totaalbedrag \\
+\hline
+#foreach( $itemLine in $invoice.itemLines )
 #if( $itemLine.itemPrice )
-$itemLine.description & & $itemLine.itemCount & $util.formatPrice( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) & $util.formatTax( $itemLine.taxRate )\% \\
+$itemLine.description & & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
 #elseif( $itemLine.pricePerCall )
-$itemLine.description & & $itemLine.numberOfCalls + $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPrice( $invoice.currency, $itemLine.pricePerCall ) + $util.formatPrice( $invoice.currency, $itemLine.pricePerMinute ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) & $util.formatTax( $itemLine.taxRate )\% \\
-#end
+$itemLine.description & & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+ & & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
 #end
 \hline
+#end
 \end{tabularx}
 
 Totaal: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithoutTaxes )
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \begin{tabularx}{\textwidth}{ | X | X | R | }
-\hline \\
+\hline
 BTW & Over & BTW-bedrag \\
-\hline \\
-#foreach( $taxLine in $invoice.taxLines ) \\
+\hline
+#foreach( $taxLine in $invoice.taxLines )
 $util.formatTax( $taxLine.taxRate )\% & $util.formatPrice( $invoice.currency, $taxLine.baseAmount ) & $util.formatPrice( $invoice.currency, $taxLine.taxAmount ) \\
 #end
 \hline
