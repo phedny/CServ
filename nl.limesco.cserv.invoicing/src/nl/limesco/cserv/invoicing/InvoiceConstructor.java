@@ -131,7 +131,7 @@ public class InvoiceConstructor {
 			
 			final Pricing price = pricingRule.get().getPrice();
 			final CombinedDuration cd = duration.getValue();
-			builder.durationItemLine("Bellen " + pricingRule.get().getId(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
+			builder.durationItemLine("Bellen " + pricingRule.get().getDescription(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
 		}
 		
 		final Invoice invoice = builder.build();

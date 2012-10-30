@@ -15,6 +15,8 @@ public class PricingRuleImpl implements PricingRule {
 	
 	private String id;
 	
+	private String description;
+	
 	private ApplicationConstraintsImpl applicability;
 	
 	private PricingImpl price;
@@ -31,6 +33,14 @@ public class PricingRuleImpl implements PricingRule {
 		this.id = id;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	@JsonIgnore
 	public ApplicationConstraints getApplicability() {
