@@ -80,32 +80,51 @@ public class InvoiceConstructor {
 			}
 			
 			final Optional<MonthedInvoice> lastMonthlyFeesInvoice = sim.getLastMonthlyFeesInvoice();
-			final SubscriptionKey key;
+			final Calendar itemStart;
 			if (lastMonthlyFeesInvoice.isPresent()) {
 				final Calendar monthStart = Calendar.getInstance();
 				monthStart.setTimeZone(TimeZone.getTimeZone("UTC"));
 				monthStart.setTimeInMillis(0);
 				monthStart.set(Calendar.YEAR, lastMonthlyFeesInvoice.get().year);
 				monthStart.set(Calendar.MONTH, lastMonthlyFeesInvoice.get().month);
-				final int days = 1 + (int) ((endOfSubscriptionPeriod.getTimeInMillis() - monthStart.getTimeInMillis()) / (24 * 60 * 60 * 1000));
-				key = new SubscriptionKey(monthStart, days, sim.getApnType());
+				itemStart = monthStart;
 			} else {
-				final int days = 1 + (int) ((endOfSubscriptionPeriod.getTimeInMillis() - contractStartDate.get().getTimeInMillis()) / (24 * 60 * 60 * 1000));
-				key = new SubscriptionKey(contractStartDate.get(), days, sim.getApnType());
+				itemStart = contractStartDate.get();
 			}
-			if (subscriptions.containsKey(key)) {
-				subscriptions.put(key, Integer.valueOf(subscriptions.get(key).intValue() + 1));
-			} else {
-				subscriptions.put(key, Integer.valueOf(1));
+			
+			Calendar start = (Calendar) itemStart.clone();
+			while (true) {
+				final Calendar end = (Calendar) start.clone();
+				end.set(Calendar.DAY_OF_MONTH, 1);
+				end.add(Calendar.MONTH, 1);
+				end.add(Calendar.DAY_OF_MONTH, -1);
+				
+				final int days = 1 + (int) ((end.getTimeInMillis() - start.getTimeInMillis()) / (24 * 60 * 60 * 1000));
+				final SubscriptionKey key = new SubscriptionKey(start, days, sim.getApnType());
+				
+				if (subscriptions.containsKey(key)) {
+					subscriptions.put(key, Integer.valueOf(subscriptions.get(key).intValue() + 1));
+				} else {
+					subscriptions.put(key, Integer.valueOf(1));
+				}
+				
+				if (!end.before(endOfSubscriptionPeriod)) {
+					break;
+				} else {
+					start = (Calendar) end.clone();
+					start.add(Calendar.DAY_OF_MONTH, 1);
+				}
 			}
 		}
 		
 		for (Entry<SubscriptionKey, Integer> subscription : subscriptions.entrySet()) {
 			final String formattedStart = DAY_FORMAT.format(subscription.getKey().getStart().getTime());
-			final String formattedEnd = DAY_FORMAT.format(endOfSubscriptionPeriod.getTime());
+			final Calendar end = (Calendar) subscription.getKey().getStart();
+			end.add(Calendar.DATE, subscription.getKey().getDays() - 1);
+			final String formattedEnd = DAY_FORMAT.format(end.getTime());
 			final String formattedApnType = subscription.getKey().getApnType().getFriendlyName();
 			final long monthlyPrice = subscription.getKey().getApnType().getMonthlyPrice();
-			final long itemPrice = computePartialMonthPrice(endOfSubscriptionPeriod.get(Calendar.DAY_OF_MONTH), subscription.getKey().getDays(), monthlyPrice);
+			final long itemPrice = computePartialMonthPrice(end.get(Calendar.DAY_OF_MONTH), subscription.getKey().getDays(), monthlyPrice);
 			final String description = String.format("Vaste kosten %s - %s (%s)", formattedStart, formattedEnd, formattedApnType);
 			builder.normalItemLine(description, subscription.getValue().intValue(), itemPrice, 0.21);
 		}
