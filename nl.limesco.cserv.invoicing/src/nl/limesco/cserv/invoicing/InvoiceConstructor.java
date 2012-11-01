@@ -151,6 +151,10 @@ public class InvoiceConstructor {
 			}
 			
 			final Pricing price = pricingRule.get().getPrice();
+			if (pricingRule.get().isHidden() && price.getPerCall() == 0 && price.getPerMinute() == 0) {
+				continue;
+			}
+			
 			final CombinedDuration cd = duration.getValue();
 			builder.durationItemLine("Bellen " + pricingRule.get().getDescription(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
 		}

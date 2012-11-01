@@ -14,6 +14,8 @@ public interface PricingRule {
 	Pricing getPrice();
 	
 	Pricing getCost();
+	
+	boolean isHidden();
 
 	long getPriceForCdr(Cdr cdr, CallConnectivityType callConnectivityType) throws PricingRuleNotApplicableException;
 

@@ -22,6 +22,8 @@ public class PricingRuleImpl implements PricingRule {
 	private PricingImpl price;
 	
 	private PricingImpl cost;
+	
+	private boolean hidden;
 
 	@ObjectId
 	@JsonProperty("_id")
@@ -84,6 +86,15 @@ public class PricingRuleImpl implements PricingRule {
 	
 	public void setCostImpl(PricingImpl cost) {
 		this.cost = cost;
+	}
+
+	@Override
+	public boolean isHidden() {
+		return hidden;
+	}
+	
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 
 	@Override
