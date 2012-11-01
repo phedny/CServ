@@ -11,6 +11,7 @@ import java.util.Iterator;
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
+import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimService;
 import nl.limesco.cserv.sim.api.SimState;
@@ -107,6 +108,28 @@ public class SimServiceImpl implements SimService {
 		}
 	}
 	
+	@Override
+	public void storeActivationInvoiceId(Sim sim) {
+		checkNotNull(sim.getIccid());
+		collection().update(
+				new BasicDBObject("_id", sim.getIccid()),
+				new BasicDBObject("$set", new BasicDBObject("activationInvoiceId", sim.getActivationInvoiceId().get()))
+				);
+	}
+
+	@Override
+	public void storeLastMonthlyFeesInvoice(Sim sim) {
+		checkNotNull(sim.getIccid());
+		final MonthedInvoice monthedInvoice = sim.getLastMonthlyFeesInvoice().get();
+		collection().update(
+				new BasicDBObject("_id", sim.getIccid()),
+				new BasicDBObject("$set", new BasicDBObject()
+						.append("lastMonthlyFeesInvoice.month", monthedInvoice.getMonth())
+						.append("lastMonthlyFeesInvoice.year", monthedInvoice.getYear())
+						.append("lastMonthlyFeesInvoice.invoiceId", monthedInvoice.getInvoiceId())
+				));
+	}
+
 	@Override
 	public Sim createSimFromJson(String json) throws IOException {
 		return new ObjectMapper().readValue(json, SimImpl.class);

@@ -85,8 +85,8 @@ public class InvoiceConstructor {
 				final Calendar monthStart = Calendar.getInstance();
 				monthStart.setTimeZone(TimeZone.getTimeZone("UTC"));
 				monthStart.setTimeInMillis(0);
-				monthStart.set(Calendar.YEAR, lastMonthlyFeesInvoice.get().year);
-				monthStart.set(Calendar.MONTH, lastMonthlyFeesInvoice.get().month);
+				monthStart.set(Calendar.YEAR, lastMonthlyFeesInvoice.get().getYear());
+				monthStart.set(Calendar.MONTH, lastMonthlyFeesInvoice.get().getMonth());
 				itemStart = monthStart;
 			} else {
 				itemStart = contractStartDate.get();
@@ -165,12 +165,12 @@ public class InvoiceConstructor {
 		
 		for (Sim sim : simActivations) {
 			sim.setActivationInvoiceId(invoice.getId());
-			simService.storeSim(sim);
+			simService.storeActivationInvoiceId(sim);
 		}
 		
 		for (Sim sim : subscriptionFees) {
 			sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
-			simService.storeSim(sim);
+			simService.storeLastMonthlyFeesInvoice(sim);
 		}
 		
 		cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
