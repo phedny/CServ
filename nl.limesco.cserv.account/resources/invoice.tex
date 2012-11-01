@@ -61,7 +61,7 @@ Omschrijving      & Aantal  & Stuksprijs & Bedrag \\
 $itemLine.description & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
 #elseif( $itemLine.pricePerCall )
 $itemLine.description & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
- & & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
+ & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
 #end
 \hline
 #end
