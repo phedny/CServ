@@ -48,19 +48,19 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \end{flalign*}
 
 \begin{center}
-\line(1,0){450}
+\line(1,0){500}
 \end{center}
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ | X | X | R | R | R | }
+\begin{tabularx}{\textwidth}{ | X | R | R | R | }
 \hline
-Omschrijving &    & Aantal  & Stuksprijs & Bedrag \\
+Omschrijving      & Aantal  & Stuksprijs & Bedrag \\
 \hline
 #foreach( $itemLine in $invoice.itemLines )
 #if( $itemLine.itemPrice )
-$itemLine.description & & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.description & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
 #elseif( $itemLine.pricePerCall )
-$itemLine.description & & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.description & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
  & & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
 #end
 \hline
@@ -68,7 +68,7 @@ $itemLine.description & & $itemLine.numberOfCalls gesprekken & $util.formatPrice
 \end{tabularx}
 
 \begin{flushright}
-Totaal: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithoutTaxes )
+Totaal excl. BTW: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithoutTaxes )
 \end{flushright}
 
 \begin{tabularx}{\textwidth}{ | X | X | R | }
@@ -82,7 +82,7 @@ $util.formatPrice( $invoice.currency, $taxLine.baseAmount ) & $util.formatTax( $
 \end{tabularx}
 
 \begin{flushright}
-Totaal incl. BTW: $invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithTaxes )
+Totaal incl. BTW: \textbf{$invoice.currency $util.formatPrice( $invoice.currency, $invoice.totalWithTaxes )}
 \end{flushright}
 
 \end{document}
