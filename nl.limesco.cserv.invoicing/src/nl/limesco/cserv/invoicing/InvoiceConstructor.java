@@ -72,6 +72,7 @@ public class InvoiceConstructor {
 		}
 		
 		// Include the subscription fees
+		int numberOfMonthForCostContribution = 0;
 		final Map<SubscriptionKey, Integer> subscriptions = Maps.newHashMap();
 		for (Sim sim : subscriptionFees) {
 			final Optional<Calendar> contractStartDate = sim.getContractStartDate();
@@ -106,6 +107,10 @@ public class InvoiceConstructor {
 					subscriptions.put(key, Integer.valueOf(subscriptions.get(key).intValue() + 1));
 				} else {
 					subscriptions.put(key, Integer.valueOf(1));
+				}
+				
+				if (!sim.isExemptFromCostContribution()) {
+					numberOfMonthForCostContribution++;
 				}
 				
 				if (!end.before(endOfSubscriptionPeriod)) {
@@ -160,8 +165,8 @@ public class InvoiceConstructor {
 		}
 		
 		// Include the cost contribution
-		if (subscriptions.size() > 0) {
-			builder.normalItemLine("Bijdrage vaste kosten", subscriptions.size(), CONTRIBUTION_PRICE, 0.21);
+		if (numberOfMonthForCostContribution > 0) {
+			builder.normalItemLine("Bijdrage vaste kosten", numberOfMonthForCostContribution, CONTRIBUTION_PRICE, 0.21);
 		}
 		
 		final Invoice invoice = builder.build();

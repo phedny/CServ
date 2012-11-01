@@ -26,6 +26,7 @@ public class SimImpl implements Sim {
 	private String owner;
 	private SipSettings sipSettings;
 	private SimApnType apnType;
+	private boolean exemptFromCostContribution;
 	private Calendar contractStartDate;
 	private String activationInvoiceId;
 	private MonthedInvoice lastMonthlyFeesInvoice;
@@ -132,6 +133,14 @@ public class SimImpl implements Sim {
 		this.apnType = t;
 	}
 
+	@Override
+	public boolean isExemptFromCostContribution() {
+		return exemptFromCostContribution;
+	}
+	@Override
+	public void setExemptFromCostContribution(boolean exemptFromCostContribution) {
+		this.exemptFromCostContribution = exemptFromCostContribution;
+	}
 	public SimState getState() {
 		return state;
 	}

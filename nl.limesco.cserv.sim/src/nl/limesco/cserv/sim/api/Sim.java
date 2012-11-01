@@ -30,6 +30,9 @@ public interface Sim {
 	public SimApnType getApnType();
 	public void setApnType(SimApnType t);
 	
+	public boolean isExemptFromCostContribution();
+	public void setExemptFromCostContribution(boolean exemptFromCostContribution);
+	
 	public Optional<String> getActivationInvoiceId();
 	public void setActivationInvoiceId(String string);
 
