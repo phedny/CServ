@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Calendar;
 import java.util.Date;
 
+import net.vz.mongodb.jackson.Id;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
@@ -57,7 +58,7 @@ public class SimImpl implements Sim {
 		}
 	}
 
-	@JsonProperty("_id")
+	@Id
 	public String getIccid() {
 		return iccid;
 	}

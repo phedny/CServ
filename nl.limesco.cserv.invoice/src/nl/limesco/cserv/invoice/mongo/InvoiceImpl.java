@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.vz.mongodb.jackson.Id;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.ItemLine;
@@ -40,7 +41,7 @@ public class InvoiceImpl implements Invoice {
 	
 	private long totalWithTaxes;
 	
-	@JsonProperty("_id")
+	@Id
 	@Override
 	public String getId() {
 		return id;

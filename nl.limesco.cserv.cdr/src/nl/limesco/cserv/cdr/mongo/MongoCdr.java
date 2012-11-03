@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 
@@ -62,7 +63,7 @@ public class MongoCdr implements Cdr {
 	}
 
 	@ObjectId
-	@JsonProperty("_id")
+	@Id
 	public String getId() {
 		return id;
 	}

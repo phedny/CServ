@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import net.vz.mongodb.jackson.Id;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -15,7 +17,7 @@ public class JobState {
 	
 	private Map<String, Calendar> lastRetrieved;
 
-	@JsonProperty("_id")
+	@Id
 	public String getSource() {
 		return source;
 	}
