@@ -2,13 +2,12 @@ package nl.limesco.cserv.payment.mongo;
 
 import java.util.Set;
 
+import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.payment.api.Payment;
 import nl.limesco.cserv.payment.api.PaymentStatus;
 import nl.limesco.cserv.payment.api.PaymentType;
-
-import org.codehaus.jackson.annotate.JsonProperty;
 
 public class PaymentImpl implements Payment {
 	String id;
@@ -21,7 +20,7 @@ public class PaymentImpl implements Payment {
 	int amount;
 	PaymentStatus status;
 	
-	@JsonProperty("_id")
+	@Id
 	@ObjectId
 	@Override
 	public String getId() {

@@ -3,12 +3,11 @@ package nl.limesco.cserv.account.mongo;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.Address;
 import nl.limesco.cserv.account.api.Name;
-
-import org.codehaus.jackson.annotate.JsonProperty;
 
 public class AccountImpl implements Account {
 
@@ -29,7 +28,7 @@ public class AccountImpl implements Account {
 	}
 	
 	@ObjectId
-	@JsonProperty("_id")
+	@Id
 	public String getId() {
 		return id;
 	}

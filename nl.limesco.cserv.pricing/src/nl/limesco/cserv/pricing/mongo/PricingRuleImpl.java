@@ -1,5 +1,6 @@
 package nl.limesco.cserv.pricing.mongo;
 
+import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
@@ -26,7 +27,7 @@ public class PricingRuleImpl implements PricingRule {
 	private boolean hidden;
 
 	@ObjectId
-	@JsonProperty("_id")
+	@Id
 	public String getId() {
 		return id;
 	}
