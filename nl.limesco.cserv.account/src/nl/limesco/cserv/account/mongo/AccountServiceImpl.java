@@ -58,6 +58,12 @@ public class AccountServiceImpl implements AccountService {
 		final DBCursor<AccountImpl> cursor = collection().find(new BasicDBObject().append("email", email));
 		return Sets.newHashSet((Iterator<AccountImpl>) cursor);
 	}
+	
+	@Override
+	public Collection<? extends Account> getAllAccounts() {
+		final DBCursor<AccountImpl> cursor = collection().find();
+		return Sets.newHashSet((Iterator<AccountImpl>) cursor);
+	}
 
 	@Override
 	public Account createAccount() {

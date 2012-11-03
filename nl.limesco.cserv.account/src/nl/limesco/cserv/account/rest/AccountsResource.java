@@ -46,6 +46,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -87,11 +88,14 @@ public class AccountsResource {
 			ObjectMapper om = new ObjectMapper();
 			Map<String,String> req = om.readValue(json, Map.class);
 			// TODO: understand more keys
-			if(req.size() != 1 || !req.containsKey("email")) {
+			final Collection<? extends Account> accounts;
+			if(req.size() == 0) {
+				accounts = accountService.getAllAccounts();
+			} else if(req.size() == 1 && req.containsKey("email")) {
+				accounts = accountService.getAccountByEmail(req.get("email"));
+			} else {
 				throw new WebApplicationException(Status.BAD_REQUEST);
 			}
-			String email = req.get("email");
-			final Collection<? extends Account> accounts = accountService.getAccountByEmail(email);
 			return om.writeValueAsString(accounts);
 		} catch(JsonGenerationException e) {
 			throw new WebApplicationException(e);

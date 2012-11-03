@@ -12,6 +12,7 @@ public interface AccountService {
 	Optional<? extends Account> getAccountByExternalAccount(String system, String externalAccount);
 	
 	Collection<? extends Account> getAccountByEmail(String email);
+	Collection<? extends Account> getAllAccounts();
 	
 	Account createAccount();
 	
