@@ -8,6 +8,9 @@ public interface Account {
 
 	public String getEmail();
 
+	public AccountState getState();
+	public void setState(AccountState state);
+	
 	public void setEmail(String email);
 
 	public String getCompanyName();

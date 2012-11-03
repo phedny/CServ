@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
+import nl.limesco.cserv.account.api.AccountState;
 import nl.limesco.cserv.auth.api.Role;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
@@ -411,6 +412,30 @@ public class AccountsResource {
 			} catch(JsonMappingException e) {
 				throw new WebApplicationException(e);
 			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@POST
+		@Path("setState")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public void setConfirmed(String json) {
+			if(!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				Map<String,String> req = new ObjectMapper().readValue(json, Map.class);
+				if(req.containsKey("state")) {
+					AccountState state = AccountState.valueOf(req.get("state"));
+					account.setState(state);
+					accountService.updateAccount(account);
+				}
+			} catch (JsonParseException e) {
+				throw new WebApplicationException(e);
+			} catch (JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch (IOException e) {
 				throw new WebApplicationException(e);
 			}
 		}

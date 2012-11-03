@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.account.api.AccountState;
 import nl.limesco.cserv.account.api.Address;
 import nl.limesco.cserv.account.api.Name;
 
@@ -24,8 +25,11 @@ public class AccountImpl implements Account {
 	
 	private Map<String, String> externalAccounts;
 
+	private AccountState state;
+	
 	public AccountImpl() {
 		this.externalAccounts = new HashMap<String,String>();
+		this.state = AccountState.UNCONFIRMED;
 	}
 	
 	@ObjectId
@@ -78,6 +82,16 @@ public class AccountImpl implements Account {
 	@Override
 	public void setExternalAccounts(Map<String, String> externalAccounts) {
 		this.externalAccounts = externalAccounts;
+	}
+	
+	@Override
+	public AccountState getState() {
+		return state;
+	}
+	
+	@Override
+	public void setState(AccountState state) {
+		this.state = state;
 	}
 	
 }
