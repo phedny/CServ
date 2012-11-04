@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +40,10 @@ import nl.limesco.cserv.payment.api.PaymentBuilder;
 import nl.limesco.cserv.payment.api.PaymentService;
 import nl.limesco.cserv.util.pdflatex.PdfLatex;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
-import org.apache.velocity.runtime.resource.util.StringResourceRepository;
+import org.amdatu.template.processor.TemplateContext;
+import org.amdatu.template.processor.TemplateEngine;
+import org.amdatu.template.processor.TemplateException;
+import org.amdatu.template.processor.TemplateProcessor;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -65,6 +64,8 @@ public class AccountsResource {
 	private volatile InvoiceService invoiceService;
 	
 	private volatile PaymentService paymentService;
+	
+	private volatile TemplateEngine templateEngine;
 
 	@Path("{accountId}")
 	public AccountSubResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
@@ -204,32 +205,23 @@ public class AccountsResource {
 		@GET
 		@Path("invoices/{invoiceId}")
 		@Produces("application/x-tex")
-		public String getInvoiceByIdAsTex(@PathParam("invoiceId") String id) throws IOException {
+		public String getInvoiceByIdAsTex(@PathParam("invoiceId") String id) throws IOException, TemplateException {
 			final Invoice invoice = getInvoiceByIdForRest(id);
 			
-			final VelocityEngine engine = new VelocityEngine();
-			engine.setProperty(Velocity.RESOURCE_LOADER, "string");
-			engine.setProperty("string.resource.loader.class", StringResourceLoader.class.getName());
-			engine.init();
-
-			final StringResourceRepository repository = StringResourceLoader.getRepository();
-			repository.putStringResource("invoice.tex", getFileContents("resources/invoice.tex"));
-			
-			final Template template = engine.getTemplate("invoice.tex");
-			final VelocityContext context = new VelocityContext();
+			final TemplateContext context = templateEngine.createContext();
 			context.put("invoice", invoice);
 			context.put("account", account);
 			context.put("util", VelocityUtils.class);
-			
-			final StringWriter writer = new StringWriter();
-			template.merge(context, writer);
-			return writer.toString();
+
+			final URL template = getClass().getClassLoader().getResource("resources/invoice.tex");
+			final TemplateProcessor processor = templateEngine.createProcessor(template);
+			return processor.generateString(context);
 		}
 
 		@GET
 		@Path("invoices/{invoiceId}")
 		@Produces("application/pdf")
-		public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) throws IOException, InterruptedException {
+		public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) throws IOException, InterruptedException, TemplateException {
 			final String invoiceAsTex = getInvoiceByIdAsTex(id);
 			return pdfLatex.compile(invoiceAsTex);
 		}

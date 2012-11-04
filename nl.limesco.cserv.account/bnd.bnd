@@ -14,6 +14,6 @@
 	nl.limesco.cserv.auth.api;version=latest,\
 	nl.limesco.cserv.payment.api;version=latest,\
 	javax.servlet,\
-	org.apache.velocity,\
 	com.springsource.org.apache.commons.collections,\
-	nl.limesco.cserv.util.pdflatex;version=latest
+	nl.limesco.cserv.util.pdflatex;version=latest,\
+	org.amdatu.template.processor
