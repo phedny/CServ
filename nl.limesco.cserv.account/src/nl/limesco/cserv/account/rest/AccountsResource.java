@@ -226,21 +226,6 @@ public class AccountsResource {
 			return pdfLatex.compile(invoiceAsTex);
 		}
 		
-		public String getFileContents(String filename) throws IOException {
-			final StringWriter writer = new StringWriter();
-			final Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename), "UTF-8");
-			try {
-				final char buffer[] = new char[1024];
-				int chars;
-				while ((chars = reader.read(buffer)) > 0) {
-					writer.write(buffer, 0, chars);
-				}
-			} finally {
-				reader.close();
-			}
-			return writer.toString();
-		}
-
 		private Invoice getInvoiceByIdForRest(String id) {
 			final Optional<? extends Invoice> optionalInvoice = invoiceService.getInvoiceById(id);
 			if (!optionalInvoice.isPresent()) {
