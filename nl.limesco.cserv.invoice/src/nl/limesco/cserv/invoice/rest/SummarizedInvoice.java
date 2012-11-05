@@ -1,4 +1,4 @@
-package nl.limesco.cserv.account.rest;
+package nl.limesco.cserv.invoice.rest;
 
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;

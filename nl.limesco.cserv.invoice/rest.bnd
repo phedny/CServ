@@ -1,0 +1,3 @@
+Private-Package: nl.limesco.cserv.invoice.rest
+Bundle-Activator: nl.limesco.cserv.invoice.rest.Activator
+Include-Resource: resources=resources

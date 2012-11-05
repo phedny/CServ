@@ -1,4 +1,4 @@
-package nl.limesco.cserv.account.rest;
+package nl.limesco.cserv.invoice.rest;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

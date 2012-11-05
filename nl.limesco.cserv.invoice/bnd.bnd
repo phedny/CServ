@@ -7,5 +7,9 @@
 	org.amdatu.mongo,\
 	jackson-core-asl,\
 	jackson-mapper-asl,\
-	com.google.guava
+	com.google.guava,\
+	nl.limesco.cserv.account.api;version=latest,\
+	org.amdatu.template.processor,\
+	nl.limesco.cserv.util.dm;version=latest,\
+	nl.limesco.cserv.util.pdflatex;version=latest
 -sub: *.bnd
