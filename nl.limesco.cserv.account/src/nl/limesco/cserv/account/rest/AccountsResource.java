@@ -59,7 +59,7 @@ public class AccountsResource {
 	
 	@Path("{accountId}")
 	public AccountResource getAccount(@PathParam("accountId") String id, @Context HttpServletRequest request) {
-//		authorizationService.requireUserRole(request, Role.ADMIN);
+		authorizationService.requireUserRole(request, Role.ADMIN);
 		return getAccount(id, true);
 	}
 
