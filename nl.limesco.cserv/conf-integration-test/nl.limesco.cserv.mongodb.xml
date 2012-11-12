@@ -1,0 +1,40 @@
+<MetaData xmlns:metatype='http://www.osgi.org/xmlns/metatype/v1.0.0'>
+  <OCD name='ocd' id='ocd'>
+  	<AD id='dbName' type='STRING' cardinality='0' />
+    <AD id='mongoURI' type='STRING' cardinality='0' />
+    <AD id='username' type='STRING' cardinality='0' />
+    <AD id='password' type='STRING' cardinality='0' />
+    <AD id='host' type='STRING' cardinality='0' />
+    <AD id='port' type='STRING' cardinality='0' />
+    <AD id='writeConcern' type='STRING' cardinality='0' />
+    <AD id='readPreference' type='STRING' cardinality='0' />
+    <AD id='autoConnectRetry' type='STRING' cardinality='0' />
+    <AD id='connectionsPerHost' type='STRING' cardinality='0' />
+    <AD id='connectTimeout' type='STRING' cardinality='0' />
+    <AD id='description' type='STRING' cardinality='0' />
+    <AD id='fsync' type='STRING' cardinality='0' />
+    <AD id='j' type='STRING' cardinality='0' />
+    <AD id='maxAutoConnectRetryTime' type='STRING' cardinality='0' />
+    <AD id='maxWaitTime' type='STRING' cardinality='0' />
+    <AD id='safe' type='STRING' cardinality='0' />
+    <AD id='socketKeepAlive' type='STRING' cardinality='0' />
+    <AD id='socketTimeout' type='STRING' cardinality='0' />
+    <AD id='threadsAllowedToBlockForConnectionMultiplier' type='STRING' cardinality='0' />
+    <AD id='w' type='STRING' cardinality='0' />
+    <AD id='wtimeout' type='STRING' cardinality='0' />
+    
+  </OCD>
+  <Designate factoryPid='org.amdatu.mongo' pid='nl.limesco.cserv.mongodb'  bundle="osgi-dp:org.amdatu.mongo">
+    <Object ocdref='ocd'>
+      <Attribute adref='dbName'>
+        <Value><![CDATA[LimescoCServIntegrationTest]]></Value>
+      </Attribute>	
+      <Attribute adref='host'>
+        <Value><![CDATA[127.0.0.1]]></Value>
+      </Attribute>
+      <Attribute adref='connectionsPerHost'>
+        <Value><![CDATA[50]]></Value>
+      </Attribute>
+    </Object>
+  </Designate>
+</MetaData>

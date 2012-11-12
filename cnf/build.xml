@@ -41,6 +41,12 @@
 		</copy>
 	</target>
 
+	<target name="run" depends="build">
+		<java fork="true" jar="${workspacedir}/cnf/plugins/biz.aQute.bnd/biz.aQute.bnd-2.0.0.jar">
+			<arg value="run" />
+		</java>
+	</target>
+
 	<target name="junit" depends="init,compileTests" if="testDirExists">
 		<junit showoutput="false" printsummary="true" failureproperty='stop' errorproperty='stop' fork="true" haltonfailure="yes" dir="${basedir}">
 			<classpath path="${project.buildpath}:bin_test/:${workspacedir}/cnf/lib/junit-4.10.jar" />

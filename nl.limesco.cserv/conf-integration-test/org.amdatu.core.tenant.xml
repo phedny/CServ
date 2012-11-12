@@ -1,0 +1,20 @@
+<MetaData xmlns:metatype='http://www.osgi.org/xmlns/metatype/v1.0.0'>
+  <OCD name='ocd' id='ocd'>
+    <AD id='tenant1.id' type='STRING' cardinality='0' />
+    <AD id='tenant1.name' type='STRING' cardinality='0' />
+    <AD id='tenant1.properties.hostname' type='STRING' cardinality='0' />
+  </OCD>
+  <Designate pid='org.amdatu.core.tenant' bundle="osgi-dp:org.amdatu.core.tenant">
+    <Object ocdref='ocd'>
+      <Attribute adref='tenant1.id'>
+        <Value><![CDATA[Default]]></Value>
+      </Attribute>
+      <Attribute adref='tenant1.name'>
+        <Value><![CDATA[Default tenant]]></Value>
+      </Attribute>
+      <Attribute adref='tenant1.properties.hostname'>
+        <Value><![CDATA[localhost]]></Value>
+      </Attribute>
+    </Object>
+  </Designate>
+</MetaData>

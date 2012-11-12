@@ -1,0 +1,12 @@
+<MetaData xmlns:metatype='http://www.osgi.org/xmlns/metatype/v1.0.0'> 
+  <OCD name='ocd' id='ocd'>
+    <AD id='binary_path' type='STRING' cardinality='0' />
+  </OCD>
+  <Designate pid='nl.limesco.cserv.util.pdflatex' bundle="osgi-dp:nl.limesco.cserv.util.pdflatex">
+    <Object ocdref='ocd'>
+      <Attribute adref='binary_path'>
+        <Value><![CDATA[/usr/texbin/pdflatex]]></Value>
+      </Attribute>
+    </Object>
+  </Designate>
+</MetaData>

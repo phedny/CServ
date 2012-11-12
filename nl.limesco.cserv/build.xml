@@ -4,4 +4,36 @@
 	<!-- -->
 	
 	<import file="../cnf/build.xml"/>
+
+	<target name="integration-test-test-confdir" depends="init">
+		<condition property="confDirDoesntExist">
+			<not>
+				<available file="${basedir}/conf" />
+			</not>
+		</condition>
+	</target>
+
+	<target name="integration-test-confdir" depends="init,integration-test-test-confdir" if="confDirDoesntExist">
+		<copydir src="${basedir}/conf-integration-test" dest="${basedir}/conf" />
+	</target>
+
+	<target name="integration-test" depends="init,compile,integration-test-confdir">
+		<taskdef name="waitForListener" classname="nl.limesco.cserv.ant.WaitForListener" classpath="${projectdir}/bin" />
+		
+		<parallel>
+			<daemons>
+				<ant dir="." target="run" />
+			</daemons>
+			<sequential>
+				<waitForListener port="8080" timeoutSeconds="120" waitingMessage="Waiting for CServ to come up on port 8080..." />
+				<sleep seconds="5" /> <!-- Give is a couple more seconds to finish initialization -->
+				
+				<exec executable="phantomjs" failonerror="true">
+					<arg file="${projectdir}/lib/js/phantomjs-testrunner.js" />
+					<arg file="${projectdir}/lib/SpecRunner.html" />
+				</exec>
+			</sequential>
+		</parallel>
+	</target>
+
 </project>
