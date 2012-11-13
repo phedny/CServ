@@ -1,5 +1,8 @@
 language: java
 
+services:
+  - mongodb
+
 notifications:
   irc:
     channels:

@@ -15,7 +15,8 @@ Environment requirements
 ------------------------
 
 CServ depends on the following external systems:
-- MongoDb
+- MongoDb for storage of persistent data
+- PhantomJS for executing integration tests (assumes "phantomjs" in $PATH)
 
 Configuration
 -------------
