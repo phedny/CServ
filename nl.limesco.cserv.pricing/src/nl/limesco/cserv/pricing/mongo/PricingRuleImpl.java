@@ -3,6 +3,7 @@ package nl.limesco.cserv.pricing.mongo;
 import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
 import nl.limesco.cserv.pricing.api.Pricing;
 import nl.limesco.cserv.pricing.api.PricingRule;
@@ -100,7 +101,7 @@ public class PricingRuleImpl implements PricingRule {
 
 	@Override
 	public long getPriceForCdr(Cdr cdr, CallConnectivityType callConnectivityType) throws PricingRuleNotApplicableException {
-		if (!cdr.isConnected()) {
+		if (!((VoiceCdr) cdr).isConnected()) {
 			return 0;
 		}
 		if (!applicability.isApplicable(cdr, callConnectivityType)) {
@@ -111,7 +112,7 @@ public class PricingRuleImpl implements PricingRule {
 
 	@Override
 	public long getCostForCdr(Cdr cdr, CallConnectivityType callConnectivityType) throws PricingRuleNotApplicableException {
-		if (!cdr.isConnected()) {
+		if (!((VoiceCdr) cdr).isConnected()) {
 			return 0;
 		}
 		if (!applicability.isApplicable(cdr, callConnectivityType)) {

@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Collection;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import com.google.common.base.Optional;
@@ -18,9 +19,9 @@ public interface ApplicationConstraints {
 	
 	Optional<Collection<CallConnectivityType>> getCallConnectivityTypes();
 	
-	Collection<Cdr.Type> getCdrTypes();
+	Collection<VoiceCdr.Type> getCdrTypes();
 	
-	boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, Cdr.Type cdrType);
+	boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType);
 	
 	boolean isApplicable(Cdr cdr, CallConnectivityType callConnectivityType);
 	

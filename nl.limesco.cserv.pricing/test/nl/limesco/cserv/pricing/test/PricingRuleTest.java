@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
 import nl.limesco.cserv.pricing.mongo.ApplicationConstraintsImpl;
 import nl.limesco.cserv.pricing.mongo.PricingImpl;
@@ -54,7 +54,7 @@ public class PricingRuleTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("source1"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		
 		final PricingImpl price = new PricingImpl();
 		price.setPerCall(pricePerCall);

@@ -3,6 +3,7 @@ package nl.limesco.cserv.pricing.api;
 import java.util.Collection;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 public interface ApplicabilityFilterBuilder {
@@ -27,11 +28,11 @@ public interface ApplicabilityFilterBuilder {
 
 	ApplicabilityFilterBuilder cdrType(Any any);
 	
-	ApplicabilityFilterBuilder cdrType(Cdr.Type cdrType);
+	ApplicabilityFilterBuilder cdrType(VoiceCdr.Type cdrType);
 	
-	ApplicabilityFilterBuilder cdrType(Cdr.Type... cdrType);
+	ApplicabilityFilterBuilder cdrType(VoiceCdr.Type... cdrType);
 	
-	ApplicabilityFilterBuilder cdrType(Collection<Cdr.Type> cdrType);
+	ApplicabilityFilterBuilder cdrType(Collection<VoiceCdr.Type> cdrType);
 
 	ApplicabilityFilterBuilder cdr(Cdr cdr);
 

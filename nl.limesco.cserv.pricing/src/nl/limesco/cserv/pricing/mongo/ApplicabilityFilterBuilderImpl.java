@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
 import nl.limesco.cserv.pricing.api.ApplicabilityFilterBuilder;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
@@ -20,7 +21,7 @@ public class ApplicabilityFilterBuilderImpl implements ApplicabilityFilterBuilde
 	
 	private Set<CallConnectivityType> callConnectivityTypes = Sets.newHashSet();
 	
-	private Set<Cdr.Type> cdrTypes = Sets.newHashSet();
+	private Set<VoiceCdr.Type> cdrTypes = Sets.newHashSet();
 
 	@Override
 	public ApplicabilityFilterBuilder source(Any any) {
@@ -90,7 +91,7 @@ public class ApplicabilityFilterBuilderImpl implements ApplicabilityFilterBuilde
 	}
 
 	@Override
-	public ApplicabilityFilterBuilder cdrType(Cdr.Type cdrType) {
+	public ApplicabilityFilterBuilder cdrType(VoiceCdr.Type cdrType) {
 		checkNotNull(cdrType);
 		checkState(cdrTypes != null);
 		cdrTypes.add(cdrType);
@@ -98,13 +99,13 @@ public class ApplicabilityFilterBuilderImpl implements ApplicabilityFilterBuilde
 	}
 
 	@Override
-	public ApplicabilityFilterBuilder cdrType(Cdr.Type... cdrType) {
+	public ApplicabilityFilterBuilder cdrType(VoiceCdr.Type... cdrType) {
 		return cdrType(Arrays.asList(cdrType));
 	}
 
 	@Override
-	public ApplicabilityFilterBuilder cdrType(Collection<Cdr.Type> cdrType) {
-		for (Cdr.Type t : cdrType) {
+	public ApplicabilityFilterBuilder cdrType(Collection<VoiceCdr.Type> cdrType) {
+		for (VoiceCdr.Type t : cdrType) {
 			checkNotNull(t);
 		}
 		checkState(cdrType != null);
@@ -114,7 +115,7 @@ public class ApplicabilityFilterBuilderImpl implements ApplicabilityFilterBuilde
 
 	@Override
 	public ApplicabilityFilterBuilder cdr(Cdr cdr) {
-		return source(cdr.getSource()).cdrType(cdr.getType().get());
+		return source(cdr.getSource()).cdrType(((VoiceCdr) cdr).getType().get());
 	}
 
 	@Override

@@ -1,2 +1,3 @@
 Bundle-Activator: nl.limesco.cserv.cdr.transform.account.Activator
-Private-Package: nl.limesco.cserv.cdr.transform.account
+Private-Package: nl.limesco.cserv.cdr.transform.account,\
+	nl.limesco.cserv.cdr.transform

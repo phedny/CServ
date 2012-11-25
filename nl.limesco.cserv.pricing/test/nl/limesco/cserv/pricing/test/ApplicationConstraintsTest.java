@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.mongo.ApplicationConstraintsImpl;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
@@ -50,7 +50,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -60,7 +60,7 @@ public class ApplicationConstraintsTest {
 		applicability.setNullableValidUntilAsDate(DAY_FORMAT.parse("01-01-2014"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -69,7 +69,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2011"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -79,7 +79,7 @@ public class ApplicationConstraintsTest {
 		applicability.setNullableValidUntilAsDate(DAY_FORMAT.parse("01-05-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -88,7 +88,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("diferentSource"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -97,7 +97,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.DIY));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -106,7 +106,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_MOBILE));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_MOBILE));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -115,7 +115,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Sets.newHashSet("source1", "source2", "source3", "source4"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(true, invoker.invoke(applicability, "source1"));
 	}
 
@@ -124,7 +124,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Sets.newHashSet("source1", "source2", "source3", "source4"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(false, invoker.invoke(applicability, "source5"));
 	}
 
@@ -133,7 +133,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB, CallConnectivityType.DIY));
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -142,7 +142,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(null);
-		applicability.setCdrTypesAsSet(Collections.singleton(Cdr.Type.EXT_EXT));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -151,7 +151,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_EXT, Cdr.Type.MOBILE_EXT, Cdr.Type.PBX_EXT));
+		applicability.setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT, VoiceCdr.Type.MOBILE_EXT, VoiceCdr.Type.PBX_EXT));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -160,7 +160,7 @@ public class ApplicationConstraintsTest {
 		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
-		applicability.setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_MOBILE, Cdr.Type.MOBILE_MOBILE, Cdr.Type.PBX_MOBILE));
+		applicability.setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_MOBILE, VoiceCdr.Type.MOBILE_MOBILE, VoiceCdr.Type.PBX_MOBILE));
 		assertResult(false, invoker.invoke(applicability));
 	}
 	
@@ -204,7 +204,7 @@ public class ApplicationConstraintsTest {
 
 		@Override
 		public boolean invoke(ApplicationConstraintsImpl applicability, String source) {
-			return applicability.isApplicable(now, source, CallConnectivityType.OOTB, Cdr.Type.EXT_EXT);
+			return applicability.isApplicable(now, source, CallConnectivityType.OOTB, VoiceCdr.Type.EXT_EXT);
 		}
 		
 	}

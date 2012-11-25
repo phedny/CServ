@@ -3,11 +3,12 @@ package nl.limesco.cserv.pricing.test;
 import java.util.Calendar;
 import java.util.Map;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.pricing.api.Pricing;
 
 import com.google.common.base.Optional;
 
-final class StaticCdr implements Cdr {
+final class StaticCdr implements VoiceCdr {
 	
 	private final Calendar time;
 	
@@ -15,15 +16,15 @@ final class StaticCdr implements Cdr {
 	
 	private final boolean connected;
 	
-	private final Cdr.Type cdrType;
+	private final VoiceCdr.Type cdrType;
 	
 	private final long seconds;
 
 	StaticCdr(Calendar time, String source, boolean connected, boolean hasCdrType, long seconds) {
-		this(time, source, connected, hasCdrType ? Cdr.Type.EXT_EXT : null, seconds);
+		this(time, source, connected, hasCdrType ? VoiceCdr.Type.EXT_EXT : null, seconds);
 	}
 
-	StaticCdr(Calendar time, String source, boolean connected, Cdr.Type cdrType, long seconds) {
+	StaticCdr(Calendar time, String source, boolean connected, VoiceCdr.Type cdrType, long seconds) {
 		this.time = time;
 		this.source = source;
 		this.connected = connected;
@@ -67,7 +68,7 @@ final class StaticCdr implements Cdr {
 	}
 
 	@Override
-	public Optional<Cdr.Type> getType() {
+	public Optional<VoiceCdr.Type> getType() {
 		return Optional.fromNullable(cdrType);
 	}
 

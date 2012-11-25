@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-public class CsvLineCdr implements Cdr {
+public class CsvLineCdr implements VoiceCdr {
 	
 	private final String source;
 	

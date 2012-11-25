@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.cdr.api.Cdr.Type;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
@@ -26,7 +26,7 @@ public class ApplicationConstraintsImpl implements ApplicationConstraints {
 	
 	private Set<CallConnectivityType> connectivityTypes;
 	
-	private Set<Cdr.Type> cdrTypes;
+	private Set<VoiceCdr.Type> cdrTypes;
 	
 	@Override
 	@JsonIgnore
@@ -110,21 +110,21 @@ public class ApplicationConstraintsImpl implements ApplicationConstraints {
 
 	@Override
 	@JsonIgnore
-	public Collection<Cdr.Type> getCdrTypes() {
+	public Collection<VoiceCdr.Type> getCdrTypes() {
 		return Collections.unmodifiableCollection(cdrTypes);
 	}
 	
 	@JsonProperty("cdrType")
-	public Set<Cdr.Type> getCdrTypesAsSet() {
+	public Set<VoiceCdr.Type> getCdrTypesAsSet() {
 		return cdrTypes;
 	}
 	
-	public void setCdrTypesAsSet(Set<Cdr.Type> cdrTypes) {
+	public void setCdrTypesAsSet(Set<VoiceCdr.Type> cdrTypes) {
 		this.cdrTypes = cdrTypes;
 	}
 
 	@Override
-	public boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, Type cdrType) {
+	public boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType) {
 		if (date.before(validFrom) || (validUntil != null && validUntil.before(date))) {
 			return false;
 		}
@@ -146,11 +146,11 @@ public class ApplicationConstraintsImpl implements ApplicationConstraints {
 
 	@Override
 	public boolean isApplicable(Cdr cdr, CallConnectivityType callConnectivityType) {
-		if (!cdr.isConnected() || !cdr.getType().isPresent()) {
+		if (!((VoiceCdr) cdr).isConnected() || !((VoiceCdr) cdr).getType().isPresent()) {
 			return false;
 		}
 		
-		return isApplicable(cdr.getTime(), cdr.getSource(), callConnectivityType, cdr.getType().get());
+		return isApplicable(cdr.getTime(), cdr.getSource(), callConnectivityType, ((VoiceCdr) cdr).getType().get());
 	}
 
 }

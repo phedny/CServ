@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.TimeZone;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
 import nl.limesco.cserv.pricing.api.PricingRule;
@@ -77,7 +77,7 @@ final class PricingServiceHelperMock extends PricingServiceHelper {
 					setNullableValidUntilAsDate(DAY_FORMAT.parse("01-01-2012"));
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
-					setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_EXT));
+					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
 				}});
 				setPriceImpl(new PricingImpl() {{
 					setPerCall(400);
@@ -94,7 +94,7 @@ final class PricingServiceHelperMock extends PricingServiceHelper {
 					setValidFromAsDate(DAY_FORMAT.parse("01-01-2011"));
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
-					setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_EXT));
+					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
 				}});
 				setPriceImpl(new PricingImpl() {{
 					setPerCall(350);

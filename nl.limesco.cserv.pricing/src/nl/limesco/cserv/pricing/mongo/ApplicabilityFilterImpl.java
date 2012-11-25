@@ -2,8 +2,7 @@ package nl.limesco.cserv.pricing.mongo;
 
 import java.util.Collection;
 
-import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.cdr.api.Cdr.Type;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
@@ -15,9 +14,9 @@ public class ApplicabilityFilterImpl implements ApplicabilityFilter {
 	
 	private final Collection<CallConnectivityType> callConnectivityTypes;
 	
-	private final Collection<Cdr.Type> cdrTypes;
+	private final Collection<VoiceCdr.Type> cdrTypes;
 
-	public ApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<Type> cdrTypes) {
+	public ApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<VoiceCdr.Type> cdrTypes) {
 		this.sources = sources;
 		this.callConnectivityTypes = callConnectivityTypes;
 		this.cdrTypes = cdrTypes;
@@ -34,7 +33,7 @@ public class ApplicabilityFilterImpl implements ApplicabilityFilter {
 	}
 
 	@Override
-	public Optional<Collection<Cdr.Type>> getCdrTypes() {
+	public Optional<Collection<VoiceCdr.Type>> getCdrTypes() {
 		return Optional.fromNullable(cdrTypes);
 	}
 

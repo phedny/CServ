@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
@@ -146,7 +147,7 @@ public class InvoiceConstructor {
 			if (!durations.containsKey(pricingRuleId)) {
 				durations.put(pricingRuleId, new CombinedDuration());
 			}
-			durations.get(pricingRuleId).addCdr(cdr);
+			durations.get(pricingRuleId).addCdr((VoiceCdr) cdr);
 		}
 		
 		for (Entry<String, CombinedDuration> duration : durations.entrySet()) {
