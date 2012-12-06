@@ -33,7 +33,8 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.mongo)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoicing)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.rest)',\
-	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.rest)'
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.rest)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.6
 -runbundles: org.apache.felix.useradmin;version='[1.0.2,1.0.3)',\
@@ -102,7 +103,11 @@
 	nl.limesco.cserv.invoice.api;version=latest,\
 	nl.limesco.cserv.account.api;version=latest,\
 	nl.limesco.cserv.invoice.mongo;version=latest,\
-	org.amdatu.template.processor;version='[1.0.0,1.0.1)'
+	org.amdatu.template.processor;version='[1.0.0,1.0.1)',\
+	com.springsource.org.apache.commons.collections;version='[3.2.1,3.2.2)',\
+	org.apache.velocity;version='[1.7.0,1.7.1)',\
+	nl.limesco.cserv.sim.rest;version=latest,\
+	com.springsource.org.apache.commons.lang;version='[2.6.0,2.6.1)'
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\

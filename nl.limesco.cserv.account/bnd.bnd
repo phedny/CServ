@@ -13,4 +13,8 @@
 	nl.limesco.cserv.util.pdflatex;version=latest,\
 	nl.limesco.cserv.auth.api;version=latest,\
 	javax.servlet,\
-	com.springsource.org.apache.commons.collections
+	com.springsource.org.apache.commons.collections,\
+	org.apache.velocity,\
+	nl.limesco.cserv.util.pdflatex;version=latest
+-runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
+-runee: JavaSE-1.6
