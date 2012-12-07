@@ -4,6 +4,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.AccountResourceExtension;
+import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.sim.api.SimService;
 import nl.limesco.cserv.util.dm.UnavailableOSGiService;
@@ -24,6 +25,7 @@ public class Activator extends DependencyActivatorBase {
 				.setInterface(Object.class.getName(), null)
 				.setImplementation(SimResource.class)
 				.add(createServiceDependency().setService(WebAuthorizationService.class).setRequired(true))
+				.add(createServiceDependency().setService(AccountService.class).setRequired(true))
 				.add(createServiceDependency().setService(SimService.class).setRequired(true).setDefaultImplementation(UnavailableOSGiService.newInstance(SimService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 

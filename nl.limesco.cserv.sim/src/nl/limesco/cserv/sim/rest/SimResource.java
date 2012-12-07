@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -18,10 +19,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.auth.api.Role;
 import nl.limesco.cserv.auth.api.WebAuthorizationService;
+import nl.limesco.cserv.sim.api.CallConnectivityType;
+import nl.limesco.cserv.sim.api.PortingState;
 import nl.limesco.cserv.sim.api.Sim;
+import nl.limesco.cserv.sim.api.SimApnType;
 import nl.limesco.cserv.sim.api.SimService;
+import nl.limesco.cserv.sim.api.SimState;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -35,6 +42,8 @@ public class SimResource {
 	private volatile WebAuthorizationService authorizationService;
 	
 	private volatile SimService simService;
+	
+	private volatile AccountService accountService;
 
 	@Path("{simId}")
 	public SimSubResource getSim(@PathParam("simId") String id, @Context HttpServletRequest request) {
@@ -117,6 +126,57 @@ public class SimResource {
 		public String getSim() {
 			try {
 				return new ObjectMapper().writeValueAsString(this.sim);
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@POST
+		@Path("/allocate")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public void allocateSim(String json, @Context HttpServletRequest request) {
+			authorizationService.requireUserRole(request, Role.ADMIN);
+			if(sim.getState() != SimState.STOCK){
+				throw new WebApplicationException(Status.CONFLICT);
+			}
+			try {
+				ObjectMapper om = new ObjectMapper();
+				Map<String,String> req = om.readValue(json, Map.class);
+				String accountId = req.get("ownerAccountId");
+				String apn = req.get("apn");
+				String callConnectivityType = req.get("callConnectivityType");
+				String numberPorting = req.get("numberPorting");
+				if(accountId == null || apn == null || callConnectivityType == null || numberPorting == null) {
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				}
+				SimApnType apntype = SimApnType.valueOf(apn);
+				if(apntype == null) {
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				}
+				CallConnectivityType cct = CallConnectivityType.valueOf(callConnectivityType);
+				if(cct == null) {
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				}
+				PortingState ps;
+				if(numberPorting.equals("true")) {
+					ps = PortingState.WILL_PORT;
+				} else {
+					ps = PortingState.NO_PORT;
+				}
+				Optional<? extends Account> optAccount = accountService.getAccountById(accountId);
+				if(!optAccount.isPresent()) {
+					throw new WebApplicationException(Status.NOT_FOUND);
+				}
+				sim.setState(SimState.ALLOCATED);
+				sim.setOwnerAccountId(accountId);
+				sim.setApnType(apntype);
+				sim.setCallConnectivityType(cct);
+				sim.setPortingState(ps);
+				simService.storeSim(sim);
 			} catch(JsonGenerationException e) {
 				throw new WebApplicationException(e);
 			} catch(JsonMappingException e) {
