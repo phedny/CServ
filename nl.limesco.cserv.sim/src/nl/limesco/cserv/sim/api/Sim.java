@@ -30,6 +30,9 @@ public interface Sim {
 	public SimApnType getApnType();
 	public void setApnType(SimApnType t);
 	
+	public PortingState getPortingState();
+	public void setPortingState(PortingState t);
+	
 	public boolean isExemptFromCostContribution();
 	public void setExemptFromCostContribution(boolean exemptFromCostContribution);
 	

@@ -8,6 +8,7 @@ import java.util.Date;
 import net.vz.mongodb.jackson.Id;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
+import nl.limesco.cserv.sim.api.PortingState;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
 import nl.limesco.cserv.sim.api.SimState;
@@ -31,6 +32,7 @@ public class SimImpl implements Sim {
 	private Calendar contractStartDate;
 	private String activationInvoiceId;
 	private MonthedInvoice lastMonthlyFeesInvoice;
+	private PortingState portingState;
 
 	@JsonIgnore
 	public Optional<Calendar> getContractStartDate() {
@@ -188,5 +190,15 @@ public class SimImpl implements Sim {
 	}
 	public void setNullableLastMonthlyFeesInvoice(MonthedInvoice invoice) {
 		this.lastMonthlyFeesInvoice = invoice;
+	}
+	
+	@Override
+	public PortingState getPortingState() {
+		return portingState;
+	}
+	
+	@Override
+	public void setPortingState(PortingState t) {
+		this.portingState = t;
 	}
 }
