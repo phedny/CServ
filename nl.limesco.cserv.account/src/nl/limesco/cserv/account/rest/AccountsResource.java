@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.account.api.AccountChecker;
 import nl.limesco.cserv.account.api.AccountResourceExtension;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.account.api.AccountState;
@@ -205,6 +206,30 @@ public class AccountsResource {
 			} catch (JsonMappingException e) {
 				throw new WebApplicationException(e);
 			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@GET
+		@Path("validate")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String validateAccount() {
+			if(!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			try {
+				AccountChecker c = new AccountChecker(this.account);
+				c.run();
+				if(c.isSound()) {
+					throw new WebApplicationException(Status.NO_CONTENT);
+				}
+				return new ObjectMapper().writeValueAsString(c.getProposedChanges());
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
 				throw new WebApplicationException(e);
 			}
 		}
