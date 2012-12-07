@@ -20,7 +20,7 @@ public interface Sim {
 	public SimState getState();
 	public void setState(SimState state);
 	
-	public String getOwnerAccountId();
+	public Optional<String> getOwnerAccountId();
 	public void setOwnerAccountId(String a);
 	
 	public Optional<SipSettings> getSipSettings();

@@ -98,11 +98,19 @@ public class SimImpl implements Sim {
 		this.phoneNumber = n;
 	}
 	
-	// TODO: must be possible for a SIM to have multiple corresponding accounts
-	public String getOwnerAccountId() {
+	@JsonIgnore
+	public Optional<String> getOwnerAccountId() {
+		return Optional.fromNullable(owner);
+	}
+	@JsonProperty("ownerAccountId")
+	public String getNullableOwnerAccountId() {
 		return owner;
 	}
 	public void setOwnerAccountId(String a) {
+		checkNotNull(a);
+		this.owner = a;
+	}
+	public void setNullableOwnerAccountId(String a) {
 		this.owner = a;
 	}
 	

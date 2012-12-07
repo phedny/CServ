@@ -47,7 +47,7 @@ public class SimResource {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 		final Sim sim = optSim.get();
-		if(!sim.getOwnerAccountId().equals(accountId)) {
+		if(!sim.getOwnerAccountId().isPresent() || !sim.getOwnerAccountId().get().equals(accountId)) {
 			authorizationService.requireUserRole(request, Role.ADMIN);
 		}
 		return new SimSubResource(sim);
