@@ -105,7 +105,9 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 	private Collection<? extends String> findAccountsWithInvoicableSimActivations() {
 		final Set<String> accountIds = Sets.newHashSet();
 		for (Sim sim : simService.getActivatedSimsWithoutActivationInvoice()) {
-			accountIds.add(sim.getOwnerAccountId());
+			if(sim.getOwnerAccountId().isPresent()) {
+				accountIds.add(sim.getOwnerAccountId().get());
+			}
 		}
 		return accountIds;
 	}
@@ -113,7 +115,9 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 	private Collection<? extends String> findAccountsWithInvoicableSubscriptionFees(Calendar day) {
 		final Set<String> accountIds = Sets.newHashSet();
 		for (Sim sim : simService.getActivatedSimsLastInvoicedBefore(day)) {
-			accountIds.add(sim.getOwnerAccountId());
+			if(sim.getOwnerAccountId().isPresent()) {
+				accountIds.add(sim.getOwnerAccountId().get());
+			}
 		}
 		return accountIds;
 	}
