@@ -88,6 +88,23 @@ public class SimResource {
 		}
 	}
 	
+	@GET
+	@Path("/unallocated")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getUnallocatedSims(@Context HttpServletRequest request) {
+		authorizationService.requireUserRole(request, Role.ADMIN);
+		Collection<? extends Sim> sims = simService.getUnallocatedSims();
+		try {
+			return new ObjectMapper().writeValueAsString(sims);
+		} catch(JsonGenerationException e) {
+			throw new WebApplicationException(e);
+		} catch(JsonMappingException e) {
+			throw new WebApplicationException(e);
+		} catch(IOException e) {
+			throw new WebApplicationException(e);
+		}
+	}
+	
 	public class SimSubResource {
 		private final Sim sim;
 		

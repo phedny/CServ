@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 public interface SimService {
 	Optional<? extends Sim> getSimByIccid(String iccid);
 	Collection<? extends Sim> getSimsByOwnerAccountId(String accountId);
+	Collection<? extends Sim> getUnallocatedSims();
 	Collection<? extends Sim> getActivatedSimsWithoutActivationInvoice();
 	Collection<? extends Sim> getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(String accountId);
 	/**
