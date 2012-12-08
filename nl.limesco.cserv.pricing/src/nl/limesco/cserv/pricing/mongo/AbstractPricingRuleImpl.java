@@ -9,14 +9,15 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "service")
 @JsonSubTypes({
-	@JsonSubTypes.Type(value = VoicePricingRuleImpl.class, name = "voice")
-})
+		@JsonSubTypes.Type(value = VoicePricingRuleImpl.class, name = "voice"),
+		@JsonSubTypes.Type(value = SmsPricingRuleImpl.class, name = "sms"),
+		@JsonSubTypes.Type(value = DataPricingRuleImpl.class, name = "data") })
 public abstract class AbstractPricingRuleImpl implements PricingRule {
 
 	private String id;
-	
+
 	private String description;
-	
+
 	private boolean hidden;
 
 	public AbstractPricingRuleImpl() {

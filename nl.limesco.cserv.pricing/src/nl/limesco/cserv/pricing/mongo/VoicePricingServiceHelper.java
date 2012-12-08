@@ -21,6 +21,7 @@ public class VoicePricingServiceHelper extends PricingServiceHelper<VoicePricing
 
 	public void start() {
 		collection().ensureIndex(new BasicDBObject()
+				.append("service", 1)
 				.append("applicability.validFrom", 1)
 				.append("applicability.source", 1)
 				.append("applicability.callConnectivityType", 1)
@@ -38,7 +39,7 @@ public class VoicePricingServiceHelper extends PricingServiceHelper<VoicePricing
 	}
 
 	public Collection<? extends VoicePricingRule> getApplicablePricingRules(Calendar day, VoiceApplicabilityFilter filter) {
-		Query query = DBQuery.lessThanEquals("applicability.validFrom", day.getTime());
+		Query query = DBQuery.is("service", "voice").lessThanEquals("applicability.validFrom", day.getTime());
 		
 		if (filter.getSources().isPresent()) {
 			query.in("applicability.source", filter.getSources().get());

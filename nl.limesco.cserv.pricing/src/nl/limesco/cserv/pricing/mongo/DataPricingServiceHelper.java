@@ -21,6 +21,7 @@ public class DataPricingServiceHelper extends PricingServiceHelper<DataPricingRu
 
 	public void start() {
 		collection().ensureIndex(new BasicDBObject()
+				.append("service", 1)
 				.append("applicability.validFrom", 1)
 				.append("applicability.source", 1));
 	}
@@ -36,7 +37,7 @@ public class DataPricingServiceHelper extends PricingServiceHelper<DataPricingRu
 	}
 
 	public Collection<? extends DataPricingRule> getApplicablePricingRules(Calendar day, DataApplicabilityFilter filter) {
-		Query query = DBQuery.lessThanEquals("applicability.validFrom", day.getTime());
+		Query query = DBQuery.is("service", "data").lessThanEquals("applicability.validFrom", day.getTime());
 		
 		if (filter.getSources().isPresent()) {
 			query.in("applicability.source", filter.getSources().get());

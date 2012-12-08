@@ -21,6 +21,7 @@ public class SmsPricingServiceHelper extends PricingServiceHelper<SmsPricingRule
 
 	public void start() {
 		collection().ensureIndex(new BasicDBObject()
+				.append("service", 1)
 				.append("applicability.validFrom", 1)
 				.append("applicability.source", 1)
 				.append("applicability.cdrType", 1));
@@ -37,7 +38,7 @@ public class SmsPricingServiceHelper extends PricingServiceHelper<SmsPricingRule
 	}
 
 	public Collection<? extends SmsPricingRule> getApplicablePricingRules(Calendar day, SmsApplicabilityFilter filter) {
-		Query query = DBQuery.lessThanEquals("applicability.validFrom", day.getTime());
+		Query query = DBQuery.is("service", "sms").lessThanEquals("applicability.validFrom", day.getTime());
 		
 		if (filter.getSources().isPresent()) {
 			query.in("applicability.source", filter.getSources().get());
