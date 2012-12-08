@@ -64,11 +64,11 @@ public class PricingServiceImpl implements PricingService {
 	@SuppressWarnings("unchecked")
 	public <T extends PricingRule> Collection<? extends T> getApplicablePricingRules(Class<T> clazz, Calendar day) {
 		if (VoicePricingRule.class.isAssignableFrom(clazz)) {
-			return (Collection<T>) (Collection<Object>) getApplicableVoicePricingRules(day);
+			return (Collection<T>) (Object) getApplicableVoicePricingRules(day);
 		} else if (SmsPricingRule.class.isAssignableFrom(clazz)) {
-			return (Collection<T>) (Collection<Object>) getApplicableSmsPricingRules(day);
+			return (Collection<T>) (Object) getApplicableSmsPricingRules(day);
 		} else if (DataPricingRule.class.isAssignableFrom(clazz)) {
-			return (Collection<T>) (Collection<Object>) getApplicableDataPricingRules(day);
+			return (Collection<T>) (Object) getApplicableDataPricingRules(day);
 		} else {
 			throw new IllegalArgumentException();
 		}
