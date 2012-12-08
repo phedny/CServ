@@ -6,14 +6,15 @@ import java.util.Set;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.pricing.api.NoApplicablePricingRuleException;
-import nl.limesco.cserv.pricing.api.PricingRule;
 import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
 import nl.limesco.cserv.pricing.api.PricingService;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimService;
@@ -89,7 +90,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 					continue;
 				}
 				
-				final PricingRule pricingRule = pricingService.getApplicablePricingRule(cdr, callConnectivityType.get());
+				final VoicePricingRule pricingRule = pricingService.getApplicablePricingRule(((VoiceCdr) cdr), callConnectivityType.get());
 				final long price = pricingRule.getPriceForCdr(cdr, callConnectivityType.get());
 				final long cost = pricingRule.getCostForCdr(cdr, callConnectivityType.get());
 				cdrService.storePricingForCdr(cdr, pricingRule.getId(), price, cost);

@@ -1,102 +1,67 @@
 package nl.limesco.cserv.pricing.mongo;
 
-import net.vz.mongodb.jackson.Id;
-import net.vz.mongodb.jackson.ObjectId;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.VoiceCdr;
-import nl.limesco.cserv.pricing.api.ApplicationConstraints;
-import nl.limesco.cserv.pricing.api.Pricing;
-import nl.limesco.cserv.pricing.api.PricingRule;
 import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
+import nl.limesco.cserv.pricing.api.VoiceApplicationConstraints;
+import nl.limesco.cserv.pricing.api.VoicePricing;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class PricingRuleImpl implements PricingRule {
+public class VoicePricingRuleImpl extends AbstractPricingRuleImpl implements VoicePricingRule {
 	
-	private String id;
+	private VoiceApplicationConstraintsImpl applicability;
 	
-	private String description;
+	private VoicePricingImpl price;
 	
-	private ApplicationConstraintsImpl applicability;
+	private VoicePricingImpl cost;
 	
-	private PricingImpl price;
-	
-	private PricingImpl cost;
-	
-	private boolean hidden;
-
-	@ObjectId
-	@Id
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	@Override
 	@JsonIgnore
-	public ApplicationConstraints getApplicability() {
+	public VoiceApplicationConstraints getApplicability() {
 		return applicability;
 	}
 	
 	@JsonProperty("applicability")
-	public ApplicationConstraintsImpl getApplicabilityImpl() {
+	public VoiceApplicationConstraintsImpl getApplicabilityImpl() {
 		return applicability;
 	}
 	
-	public void setApplicabilityImpl(ApplicationConstraintsImpl applicability) {
+	public void setApplicabilityImpl(VoiceApplicationConstraintsImpl applicability) {
 		this.applicability = applicability;
 	}
 
 	@Override
 	@JsonIgnore
-	public Pricing getPrice() {
+	public VoicePricing getPrice() {
 		return price;
 	}
 	
 	@JsonProperty("price")
-	public PricingImpl getPriceImpl() {
+	public VoicePricingImpl getPriceImpl() {
 		return price;
 	}
 	
-	public void setPriceImpl(PricingImpl price) {
+	public void setPriceImpl(VoicePricingImpl price) {
 		this.price = price;
 	}
 
 	@Override
 	@JsonIgnore
-	public Pricing getCost() {
+	public VoicePricing getCost() {
 		return cost;
 	}
 	
 	@JsonProperty("cost")
-	public PricingImpl getCostImpl() {
+	public VoicePricingImpl getCostImpl() {
 		return cost;
 	}
 	
-	public void setCostImpl(PricingImpl cost) {
+	public void setCostImpl(VoicePricingImpl cost) {
 		this.cost = cost;
-	}
-
-	@Override
-	public boolean isHidden() {
-		return hidden;
-	}
-	
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
 	}
 
 	@Override

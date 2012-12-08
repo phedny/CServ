@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.VoiceCdr;
-import nl.limesco.cserv.pricing.mongo.ApplicationConstraintsImpl;
+import nl.limesco.cserv.pricing.mongo.VoiceApplicationConstraintsImpl;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import org.junit.Before;
@@ -23,26 +23,26 @@ import org.junit.runners.Parameterized.Parameters;
 import com.google.common.collect.Sets;
 
 @RunWith(Parameterized.class)
-public class ApplicationConstraintsTest {
+public class VoiceApplicationConstraintsTest {
 
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd-MM-yyyy") {{
 		setTimeZone(TimeZone.getTimeZone("UTC"));
 	}};
 
-	private ApplicationConstraintsImpl applicability;
+	private VoiceApplicationConstraintsImpl applicability;
 	
 	private final Invoker invoker;
 	
 	private Boolean expected;
 	
-	public ApplicationConstraintsTest(Invoker invoker, Boolean expected) {
+	public VoiceApplicationConstraintsTest(Invoker invoker, Boolean expected) {
 		this.invoker = invoker;
 		this.expected = expected;
 	}
 	
 	@Before
 	public void setUp() throws ParseException {
-		applicability = new ApplicationConstraintsImpl();
+		applicability = new VoiceApplicationConstraintsImpl();
 	}
 
 	@Test
@@ -193,17 +193,17 @@ public class ApplicationConstraintsTest {
 			}
 		}
 		
-		boolean invoke(ApplicationConstraintsImpl applicability) {
+		boolean invoke(VoiceApplicationConstraintsImpl applicability) {
 			return invoke(applicability, "any");
 		}
 		
-		abstract boolean invoke(ApplicationConstraintsImpl applicability, String source);
+		abstract boolean invoke(VoiceApplicationConstraintsImpl applicability, String source);
 	}
 	
 	final static class LongVersionInvoker extends Invoker {
 
 		@Override
-		public boolean invoke(ApplicationConstraintsImpl applicability, String source) {
+		public boolean invoke(VoiceApplicationConstraintsImpl applicability, String source) {
 			return applicability.isApplicable(now, source, CallConnectivityType.OOTB, VoiceCdr.Type.EXT_EXT);
 		}
 		
@@ -212,8 +212,8 @@ public class ApplicationConstraintsTest {
 	final static class ConnectedCdrVersionInvoker extends Invoker {
 
 		@Override
-		public boolean invoke(ApplicationConstraintsImpl applicability, final String source) {
-			return applicability.isApplicable(new StaticCdr(now, source, true, true, 0), CallConnectivityType.OOTB);
+		public boolean invoke(VoiceApplicationConstraintsImpl applicability, final String source) {
+			return applicability.isApplicable(new StaticVoiceCdr(now, source, true, true, 0), CallConnectivityType.OOTB);
 		}
 		
 	}
@@ -221,8 +221,8 @@ public class ApplicationConstraintsTest {
 	final static class ConnectedUntypedCdrVersionInvoker extends Invoker {
 
 		@Override
-		public boolean invoke(ApplicationConstraintsImpl applicability, final String source) {
-			return applicability.isApplicable(new StaticCdr(now, source, true, false, 0), CallConnectivityType.OOTB);
+		public boolean invoke(VoiceApplicationConstraintsImpl applicability, final String source) {
+			return applicability.isApplicable(new StaticVoiceCdr(now, source, true, false, 0), CallConnectivityType.OOTB);
 		}
 		
 	}
@@ -230,8 +230,8 @@ public class ApplicationConstraintsTest {
 	final static class UnconnectedCdrVersionInvoker extends Invoker {
 
 		@Override
-		public boolean invoke(ApplicationConstraintsImpl applicability, final String source) {
-			return applicability.isApplicable(new StaticCdr(now, source, false, false, 0), CallConnectivityType.OOTB);
+		public boolean invoke(VoiceApplicationConstraintsImpl applicability, final String source) {
+			return applicability.isApplicable(new StaticVoiceCdr(now, source, false, false, 0), CallConnectivityType.OOTB);
 		}
 		
 	}
@@ -239,8 +239,8 @@ public class ApplicationConstraintsTest {
 	final static class UnconnectedUntypedCdrVersionInvoker extends Invoker {
 
 		@Override
-		public boolean invoke(ApplicationConstraintsImpl applicability, final String source) {
-			return applicability.isApplicable(new StaticCdr(now, source, false, false, 0), CallConnectivityType.OOTB);
+		public boolean invoke(VoiceApplicationConstraintsImpl applicability, final String source) {
+			return applicability.isApplicable(new StaticVoiceCdr(now, source, false, false, 0), CallConnectivityType.OOTB);
 		}
 		
 	}

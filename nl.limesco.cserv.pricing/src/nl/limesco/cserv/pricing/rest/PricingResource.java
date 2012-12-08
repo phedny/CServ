@@ -15,7 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -62,7 +62,7 @@ public class PricingResource {
 		public String getAll() {
 			try {
 				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
-				for (PricingRule rule : pricingService.getApplicablePricingRules(day)) {
+				for (VoicePricingRule rule : pricingService.getApplicablePricingRules(VoicePricingRule.class, day)) {
 					pricingRules.add(new RestPricingRule(rule));
 				}
 				return new ObjectMapper().writeValueAsString(pricingRules);

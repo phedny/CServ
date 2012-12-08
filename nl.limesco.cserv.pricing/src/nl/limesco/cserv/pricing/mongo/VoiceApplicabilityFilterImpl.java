@@ -3,12 +3,12 @@ package nl.limesco.cserv.pricing.mongo;
 import java.util.Collection;
 
 import nl.limesco.cserv.cdr.api.VoiceCdr;
-import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
+import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilter;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import com.google.common.base.Optional;
 
-public class ApplicabilityFilterImpl implements ApplicabilityFilter {
+public class VoiceApplicabilityFilterImpl implements VoiceApplicabilityFilter {
 	
 	private final Collection<String> sources;
 	
@@ -16,7 +16,7 @@ public class ApplicabilityFilterImpl implements ApplicabilityFilter {
 	
 	private final Collection<VoiceCdr.Type> cdrTypes;
 
-	public ApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<VoiceCdr.Type> cdrTypes) {
+	public VoiceApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<VoiceCdr.Type> cdrTypes) {
 		this.sources = sources;
 		this.callConnectivityTypes = callConnectivityTypes;
 		this.cdrTypes = cdrTypes;

@@ -17,8 +17,8 @@ import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
-import nl.limesco.cserv.pricing.api.Pricing;
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricing;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
@@ -151,12 +151,12 @@ public class InvoiceConstructor {
 		}
 		
 		for (Entry<String, CombinedDuration> duration : durations.entrySet()) {
-			final Optional<? extends PricingRule> pricingRule = pricingService.getPricingRuleById(duration.getKey());
+			final Optional<? extends VoicePricingRule> pricingRule = pricingService.getPricingRuleById(VoicePricingRule.class, duration.getKey());
 			if (!pricingRule.isPresent()) {
 				continue;
 			}
 			
-			final Pricing price = pricingRule.get().getPrice();
+			final VoicePricing price = pricingRule.get().getPrice();
 			if (pricingRule.get().isHidden() && price.getPerCall() == 0 && price.getPerMinute() == 0) {
 				continue;
 			}

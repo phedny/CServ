@@ -2,13 +2,13 @@ package nl.limesco.cserv.pricing.rest;
 
 import nl.limesco.cserv.pricing.api.ApplicationConstraints;
 import nl.limesco.cserv.pricing.api.Pricing;
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 
 public class RestPricingRule {
 
-	private final PricingRule rule;
+	private final VoicePricingRule rule;
 
-	public RestPricingRule(PricingRule rule) {
+	public RestPricingRule(VoicePricingRule rule) {
 		this.rule = rule;
 	}
 	

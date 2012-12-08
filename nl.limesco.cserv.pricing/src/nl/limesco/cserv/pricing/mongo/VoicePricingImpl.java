@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.VoiceCdr;
-import nl.limesco.cserv.pricing.api.Pricing;
+import nl.limesco.cserv.pricing.api.VoicePricing;
 
-public class PricingImpl implements Pricing {
+public class VoicePricingImpl implements VoicePricing {
 	
 	private static final BigDecimal SECONDS_PER_MINUTE_BD = BigDecimal.valueOf(60);
 
