@@ -57,6 +57,17 @@ public class InvoiceConstructor {
 	public Invoice constructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
 		
 		final UUID builderUUID = UUID.randomUUID();
+
+		/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
+		final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(accountId);
+		if (sims.isEmpty()) {
+			return null;
+		}
+
+		if (sims.size() > 1) {
+			return null; // XXX: for now, until #67 is fixed
+		}
+		final Sim accountSim = sims.iterator().next();
 		
 		// Compute end of subscription period
 		final Calendar endOfSubscriptionPeriod = (Calendar) day.clone();
@@ -226,22 +237,16 @@ public class InvoiceConstructor {
 			}
 
 			/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
-			final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(cdr.getAccount().get());
-			if (sims.isEmpty()) {
-				continue;
-			}
-			final Sim sim = sims.iterator().next();
-			
 			final Calendar cdrTime = cdr.getTime();
 			final boolean inContract;
-			if (sim.getContractStartDate().isPresent()) {
-				inContract = sim.getContractStartDate().get().before(cdrTime);
+			if (accountSim.getContractStartDate().isPresent()) {
+				inContract = accountSim.getContractStartDate().get().before(cdrTime);
 			} else {
 				inContract = false;
 			}
 			final RuleAndMonth ruleAndMonth = new RuleAndMonth(cdrTime.get(Calendar.YEAR), cdrTime.get(Calendar.MONTH), pricing.get().getPricingRuleId(), inContract);
 			if (!dataRules.containsKey(ruleAndMonth)) {
-				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(sim.getApnType().getBundleKilobytes()));
+				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(accountSim.getApnType().getBundleKilobytes()));
 			}
 			dataRules.get(ruleAndMonth).add(cdr.getKilobytes());
 		}
