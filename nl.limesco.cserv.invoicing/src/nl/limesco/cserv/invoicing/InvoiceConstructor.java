@@ -279,19 +279,21 @@ public class InvoiceConstructor {
 		}
 		
 		final Invoice invoice = builder.build();
-		invoiceService.storeInvoice(invoice);
+		if (invoice.getTotalWithTaxes() > 0) {
+			invoiceService.storeInvoice(invoice);
 		
-		for (Sim sim : simActivations) {
-			sim.setActivationInvoiceId(invoice.getId());
-			simService.storeActivationInvoiceId(sim);
+			for (Sim sim : simActivations) {
+				sim.setActivationInvoiceId(invoice.getId());
+				simService.storeActivationInvoiceId(sim);
+			}
+			
+			for (Sim sim : subscriptionFees) {
+				sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
+				simService.storeLastMonthlyFeesInvoice(sim);
+			}
+			
+			cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
 		}
-		
-		for (Sim sim : subscriptionFees) {
-			sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
-			simService.storeLastMonthlyFeesInvoice(sim);
-		}
-		
-		cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
 		
 		return invoice;
 	}
