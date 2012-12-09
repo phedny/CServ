@@ -172,7 +172,7 @@ public class InvoiceConstructor {
 		final Map<String, CombinedDuration> durations = Maps.newHashMap();
 		for (VoiceCdr cdr : voiceCdrs) {
 			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
-			if (!pricing.isPresent()) {
+			if (!pricing.isPresent() || !cdr.isConnected()) {
 				continue;
 			}
 			
