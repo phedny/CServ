@@ -218,23 +218,37 @@ public class InvoiceConstructor {
 		}
 
 		// Include the data CDRs
-		final Map<String, Long> dataRules = Maps.newHashMap();
+		final Map<RuleAndMonth, MonthlyBundleUsage> dataRules = Maps.newHashMap();
 		for (DataCdr cdr : dataCdrs) {
 			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
 			if (!pricing.isPresent()) {
 				continue;
 			}
-			
-			final String pricingRuleId = pricing.get().getPricingRuleId();
-			if (dataRules.containsKey(pricingRuleId)) {
-				dataRules.put(pricingRuleId, Long.valueOf(cdr.getKilobytes() + dataRules.get(pricingRuleId).longValue()));
-			} else {
-				dataRules.put(pricingRuleId, Long.valueOf(cdr.getKilobytes()));
+
+			/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
+			final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(cdr.getAccount().get());
+			if (sims.isEmpty()) {
+				continue;
 			}
+			final Sim sim = sims.iterator().next();
+			
+			final Calendar cdrTime = cdr.getTime();
+			final boolean inContract;
+			if (sim.getContractStartDate().isPresent()) {
+				inContract = sim.getContractStartDate().get().before(cdrTime);
+			} else {
+				inContract = false;
+			}
+			final RuleAndMonth ruleAndMonth = new RuleAndMonth(cdrTime.get(Calendar.YEAR), cdrTime.get(Calendar.MONTH), pricing.get().getPricingRuleId(), inContract);
+			if (!dataRules.containsKey(ruleAndMonth)) {
+				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(sim.getApnType().getBundleKilobytes()));
+			}
+			dataRules.get(ruleAndMonth).add(cdr.getKilobytes());
 		}
 		
-		for (Entry<String, Long> dataRuleEntry : dataRules.entrySet()) {
-			final Optional<? extends DataPricingRule> pricingRule = pricingService.getPricingRuleById(DataPricingRule.class, dataRuleEntry.getKey());
+		for (Entry<RuleAndMonth, MonthlyBundleUsage> dataRuleEntry : dataRules.entrySet()) {
+			final RuleAndMonth ruleAndMonth = dataRuleEntry.getKey();
+			final Optional<? extends DataPricingRule> pricingRule = pricingService.getPricingRuleById(DataPricingRule.class, ruleAndMonth.getRule());
 			if (!pricingRule.isPresent()) {
 				continue;
 			}
@@ -244,7 +258,19 @@ public class InvoiceConstructor {
 				continue;
 			}
 			
-			builder.normalItemLine(pricingRule.get().getDescription(), dataRuleEntry.getValue().intValue(), price.getPerKilobyte(), 0.21);
+			final MonthlyBundleUsage monthlyUsage = dataRuleEntry.getValue();
+			if (monthlyUsage.getBundle() > 0 && monthlyUsage.getCount() > 0 && ruleAndMonth.isInContract()) {
+				final String description = String.format("%s (bundel %02d-%4d)", pricingRule.get().getDescription(), 1 + ruleAndMonth.getMonth() % 12, ruleAndMonth.getMonth() / 12);
+				builder.normalItemLine(description, Math.min(monthlyUsage.getCount(), monthlyUsage.getBundle()), 0, 0.21);
+			}
+			if (monthlyUsage.getCount() > monthlyUsage.getBundle() || !ruleAndMonth.isInContract()) {
+				final String description2 = String.format("%s (%02d-%4d)", pricingRule.get().getDescription(), 1 + ruleAndMonth.getMonth() % 12, ruleAndMonth.getMonth() / 12);
+				if (ruleAndMonth.isInContract()) {
+					builder.normalItemLine(description2, monthlyUsage.getCount() - monthlyUsage.getBundle(), price.getPerKilobyte(), 0.21);
+				} else {
+					builder.normalItemLine(description2, monthlyUsage.getCount(), price.getPerKilobyte(), 0.21);
+				}
+			}
 		}
 		
 		// Include the cost contribution
