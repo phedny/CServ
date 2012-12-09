@@ -60,6 +60,10 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 				if ("Netherlands - Mobile - Mobile".equals(info.get("9"))) {
 					return Optional.of(SmsCdr.Type.MOBILE_EXT);
 				}
+			} else if ("in".equals(info.get("10"))) {
+				if ("Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
+					return Optional.of(SmsCdr.Type.EXT_MOBILE);
+				}
 			}
 			
 			return Optional.absent();
