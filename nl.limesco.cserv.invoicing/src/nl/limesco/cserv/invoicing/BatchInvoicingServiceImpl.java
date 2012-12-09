@@ -6,14 +6,18 @@ import java.util.Set;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
 import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.NoApplicablePricingRuleException;
 import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
 import nl.limesco.cserv.pricing.api.PricingService;
+import nl.limesco.cserv.pricing.api.SmsPricingRule;
 import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.Sim;
@@ -90,10 +94,24 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 					continue;
 				}
 				
-				final VoicePricingRule pricingRule = pricingService.getApplicablePricingRule(((VoiceCdr) cdr), callConnectivityType.get());
-				final long price = pricingRule.getPriceForCdr(cdr, callConnectivityType.get());
-				final long cost = pricingRule.getCostForCdr(cdr, callConnectivityType.get());
-				cdrService.storePricingForCdr(cdr, pricingRule.getId(), price, cost);
+				if (cdr instanceof VoiceCdr) {
+					final VoicePricingRule pricingRule = pricingService.getApplicablePricingRule((VoiceCdr) cdr, callConnectivityType.get());
+					final long price = pricingRule.getPriceForCdr(cdr, callConnectivityType.get());
+					final long cost = pricingRule.getCostForCdr(cdr, callConnectivityType.get());
+					cdrService.storePricingForCdr(cdr, pricingRule.getId(), price, cost);
+				} else if (cdr instanceof SmsCdr) {
+					final SmsPricingRule pricingRule = pricingService.getApplicablePricingRule((SmsCdr) cdr);
+					final long price = pricingRule.getPriceForCdr(cdr);
+					final long cost = pricingRule.getCostForCdr(cdr);
+					cdrService.storePricingForCdr(cdr, pricingRule.getId(), price, cost);
+				} else if (cdr instanceof DataCdr) {
+					final DataPricingRule pricingRule = pricingService.getApplicablePricingRule((DataCdr) cdr);
+					final long price = pricingRule.getPriceForCdr(cdr);
+					final long cost = pricingRule.getCostForCdr(cdr);
+					cdrService.storePricingForCdr(cdr, pricingRule.getId(), price, cost);
+				} else {
+					continue;
+				}
 				
 			} catch (NoApplicablePricingRuleException e) {
 				logService.log(LogService.LOG_WARNING, "Failed to obtain pricing rule for CDR " + cdr.getSource() + "/" + cdr.getCallId());

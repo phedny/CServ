@@ -168,6 +168,9 @@ public class PricingServiceImpl implements PricingService {
 
 	@Override
 	public VoicePricingRule getApplicablePricingRule(VoiceCdr cdr, CallConnectivityType callConnectivityType) throws NoApplicablePricingRuleException {
+		if (!cdr.getType().isPresent()) {
+			throw new NoApplicablePricingRuleException();
+		}
 		final Collection<? extends VoicePricingRule> rules = getApplicablePricingRules(cdr, callConnectivityType);
 		if (rules.size() == 1) {
 			return rules.iterator().next();
@@ -178,6 +181,9 @@ public class PricingServiceImpl implements PricingService {
 
 	@Override
 	public SmsPricingRule getApplicablePricingRule(SmsCdr cdr) throws NoApplicablePricingRuleException {
+		if (!cdr.getType().isPresent()) {
+			throw new NoApplicablePricingRuleException();
+		}
 		final Collection<? extends SmsPricingRule> rules = getApplicablePricingRules(cdr);
 		if (rules.size() == 1) {
 			return rules.iterator().next();
