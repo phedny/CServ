@@ -3,32 +3,22 @@ package nl.limesco.cserv.pricing.test;
 import java.util.Calendar;
 import java.util.Map;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.DataCdr;
 
 import com.google.common.base.Optional;
 
-final class StaticCdr implements Cdr {
+final class StaticDataCdr implements DataCdr {
 	
 	private final Calendar time;
 	
 	private final String source;
 	
-	private final boolean connected;
+	private final long kilobytes;
 	
-	private final Cdr.Type cdrType;
-	
-	private final long seconds;
-
-	StaticCdr(Calendar time, String source, boolean connected, boolean hasCdrType, long seconds) {
-		this(time, source, connected, hasCdrType ? Cdr.Type.EXT_EXT : null, seconds);
-	}
-
-	StaticCdr(Calendar time, String source, boolean connected, Cdr.Type cdrType, long seconds) {
+	StaticDataCdr(Calendar time, String source, long kilobytes) {
 		this.time = time;
 		this.source = source;
-		this.connected = connected;
-		this.cdrType = cdrType;
-		this.seconds = seconds;
+		this.kilobytes = kilobytes;
 	}
 
 	@Override
@@ -62,18 +52,8 @@ final class StaticCdr implements Cdr {
 	}
 
 	@Override
-	public boolean isConnected() {
-		return connected;
-	}
-
-	@Override
-	public Optional<Cdr.Type> getType() {
-		return Optional.fromNullable(cdrType);
-	}
-
-	@Override
-	public long getSeconds() {
-		return seconds;
+	public long getKilobytes() {
+		return kilobytes;
 	}
 
 	@Override

@@ -5,8 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.pricing.mongo.PricingImpl;
+import nl.limesco.cserv.pricing.mongo.VoicePricingImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,39 +14,39 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class PricingTest {
+public class VoicePricingTest {
   
 	private final long pricePerCall;
 	
 	private final long pricePerMinute;
 	
-	private PricingImpl pricing;
+	private VoicePricingImpl pricing;
 	
-	public PricingTest(long pricePerCall, long pricePerMinute) {
+	public VoicePricingTest(long pricePerCall, long pricePerMinute) {
 		this.pricePerCall = pricePerCall;
 		this.pricePerMinute = pricePerMinute;
 	}
 	
 	@Before
 	public void setUp() {
-		pricing = new PricingImpl();
+		pricing = new VoicePricingImpl();
 		pricing.setPerCall(pricePerCall);
 		pricing.setPerMinute(pricePerMinute);
 	}
 	
 	@Test
 	public void unconnectedCdrHasZeroPrice() {
-		assertEquals(0, pricing.getForCdr(new StaticCdr(null, null, false, false, 0)));
+		assertEquals(0, pricing.getForCdr(new StaticVoiceCdr(null, null, false, false, 0)));
 	}
 	
 	@Test
 	public void zeroSecondCdrHasOnlyPricePerCall() {
-		assertEquals(pricePerCall, pricing.getForCdr(new StaticCdr(null, null, true, false, 0)));
+		assertEquals(pricePerCall, pricing.getForCdr(new StaticVoiceCdr(null, null, true, false, 0)));
 	}
 	
 	@Test
 	public void oneMinuteCdrHasPricePerCallPlusPricePerMinute() {
-		assertEquals(pricePerCall + pricePerMinute, pricing.getForCdr(new StaticCdr(null, null, true, false, 60)));
+		assertEquals(pricePerCall + pricePerMinute, pricing.getForCdr(new StaticVoiceCdr(null, null, true, false, 60)));
 	}
 
 	@Parameters

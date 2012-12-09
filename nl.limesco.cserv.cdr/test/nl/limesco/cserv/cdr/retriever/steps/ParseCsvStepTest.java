@@ -15,6 +15,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 
 import org.apache.http.client.HttpClient;
 import org.junit.Before;
@@ -86,7 +87,7 @@ public class ParseCsvStepTest {
 			format.setTimeZone(TimeZone.getTimeZone("UTC"));
 			calendar.setTime(format.parse("2002-20-" + (i + 1) + " 20:02:20"));
 			assertEquals(calendar, cdr.getTime());
-			assertEquals(42, cdr.getSeconds());
+			assertEquals(42, ((VoiceCdr) cdr).getSeconds());
 		}
 	}
 

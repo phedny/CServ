@@ -6,33 +6,33 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.TimeZone;
 
-import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
-import nl.limesco.cserv.pricing.api.ApplicationConstraints;
-import nl.limesco.cserv.pricing.api.PricingRule;
-import nl.limesco.cserv.pricing.mongo.ApplicationConstraintsImpl;
-import nl.limesco.cserv.pricing.mongo.PricingImpl;
-import nl.limesco.cserv.pricing.mongo.PricingRuleImpl;
-import nl.limesco.cserv.pricing.mongo.PricingServiceHelper;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilter;
+import nl.limesco.cserv.pricing.api.VoiceApplicationConstraints;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
+import nl.limesco.cserv.pricing.mongo.VoicePricingServiceHelper;
+import nl.limesco.cserv.pricing.mongo.VoiceApplicationConstraintsImpl;
+import nl.limesco.cserv.pricing.mongo.VoicePricingImpl;
+import nl.limesco.cserv.pricing.mongo.VoicePricingRuleImpl;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
-final class PricingServiceHelperMock extends PricingServiceHelper {
+final class VoicePricingServiceHelperMock extends VoicePricingServiceHelper {
 
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd-MM-yyyy") {{
 		setTimeZone(TimeZone.getTimeZone("UTC"));
 	}};
 
 	@Override
-	public Collection<? extends PricingRule> getApplicablePricingRules(final Calendar day, final ApplicabilityFilter filter) {
-		return Collections2.filter(PRICING_RULES, new Predicate<PricingRule>() {
+	public Collection<? extends VoicePricingRule> getApplicablePricingRules(final Calendar day, final VoiceApplicabilityFilter filter) {
+		return Collections2.filter(PRICING_RULES, new Predicate<VoicePricingRule>() {
 			
 			@Override
-			public boolean apply(PricingRule rule) {
-				final ApplicationConstraints applicability = rule.getApplicability();
+			public boolean apply(VoicePricingRule rule) {
+				final VoiceApplicationConstraints applicability = rule.getApplicability();
 				if (day.before(applicability.getValidFrom()) || (applicability.getValidUntil().isPresent() && applicability.getValidUntil().get().before(day))) {
 					return false;
 				}
@@ -67,40 +67,40 @@ final class PricingServiceHelperMock extends PricingServiceHelper {
 		});
 	}
 
-	static final Collection<PricingRule> PRICING_RULES = new HashSet<PricingRule>() {{
+	static final Collection<VoicePricingRule> PRICING_RULES = new HashSet<VoicePricingRule>() {{
 		
 		try {
 			
-			add(new PricingRuleImpl() {{
-				setApplicabilityImpl(new ApplicationConstraintsImpl() {{
+			add(new VoicePricingRuleImpl() {{
+				setApplicabilityImpl(new VoiceApplicationConstraintsImpl() {{
 					setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
 					setNullableValidUntilAsDate(DAY_FORMAT.parse("01-01-2012"));
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
-					setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_EXT));
+					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
 				}});
-				setPriceImpl(new PricingImpl() {{
+				setPriceImpl(new VoicePricingImpl() {{
 					setPerCall(400);
 					setPerMinute(710);
 				}});
-				setCostImpl(new PricingImpl() {{
+				setCostImpl(new VoicePricingImpl() {{
 					setPerCall(300);
 					setPerMinute(700);
 				}});
 			}});
 			
-			add(new PricingRuleImpl() {{
-				setApplicabilityImpl(new ApplicationConstraintsImpl() {{
+			add(new VoicePricingRuleImpl() {{
+				setApplicabilityImpl(new VoiceApplicationConstraintsImpl() {{
 					setValidFromAsDate(DAY_FORMAT.parse("01-01-2011"));
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
-					setCdrTypesAsSet(Sets.newHashSet(Cdr.Type.EXT_EXT));
+					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
 				}});
-				setPriceImpl(new PricingImpl() {{
+				setPriceImpl(new VoicePricingImpl() {{
 					setPerCall(350);
 					setPerMinute(710);
 				}});
-				setCostImpl(new PricingImpl() {{
+				setCostImpl(new VoicePricingImpl() {{
 					setPerCall(300);
 					setPerMinute(700);
 				}});

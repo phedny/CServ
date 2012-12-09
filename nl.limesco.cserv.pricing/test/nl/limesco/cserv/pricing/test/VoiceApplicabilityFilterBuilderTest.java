@@ -7,9 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 
 import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.pricing.api.ApplicabilityFilter;
-import nl.limesco.cserv.pricing.api.ApplicabilityFilterBuilder;
-import nl.limesco.cserv.pricing.mongo.ApplicabilityFilterBuilderImpl;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilter;
+import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilterBuilder;
+import nl.limesco.cserv.pricing.mongo.VoiceApplicabilityFilterBuilderImpl;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
 
 import org.junit.Before;
@@ -17,18 +18,18 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-public class ApplicabilityFilterBuilderTest {
+public class VoiceApplicabilityFilterBuilderTest {
 
-	private ApplicabilityFilterBuilderImpl builder;
+	private VoiceApplicabilityFilterBuilderImpl builder;
 	
 	@Before
 	public void setUp() {
-		builder = new ApplicabilityFilterBuilderImpl();
+		builder = new VoiceApplicabilityFilterBuilderImpl();
 	}
 
 	@Test
 	public void defaultFilterDoesNotMatchAnything() {
-		final ApplicabilityFilter filter = builder.build();
+		final VoiceApplicabilityFilter filter = builder.build();
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
@@ -36,10 +37,10 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void anyFilterMatchesAnything() {
-		final ApplicabilityFilter filter = builder
-				.source(ApplicabilityFilterBuilder.ANY)
-				.callConnectivityType(ApplicabilityFilterBuilder.ANY)
-				.cdrType(ApplicabilityFilterBuilder.ANY)
+		final VoiceApplicabilityFilter filter = builder
+				.source(VoiceApplicabilityFilterBuilder.ANY)
+				.callConnectivityType(VoiceApplicabilityFilterBuilder.ANY)
+				.cdrType(VoiceApplicabilityFilterBuilder.ANY)
 				.build();
 		assertFalse(filter.getSources().isPresent());
 		assertFalse(filter.getCallConnectivityTypes().isPresent());
@@ -48,7 +49,7 @@ public class ApplicabilityFilterBuilderTest {
 	
 	@Test
 	public void sourceFilterMatchesOneSource() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.source("source1")
 				.build();
 		assertEquals(1, filter.getSources().get().size());
@@ -59,7 +60,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoSourcesFilterMatchesTwoSources() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.source("source1")
 				.source("source2")
 				.build();
@@ -73,7 +74,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoVarargsSourcesFilterMatchesTwoSources() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.source("source1", "source2")
 				.build();
 		final Collection<String> set = filter.getSources().get();
@@ -86,7 +87,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoCollectionSourcesFilterMatchesTwoSources() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.source(Lists.newArrayList("source1", "source2"))
 				.build();
 		final Collection<String> set = filter.getSources().get();
@@ -99,7 +100,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void callConnectivityTypeFilterMatchesOneCallConnectivityType() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.callConnectivityType(CallConnectivityType.OOTB)
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
@@ -110,7 +111,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoCallConnectivityTypesFilterMatchesTwoCallConnectivityTypes() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.callConnectivityType(CallConnectivityType.OOTB)
 				.callConnectivityType(CallConnectivityType.DIY)
 				.build();
@@ -124,7 +125,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoVarargsCallConnectivityTypesFilterMatchesTwoCallConnectivityTypes() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.callConnectivityType(CallConnectivityType.OOTB, CallConnectivityType.DIY)
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
@@ -137,7 +138,7 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void twoCollectionCallConnectivityTypesFilterMatchesTwoCallConnectivityTypes() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.callConnectivityType(Lists.newArrayList(CallConnectivityType.OOTB, CallConnectivityType.DIY))
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
@@ -150,166 +151,166 @@ public class ApplicabilityFilterBuilderTest {
 
 	@Test
 	public void cdrTypeFilterMatchesOneCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdrType(Cdr.Type.EXT_EXT)
+		final VoiceApplicabilityFilter filter = builder
+				.cdrType(VoiceCdr.Type.EXT_EXT)
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertEquals(1, filter.getCdrTypes().get().size());
-		assertEquals(Cdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
+		assertEquals(VoiceCdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
 	}
 
 	@Test
 	public void twoCdrTypesFilterMatchesTwoCdrTypes() {
-		final ApplicabilityFilter filter = builder
-				.cdrType(Cdr.Type.EXT_EXT)
-				.cdrType(Cdr.Type.EXT_MOBILE)
+		final VoiceApplicabilityFilter filter = builder
+				.cdrType(VoiceCdr.Type.EXT_EXT)
+				.cdrType(VoiceCdr.Type.EXT_MOBILE)
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> set = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> set = filter.getCdrTypes().get();
 		assertEquals(2, set.size());
-		assertTrue(set.contains(Cdr.Type.EXT_EXT));
-		assertTrue(set.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void twoVarargsCdrTypesFilterMatchesTwoCdrTypes() {
-		final ApplicabilityFilter filter = builder
-				.cdrType(Cdr.Type.EXT_EXT, Cdr.Type.EXT_MOBILE)
+		final VoiceApplicabilityFilter filter = builder
+				.cdrType(VoiceCdr.Type.EXT_EXT, VoiceCdr.Type.EXT_MOBILE)
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> set = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> set = filter.getCdrTypes().get();
 		assertEquals(2, set.size());
-		assertTrue(set.contains(Cdr.Type.EXT_EXT));
-		assertTrue(set.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void twoCollectionCdrTypesFilterMatchesTwoCdrTypes() {
-		final ApplicabilityFilter filter = builder
-				.cdrType(Lists.newArrayList(Cdr.Type.EXT_EXT, Cdr.Type.EXT_MOBILE))
+		final VoiceApplicabilityFilter filter = builder
+				.cdrType(Lists.newArrayList(VoiceCdr.Type.EXT_EXT, VoiceCdr.Type.EXT_MOBILE))
 				.build();
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> set = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> set = filter.getCdrTypes().get();
 		assertEquals(2, set.size());
-		assertTrue(set.contains(Cdr.Type.EXT_EXT));
-		assertTrue(set.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void cdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdr(new StaticCdr(null, "source1", true, true, 0))
+		final VoiceApplicabilityFilter filter = builder
+				.cdr(new StaticVoiceCdr(null, "source1", true, true, 0))
 				.build();
 		assertEquals(1, filter.getSources().get().size());
 		assertEquals("source1", filter.getSources().get().iterator().next());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertEquals(1, filter.getCdrTypes().get().size());
-		assertEquals(Cdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
+		assertEquals(VoiceCdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
 	}
 
 	@Test
 	public void twoDisjointCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdr(new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0))
-				.cdr(new StaticCdr(null, "source2", true, Cdr.Type.EXT_MOBILE, 0))
+		final VoiceApplicabilityFilter filter = builder
+				.cdr(new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0))
+				.cdr(new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_MOBILE, 0))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(2, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void twoDisjointVarargsCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdr(new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0),
-						new StaticCdr(null, "source2", true, Cdr.Type.EXT_MOBILE, 0))
+		final VoiceApplicabilityFilter filter = builder
+				.cdr(new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0),
+						new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_MOBILE, 0))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(2, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void twoDisjointCollectionCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.cdr(Lists.newArrayList(
-						(Cdr) new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0),
-						(Cdr) new StaticCdr(null, "source2", true, Cdr.Type.EXT_MOBILE, 0)))
+						(Cdr) new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0),
+						(Cdr) new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_MOBILE, 0)))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(2, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_MOBILE));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
 	}
 
 	@Test
 	public void twoOverlappingCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdr(new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0))
-				.cdr(new StaticCdr(null, "source2", true, Cdr.Type.EXT_EXT, 0))
+		final VoiceApplicabilityFilter filter = builder
+				.cdr(new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0))
+				.cdr(new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_EXT, 0))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 	}
 
 	@Test
 	public void twoOverlappingVarargsCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
-				.cdr(new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0),
-						new StaticCdr(null, "source2", true, Cdr.Type.EXT_EXT, 0))
+		final VoiceApplicabilityFilter filter = builder
+				.cdr(new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0),
+						new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_EXT, 0))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 	}
 
 	@Test
 	public void twoOverlappingCollectionCdrFilterMatchesSourceAndCdrType() {
-		final ApplicabilityFilter filter = builder
+		final VoiceApplicabilityFilter filter = builder
 				.cdr(Lists.newArrayList(
-						(Cdr) new StaticCdr(null, "source1", true, Cdr.Type.EXT_EXT, 0),
-						(Cdr) new StaticCdr(null, "source2", true, Cdr.Type.EXT_EXT, 0)))
+						(Cdr) new StaticVoiceCdr(null, "source1", true, VoiceCdr.Type.EXT_EXT, 0),
+						(Cdr) new StaticVoiceCdr(null, "source2", true, VoiceCdr.Type.EXT_EXT, 0)))
 				.build();
 		final Collection<String> sourceSet = filter.getSources().get();
 		assertEquals(2, sourceSet.size());
 		assertTrue(sourceSet.contains("source1"));
 		assertTrue(sourceSet.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
-		final Collection<Cdr.Type> cdrTypeSet = filter.getCdrTypes().get();
+		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
-		assertTrue(cdrTypeSet.contains(Cdr.Type.EXT_EXT));
+		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 	}
 	
 }

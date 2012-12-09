@@ -6,25 +6,34 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
-import nl.limesco.cserv.pricing.api.Pricing;
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.DataPricing;
+import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
+import nl.limesco.cserv.pricing.api.SmsPricing;
+import nl.limesco.cserv.pricing.api.SmsPricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricing;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimService;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class InvoiceConstructor {
 
@@ -134,9 +143,23 @@ public class InvoiceConstructor {
 			builder.normalItemLine(description, subscription.getValue().intValue(), itemPrice, 0.21);
 		}
 		
-		// Include the CDRs
-		final Map<String, CombinedDuration> durations = Maps.newHashMap();
+		// Split CDRs into types
+		final Set<VoiceCdr> voiceCdrs = Sets.newHashSet();
+		final Set<SmsCdr> smsCdrs = Sets.newHashSet();
+		final Set<DataCdr> dataCdrs = Sets.newHashSet();
 		for (Cdr cdr : cdrs) {
+			if (cdr instanceof VoiceCdr) {
+				voiceCdrs.add((VoiceCdr) cdr);
+			} else if (cdr instanceof SmsCdr) {
+				smsCdrs.add((SmsCdr) cdr);
+			} else if (cdr instanceof DataCdr) {
+				dataCdrs.add((DataCdr) cdr);
+			}
+		}
+		
+		// Include the voice CDRs
+		final Map<String, CombinedDuration> durations = Maps.newHashMap();
+		for (VoiceCdr cdr : voiceCdrs) {
 			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
 			if (!pricing.isPresent()) {
 				continue;
@@ -150,18 +173,78 @@ public class InvoiceConstructor {
 		}
 		
 		for (Entry<String, CombinedDuration> duration : durations.entrySet()) {
-			final Optional<? extends PricingRule> pricingRule = pricingService.getPricingRuleById(duration.getKey());
+			final Optional<? extends VoicePricingRule> pricingRule = pricingService.getPricingRuleById(VoicePricingRule.class, duration.getKey());
 			if (!pricingRule.isPresent()) {
 				continue;
 			}
 			
-			final Pricing price = pricingRule.get().getPrice();
+			final VoicePricing price = pricingRule.get().getPrice();
 			if (pricingRule.get().isHidden() && price.getPerCall() == 0 && price.getPerMinute() == 0) {
 				continue;
 			}
 			
 			final CombinedDuration cd = duration.getValue();
 			builder.durationItemLine("Bellen " + pricingRule.get().getDescription(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
+		}
+
+		// Include the SMS CDRs
+		final Map<String, Integer> smsRules = Maps.newHashMap();
+		for (SmsCdr cdr : smsCdrs) {
+			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
+			if (!pricing.isPresent()) {
+				continue;
+			}
+			
+			final String pricingRuleId = pricing.get().getPricingRuleId();
+			if (smsRules.containsKey(pricingRuleId)) {
+				smsRules.put(pricingRuleId, Integer.valueOf(1 + smsRules.get(pricingRuleId).intValue()));
+			} else {
+				smsRules.put(pricingRuleId, Integer.valueOf(1));
+			}
+		}
+		
+		for (Entry<String, Integer> smsRuleEntry : smsRules.entrySet()) {
+			final Optional<? extends SmsPricingRule> pricingRule = pricingService.getPricingRuleById(SmsPricingRule.class, smsRuleEntry.getKey());
+			if (!pricingRule.isPresent()) {
+				continue;
+			}
+			
+			final SmsPricing price = pricingRule.get().getPrice();
+			if (pricingRule.get().isHidden() && price.getPerSms() == 0) {
+				continue;
+			}
+			
+			builder.normalItemLine(pricingRule.get().getDescription(), smsRuleEntry.getValue().intValue(), price.getPerSms(), 0.21);
+		}
+
+		// Include the data CDRs
+		final Map<String, Long> dataRules = Maps.newHashMap();
+		for (DataCdr cdr : dataCdrs) {
+			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
+			if (!pricing.isPresent()) {
+				continue;
+			}
+			
+			final String pricingRuleId = pricing.get().getPricingRuleId();
+			if (dataRules.containsKey(pricingRuleId)) {
+				dataRules.put(pricingRuleId, Long.valueOf(cdr.getKilobytes() + dataRules.get(pricingRuleId).longValue()));
+			} else {
+				dataRules.put(pricingRuleId, Long.valueOf(cdr.getKilobytes()));
+			}
+		}
+		
+		for (Entry<String, Long> dataRuleEntry : dataRules.entrySet()) {
+			final Optional<? extends DataPricingRule> pricingRule = pricingService.getPricingRuleById(DataPricingRule.class, dataRuleEntry.getKey());
+			if (!pricingRule.isPresent()) {
+				continue;
+			}
+			
+			final DataPricing price = pricingRule.get().getPrice();
+			if (pricingRule.get().isHidden() && price.getPerKilobyte() == 0) {
+				continue;
+			}
+			
+			builder.normalItemLine(pricingRule.get().getDescription(), dataRuleEntry.getValue().intValue(), price.getPerKilobyte(), 0.21);
 		}
 		
 		// Include the cost contribution

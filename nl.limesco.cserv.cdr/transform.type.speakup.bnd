@@ -1,2 +1,3 @@
 Bundle-Activator: nl.limesco.cserv.cdr.transform.type.speakup.Activator
-Private-Package: nl.limesco.cserv.cdr.transform.type.speakup
+Private-Package: nl.limesco.cserv.cdr.transform.type.speakup,\
+	nl.limesco.cserv.cdr.transform

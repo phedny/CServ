@@ -12,53 +12,52 @@ import nl.limesco.cserv.cdr.api.Cdr;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import com.google.common.base.Optional;
 
-public class MongoCdr implements Cdr {
-	
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "service")
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = MongoVoiceCdr.class, name = "voice"),
+	@JsonSubTypes.Type(value = MongoSmsCdr.class, name = "sms"),
+	@JsonSubTypes.Type(value = MongoDataCdr.class, name = "data")
+})
+public class AbstractMongoCdr implements Cdr {
+
 	private String id;
 	
-	private String source;
+	protected String source;
 	
-	private String callId;
+	protected String callId;
 	
-	private String account;
+	protected String account;
 	
-	private Calendar time;
+	protected Calendar time;
 	
-	private String from;
+	protected String from;
 	
-	private String to;
+	protected String to;
 	
-	private boolean connected;
-	
-	private Type type;
-	
-	private long seconds;
-	
-	private Map<String, String> additionalInfo;
+	protected Map<String, String> additionalInfo;
 	
 	private String invoice;
 	
 	private String invoiceBuilder;
 	
 	private CdrPricingImpl pricing;
-	
-	public MongoCdr() {
-		// Default constructor.
+
+	public AbstractMongoCdr() {
+		super();
 	}
 
-	public MongoCdr(Cdr cdr) {
+	public AbstractMongoCdr(Cdr cdr) {
 		source = cdr.getSource();
 		callId = cdr.getCallId();
 		account = cdr.getAccount().orNull();
 		time = cdr.getTime();
 		from = cdr.getFrom();
 		to = cdr.getTo();
-		connected = cdr.isConnected();
-		type = cdr.getType().orNull();
-		seconds = cdr.getSeconds();
 		additionalInfo = cdr.getAdditionalInfo();
 	}
 
@@ -67,11 +66,11 @@ public class MongoCdr implements Cdr {
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String getSource() {
 		return source;
@@ -100,12 +99,12 @@ public class MongoCdr implements Cdr {
 		checkNotNull(account);
 		this.account = account;
 	}
-	
+
 	@JsonProperty("account")
 	public String getNullableAccount() {
 		return account;
 	}
-	
+
 	public void setNullableAccount(String account) {
 		this.account = account;
 	}
@@ -115,7 +114,7 @@ public class MongoCdr implements Cdr {
 	public Calendar getTime() {
 		return time;
 	}
-	
+
 	@JsonIgnore
 	public void setTime(Calendar time) {
 		this.time = time;
@@ -125,7 +124,7 @@ public class MongoCdr implements Cdr {
 	public Date getTimeAsDate() {
 		return time.getTime();
 	}
-	
+
 	public void setTimeAsDate(Date time) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(time);
@@ -151,44 +150,6 @@ public class MongoCdr implements Cdr {
 	}
 
 	@Override
-	public boolean isConnected() {
-		return connected;
-	}
-
-	public void setConnected(boolean connected) {
-		this.connected = connected;
-	}
-
-	@Override
-	@JsonIgnore
-	public Optional<Type> getType() {
-		return Optional.fromNullable(type);
-	}
-
-	public void setType(Type type) {
-		checkNotNull(type);
-		this.type = type;
-	}
-	
-	@JsonProperty("type")
-	public Type getNullableType() {
-		return type;
-	}
-	
-	public void setNullableType(Type type) {
-		this.type = type;
-	}
-
-	@Override
-	public long getSeconds() {
-		return seconds;
-	}
-
-	public void setSeconds(long seconds) {
-		this.seconds = seconds;
-	}
-
-	@Override
 	public Map<String, String> getAdditionalInfo() {
 		return additionalInfo;
 	}
@@ -202,12 +163,12 @@ public class MongoCdr implements Cdr {
 	public Optional<String> getInvoice() {
 		return Optional.fromNullable(invoice);
 	}
-	
+
 	@JsonProperty("invoice")
 	public String getNullableInvoice() {
 		return invoice;
 	}
-	
+
 	public void setNullableInvoice(String invoice) {
 		this.invoice = invoice;
 	}
@@ -217,12 +178,12 @@ public class MongoCdr implements Cdr {
 	public Optional<String> getInvoiceBuilder() {
 		return Optional.fromNullable(invoiceBuilder);
 	}
-	
+
 	@JsonProperty("invoiceBuilder")
 	public String getNullableInvoiceBuilder() {
 		return invoiceBuilder;
 	}
-	
+
 	public void setNullableInvoiceBuilder(String invoiceBuilder) {
 		this.invoiceBuilder = invoiceBuilder;
 	}
@@ -232,12 +193,12 @@ public class MongoCdr implements Cdr {
 	public Optional<Pricing> getPricing() {
 		return Optional.fromNullable((Pricing) pricing);
 	}
-	
+
 	@JsonProperty("pricing")
 	public CdrPricingImpl getNullablePricing() {
 		return pricing;
 	}
-	
+
 	public void setNullablePricing(CdrPricingImpl pricing) {
 		this.pricing = pricing;
 	}
