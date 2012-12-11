@@ -55,7 +55,8 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \end{center}
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ | X | R | R | R | }
+\newcolumntype{s}{>{\hsize=.5\hsize}R}
+\begin{tabularx}{\textwidth}{ | X | s | s | s | }
 \hline
 Omschrijving      & Aantal  & Stuksprijs & Bedrag \\
 \hline
