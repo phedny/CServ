@@ -41,6 +41,9 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \end{flushright}
 
 \begin{flalign*}
+#if( $account.companyName != "" )
+\mbox{Bedrijf}       &: \mbox{$account.companyName} \\
+#end
 \mbox{Naam}          &: \mbox{$account.fullName.fullName} \\
 \mbox{Adres}         &: \mbox{$account.address.streetAddress} \\
 \mbox{Postcode}      &: \mbox{$account.address.postalCode} \\
