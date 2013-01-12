@@ -3,7 +3,6 @@ package nl.limesco.cserv.invoice.rest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -23,13 +22,9 @@ import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
 import nl.limesco.cserv.invoice.api.ItemLine;
-import nl.limesco.cserv.util.pdflatex.PdfLatex;
 
-import org.amdatu.template.processor.TemplateContext;
-import org.amdatu.template.processor.TemplateEngine;
-import org.amdatu.template.processor.TemplateException;
-import org.amdatu.template.processor.TemplateProcessor;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -41,18 +36,15 @@ public class InvoiceResource {
 	
 	private final InvoiceService invoiceService;
 	
-	private final TemplateEngine templateEngine;
-
-	private final PdfLatex pdfLatex;
+	private final InvoiceTransformationService invoiceTransformationService;
 	
 	private final Account account;
 	
 	private final boolean admin;
 	
-	public InvoiceResource(InvoiceService invoiceService, TemplateEngine templateEngine, PdfLatex pdfLatex, Account account, boolean admin) {
+	public InvoiceResource(InvoiceService invoiceService, InvoiceTransformationService invoiceTransformationService, Account account, boolean admin) {
 		this.invoiceService = invoiceService;
-		this.templateEngine = templateEngine;
-		this.pdfLatex = pdfLatex;
+		this.invoiceTransformationService = invoiceTransformationService;
 		this.account = account;
 		this.admin = admin;
 	}
@@ -83,41 +75,21 @@ public class InvoiceResource {
 	@Path("{invoiceId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getInvoiceByIdAsJson(@PathParam("invoiceId") String id) {
-		final Invoice invoice = getInvoiceByIdForRest(id);
-		
-		try {
-			return new ObjectMapper().writeValueAsString(invoice);
-		} catch (JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch (JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch (IOException e) {
-			throw new WebApplicationException(e);
-		}
+		return invoiceTransformationService.transformToJson(getInvoiceByIdForRest(id));
 	}
 
 	@GET
 	@Path("{invoiceId}")
 	@Produces("application/x-tex")
-	public String getInvoiceByIdAsTex(@PathParam("invoiceId") String id) throws IOException, TemplateException {
-		final Invoice invoice = getInvoiceByIdForRest(id);
-		
-		final TemplateContext context = templateEngine.createContext();
-		context.put("invoice", invoice);
-		context.put("account", account);
-		context.put("util", VelocityUtils.class);
-
-		final URL template = getClass().getClassLoader().getResource("resources/invoice.tex");
-		final TemplateProcessor processor = templateEngine.createProcessor(template);
-		return processor.generateString(context);
+	public String getInvoiceByIdAsTex(@PathParam("invoiceId") String id) {
+		return invoiceTransformationService.transformToTex(getInvoiceByIdForRest(id), account);
 	}
 
 	@GET
 	@Path("{invoiceId}")
 	@Produces("application/pdf")
-	public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) throws IOException, InterruptedException, TemplateException {
-		final String invoiceAsTex = getInvoiceByIdAsTex(id);
-		return pdfLatex.compile(invoiceAsTex);
+	public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) {
+		return invoiceTransformationService.transformToPdf(getInvoiceByIdForRest(id), account);
 	}
 	
 	private Invoice getInvoiceByIdForRest(String id) {

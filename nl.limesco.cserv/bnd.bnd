@@ -34,7 +34,8 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoicing)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.rest)',\
-	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)'
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.transform)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.6
 -runbundles: nl.limesco.cserv.invoice.api;version=latest,\
@@ -54,6 +55,7 @@
 	javax.servlet;version='[2.5.0,2.5.1)',\
 	javax.persistence;version='[2.0.3,2.0.4)',\
 	nl.limesco.cserv.invoice.rest;version=latest,\
+	nl.limesco.cserv.invoice.transform;version=latest,\
 	nl.limesco.cserv.ideal.targetpay;version=latest,\
 	nl.limesco.cserv.account.api;version=latest,\
 	nl.limesco.cserv.ideal.rest;version=latest,\
