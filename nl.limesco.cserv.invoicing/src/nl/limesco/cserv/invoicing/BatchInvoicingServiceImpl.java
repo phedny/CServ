@@ -1,9 +1,13 @@
 package nl.limesco.cserv.invoicing;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Set;
 
+import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
 import nl.limesco.cserv.cdr.api.DataCdr;
@@ -13,6 +17,7 @@ import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
 import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.NoApplicablePricingRuleException;
 import nl.limesco.cserv.pricing.api.PricingRuleNotApplicableException;
@@ -32,8 +37,12 @@ import com.google.common.collect.Sets;
 public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 	
 	private final InvoiceConstructor invoiceConstructor;
+
+	private volatile AccountService accountService;
 	
 	private volatile InvoiceService invoiceService;
+	
+	private volatile InvoiceTransformationService invoiceTransformationService;
 	
 	private volatile PricingService pricingService;
 	
@@ -65,12 +74,37 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 		accounts.addAll(findAccountsWithInvoicableCdrs());
 		
 		logService.log(LogService.LOG_INFO, "Going to construct invoices for " + accounts.size() + " accounts");
-		for (String account : accounts) {
-			logService.log(LogService.LOG_INFO, "Constructing invoice for " + account);
+		for (String accountId : accounts) {
+			logService.log(LogService.LOG_INFO, "Constructing invoice for " + accountId);
 			try {
-				final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, account);
+				final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, accountId);
+				if (invoice != null) {
+					final Optional<? extends Account> account = accountService.getAccountById(accountId);
+					final byte[] pdf = invoiceTransformationService.transformToPdf(invoice, account.get());
+					writeToFile(invoice.getId() + ".pdf", pdf);
+				}
 			} catch (IdAllocationException e) {
-				logService.log(LogService.LOG_WARNING, "Failed to allocate ID to invoice for " + account);
+				logService.log(LogService.LOG_WARNING, "Failed to allocate ID to invoice for " + accountId);
+			} catch (Exception e) {
+				logService.log(LogService.LOG_WARNING, "Something went wrong creating invoice for " + accountId);
+			}
+		}
+	}
+
+	private void writeToFile(String filename, byte[] content) {
+		FileOutputStream stream = null;
+		try {
+			stream = new FileOutputStream(filename);
+			stream.write(content);
+		} catch (IOException e) {
+			logService.log(LogService.LOG_WARNING, "Failed to write " + filename, e);
+		} finally {
+			if (stream != null) {
+				try {
+					stream.close();
+				} catch (IOException e) {
+					logService.log(LogService.LOG_WARNING, "Failed to close stream for " + filename, e);
+				}
 			}
 		}
 	}
