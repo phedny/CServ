@@ -88,6 +88,7 @@ public class ParseCsvStepTest {
 			calendar.setTime(format.parse("2002-20-" + (i + 1) + " 20:02:20"));
 			assertEquals(calendar, cdr.getTime());
 			assertEquals(42, ((VoiceCdr) cdr).getSeconds());
+			assertEquals("Middle Earth", ((VoiceCdr) cdr).getDestination());
 		}
 	}
 
@@ -111,13 +112,13 @@ public class ParseCsvStepTest {
 	public static List<Object[]> data() {
 		return Arrays.asList(
 				// Test case with 1 line
-				new Object[] { "callId,time y-M-d H:m:s,seconds,to,from", "0;2002-20-01 20:02:20;42;101;100", 1 },
+				new Object[] { "callId,time y-M-d H:m:s,seconds,to,from,destination", "0;2002-20-01 20:02:20;42;101;100;Middle Earth", 1 },
 				// Test case with ignorable fields
-				new Object[] { "-,callId,time y-M-d H:m:s,seconds,-,from,to,-,-", "a;0;2002-20-01 20:02:20;42;ignore;100;101;13;37", 1 },
+				new Object[] { "-,callId,time y-M-d H:m:s,seconds,-,from,to,-,-,destination", "a;0;2002-20-01 20:02:20;42;ignore;100;101;13;37;Middle Earth", 1 },
 				// Test case with multiple lines, without line separator for last line
-				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds", "0;2002-20-01 20:02:20;101;100;42\n1;2002-20-02 20:02:20;101;100;42\n2;2002-20-03 20:02:20;101;100;42", 3 },
+				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds,destination", "0;2002-20-01 20:02:20;101;100;42;Middle Earth\n1;2002-20-02 20:02:20;101;100;42;Middle Earth\n2;2002-20-03 20:02:20;101;100;42;Middle Earth", 3 },
 				// Test case with multiple lines, with line separator for last line
-				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds", "0;2002-20-01 20:02:20;101;100;42\n1;2002-20-02 20:02:20;101;100;42\n2;2002-20-03 20:02:20;101;100;42\n", 3 });
+				new Object[] { "callId,time y-M-d H:m:s,to,from,seconds,destination", "0;2002-20-01 20:02:20;101;100;42;Middle Earth\n1;2002-20-02 20:02:20;101;100;42;Middle Earth\n2;2002-20-03 20:02:20;101;100;42;Middle Earth\n", 3 });
 	}
 	
 }
