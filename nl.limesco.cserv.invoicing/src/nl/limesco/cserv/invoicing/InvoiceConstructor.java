@@ -108,6 +108,7 @@ public class InvoiceConstructor {
 				monthStart.setTimeInMillis(0);
 				monthStart.set(Calendar.YEAR, lastMonthlyFeesInvoice.get().getYear());
 				monthStart.set(Calendar.MONTH, lastMonthlyFeesInvoice.get().getMonth());
+				monthStart.add(Calendar.MONTH, 1);
 				itemStart = monthStart;
 			} else {
 				itemStart = contractStartDate.get();
