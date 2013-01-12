@@ -15,7 +15,9 @@ public interface VoiceApplicationConstraints extends ApplicationConstraints {
 	
 	Collection<VoiceCdr.Type> getCdrTypes();
 	
-	boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType);
+	Collection<String> getDestinations();
+	
+	boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType, String destination);
 	
 	boolean isApplicable(Cdr cdr, CallConnectivityType callConnectivityType);
 	

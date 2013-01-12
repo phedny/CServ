@@ -16,4 +16,6 @@ public interface VoiceCdr extends Cdr {
 
 	Optional<Type> getType();
 	
+	String getDestination();
+	
 }

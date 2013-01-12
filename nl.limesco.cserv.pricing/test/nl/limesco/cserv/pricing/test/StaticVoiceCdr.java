@@ -19,17 +19,24 @@ final class StaticVoiceCdr implements VoiceCdr {
 	private final VoiceCdr.Type cdrType;
 	
 	private final long seconds;
+	
+	private final String destination;
 
 	StaticVoiceCdr(Calendar time, String source, boolean connected, boolean hasCdrType, long seconds) {
 		this(time, source, connected, hasCdrType ? VoiceCdr.Type.EXT_EXT : null, seconds);
 	}
 
 	StaticVoiceCdr(Calendar time, String source, boolean connected, VoiceCdr.Type cdrType, long seconds) {
+		this(time, source, connected, cdrType, seconds, "Middle Earth");
+	}
+	
+	StaticVoiceCdr(Calendar time, String source, boolean connected, VoiceCdr.Type cdrType, long seconds, String destination) {
 		this.time = time;
 		this.source = source;
 		this.connected = connected;
 		this.cdrType = cdrType;
 		this.seconds = seconds;
+		this.destination = destination;
 	}
 
 	@Override
@@ -70,6 +77,11 @@ final class StaticVoiceCdr implements VoiceCdr {
 	@Override
 	public Optional<VoiceCdr.Type> getType() {
 		return Optional.fromNullable(cdrType);
+	}
+
+	@Override
+	public String getDestination() {
+		return destination;
 	}
 
 	@Override

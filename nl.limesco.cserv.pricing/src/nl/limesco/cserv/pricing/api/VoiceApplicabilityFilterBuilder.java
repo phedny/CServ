@@ -24,6 +24,14 @@ public interface VoiceApplicabilityFilterBuilder extends ApplicabilityFilterBuil
 	
 	VoiceApplicabilityFilterBuilder callConnectivityType(Collection<CallConnectivityType> callConnectivityType);
 
+	VoiceApplicabilityFilterBuilder destination(Any any);
+
+	VoiceApplicabilityFilterBuilder destination(String destination);
+
+	VoiceApplicabilityFilterBuilder destination(String... destination);
+
+	VoiceApplicabilityFilterBuilder destination(Collection<String> destination);
+
 	VoiceApplicabilityFilterBuilder cdrType(Any any);
 	
 	VoiceApplicabilityFilterBuilder cdrType(VoiceCdr.Type cdrType);

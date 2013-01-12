@@ -78,6 +78,7 @@ final class VoicePricingServiceHelperMock extends VoicePricingServiceHelper {
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
 					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
+					setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 				}});
 				setPriceImpl(new VoicePricingImpl() {{
 					setPerCall(400);
@@ -95,6 +96,7 @@ final class VoicePricingServiceHelperMock extends VoicePricingServiceHelper {
 					setSourcesAsSet(Sets.newHashSet("source1", "source2"));
 					setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB));
 					setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT));
+					setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 				}});
 				setPriceImpl(new VoicePricingImpl() {{
 					setPerCall(350);

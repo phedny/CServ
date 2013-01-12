@@ -13,4 +13,6 @@ public interface VoiceApplicabilityFilter extends ApplicabilityFilter<VoicePrici
 	
 	Optional<Collection<VoiceCdr.Type>> getCdrTypes();
 	
+	Optional<Collection<String>> getDestinations();
+	
 }

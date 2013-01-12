@@ -150,7 +150,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 			} catch (NoApplicablePricingRuleException e) {
 				logService.log(LogService.LOG_WARNING, "Failed to obtain pricing rule for CDR " + cdr.getSource() + "/" + cdr.getCallId());
 			} catch (PricingRuleNotApplicableException e) {
-				throw Throwables.propagate(e);
+				logService.log(LogService.LOG_ERROR, "Obtain pricing rule for CDR " + cdr.getSource() + "/" + cdr.getCallId() + " doesn't seem to be applicable");
 			}
 		}
 	}

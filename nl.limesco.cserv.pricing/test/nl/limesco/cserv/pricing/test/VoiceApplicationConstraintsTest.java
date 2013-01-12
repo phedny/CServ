@@ -51,6 +51,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -61,6 +62,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -70,6 +72,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -80,6 +83,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -89,6 +93,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("diferentSource"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -98,6 +103,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.DIY));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -107,6 +113,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_MOBILE));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 
@@ -116,6 +123,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Sets.newHashSet("source1", "source2", "source3", "source4"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability, "source1"));
 	}
 
@@ -125,7 +133,28 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Sets.newHashSet("source1", "source2", "source3", "source4"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability, "source5"));
+	}
+
+	@Test
+	public void acWithMultipleDestinationsIsApplicable() throws Exception {
+		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
+		applicability.setSourcesAsSet(Collections.singleton("any"));
+		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth", "Planet Jupiter"));
+		assertResult(true, invoker.invoke(applicability));
+	}
+
+	@Test
+	public void acWithMultipleDestinationsButNotTheRightOneIsNotApplicable() throws Exception {
+		applicability.setValidFromAsDate(DAY_FORMAT.parse("01-01-2010"));
+		applicability.setSourcesAsSet(Collections.singleton("any"));
+		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
+		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Planet Jupiter", "Planet Saturn"));
+		assertResult(false, invoker.invoke(applicability));
 	}
 
 	@Test
@@ -134,6 +163,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Sets.newHashSet(CallConnectivityType.OOTB, CallConnectivityType.DIY));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -143,6 +173,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(null);
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -152,6 +183,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_EXT, VoiceCdr.Type.MOBILE_EXT, VoiceCdr.Type.PBX_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(true, invoker.invoke(applicability));
 	}
 
@@ -161,6 +193,7 @@ public class VoiceApplicationConstraintsTest {
 		applicability.setSourcesAsSet(Collections.singleton("any"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Sets.newHashSet(VoiceCdr.Type.EXT_MOBILE, VoiceCdr.Type.MOBILE_MOBILE, VoiceCdr.Type.PBX_MOBILE));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		assertResult(false, invoker.invoke(applicability));
 	}
 	
@@ -204,7 +237,7 @@ public class VoiceApplicationConstraintsTest {
 
 		@Override
 		public boolean invoke(VoiceApplicationConstraintsImpl applicability, String source) {
-			return applicability.isApplicable(now, source, CallConnectivityType.OOTB, VoiceCdr.Type.EXT_EXT);
+			return applicability.isApplicable(now, source, CallConnectivityType.OOTB, VoiceCdr.Type.EXT_EXT, "Middle Earth");
 		}
 		
 	}

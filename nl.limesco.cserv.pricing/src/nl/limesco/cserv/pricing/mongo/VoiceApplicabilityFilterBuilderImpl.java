@@ -9,6 +9,7 @@ import java.util.Set;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.pricing.api.ApplicabilityFilterBuilder.Any;
 import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilter;
 import nl.limesco.cserv.pricing.api.VoiceApplicabilityFilterBuilder;
 import nl.limesco.cserv.sim.api.CallConnectivityType;
@@ -22,6 +23,8 @@ public class VoiceApplicabilityFilterBuilderImpl implements VoiceApplicabilityFi
 	private Set<CallConnectivityType> callConnectivityTypes = Sets.newHashSet();
 	
 	private Set<VoiceCdr.Type> cdrTypes = Sets.newHashSet();
+	
+	private Set<String> destinations = Sets.newHashSet();
 
 	@Override
 	public VoiceApplicabilityFilterBuilder source(Any any) {
@@ -114,8 +117,38 @@ public class VoiceApplicabilityFilterBuilderImpl implements VoiceApplicabilityFi
 	}
 
 	@Override
+	public VoiceApplicabilityFilterBuilder destination(Any any) {
+		checkState(destinations != null && destinations.isEmpty());
+		destinations = null;
+		return this;
+	}
+
+	@Override
+	public VoiceApplicabilityFilterBuilder destination(String destination) {
+		checkNotNull(destinations);
+		checkState(destinations != null);
+		destinations.add(destination);
+		return this;
+	}
+
+	@Override
+	public VoiceApplicabilityFilterBuilder destination(String... destination) {
+		return destination(Arrays.asList(destination));
+	}
+
+	@Override
+	public VoiceApplicabilityFilterBuilder destination(Collection<String> destination) {
+		for (String t : destination) {
+			checkNotNull(t);
+		}
+		checkState(destinations != null);
+		destinations.addAll(destination);
+		return this;
+	}
+
+	@Override
 	public VoiceApplicabilityFilterBuilder cdr(Cdr cdr) {
-		return source(cdr.getSource()).cdrType(((VoiceCdr) cdr).getType().get());
+		return source(cdr.getSource()).cdrType(((VoiceCdr) cdr).getType().get()).destination(((VoiceCdr) cdr).getDestination());
 	}
 
 	@Override
@@ -133,7 +166,7 @@ public class VoiceApplicabilityFilterBuilderImpl implements VoiceApplicabilityFi
 
 	@Override
 	public VoiceApplicabilityFilter build() {
-		return new VoiceApplicabilityFilterImpl(sources, callConnectivityTypes, cdrTypes);
+		return new VoiceApplicabilityFilterImpl(sources, callConnectivityTypes, cdrTypes, destinations);
 	}
 
 }

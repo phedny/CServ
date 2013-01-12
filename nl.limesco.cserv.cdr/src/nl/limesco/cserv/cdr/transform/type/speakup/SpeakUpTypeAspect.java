@@ -57,11 +57,11 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 		public Optional<SmsCdr.Type> getType() {
 			final Map<String, String> info = input.getAdditionalInfo();
 			if ("out".equals(info.get("10"))) {
-				if ("Netherlands - Mobile - Mobile".equals(info.get("9"))) {
+				if ("Netherlands - Mobile - Mobile".equals(input.getDestination())) {
 					return Optional.of(SmsCdr.Type.MOBILE_EXT);
 				}
 			} else if ("in".equals(info.get("10"))) {
-				if ("Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
+				if ("Netherlands - Mobile - SpeakUp".equals(input.getDestination())) {
 					return Optional.of(SmsCdr.Type.EXT_MOBILE);
 				}
 			}

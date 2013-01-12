@@ -21,6 +21,8 @@ public class VoiceApplicationConstraintsImpl extends ApplicationConstraintsImpl 
 	
 	private Set<VoiceCdr.Type> cdrTypes;
 	
+	private Set<String> destinations;
+	
 	@Override
 	@JsonIgnore
 	public Optional<Collection<CallConnectivityType>> getCallConnectivityTypes() {
@@ -56,7 +58,22 @@ public class VoiceApplicationConstraintsImpl extends ApplicationConstraintsImpl 
 	}
 
 	@Override
-	public boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType) {
+	@JsonIgnore
+	public Collection<String> getDestinations() {
+		return Collections.unmodifiableCollection(destinations);
+	}
+
+	@JsonProperty("destination")
+	public Set<String> getDestinationsAsSet() {
+		return destinations;
+	}
+	
+	public void setDestinationsAsSet(Set<String> destinations) {
+		this.destinations = destinations;
+	}
+
+	@Override
+	public boolean isApplicable(Calendar date, String source, CallConnectivityType callConnectivityType, VoiceCdr.Type cdrType, String destination) {
 		if (date.before(validFrom) || (validUntil != null && validUntil.before(date))) {
 			return false;
 		}
@@ -73,6 +90,10 @@ public class VoiceApplicationConstraintsImpl extends ApplicationConstraintsImpl 
 			return false;
 		}
 		
+		if (destination != null && !destinations.contains(destination)) {
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -82,7 +103,7 @@ public class VoiceApplicationConstraintsImpl extends ApplicationConstraintsImpl 
 			return false;
 		}
 		
-		return isApplicable(cdr.getTime(), cdr.getSource(), callConnectivityType, ((VoiceCdr) cdr).getType().get());
+		return isApplicable(cdr.getTime(), cdr.getSource(), callConnectivityType, ((VoiceCdr) cdr).getType().get(), ((VoiceCdr) cdr).getDestination());
 	}
 
 }

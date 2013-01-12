@@ -18,6 +18,8 @@ public class MongoVoiceCdr extends AbstractMongoCdr implements VoiceCdr {
 
 	protected boolean connected;
 	
+	private String destination;
+	
 	public MongoVoiceCdr() {
 		// Default constructor.
 	}
@@ -27,6 +29,7 @@ public class MongoVoiceCdr extends AbstractMongoCdr implements VoiceCdr {
 		connected = cdr.isConnected();
 		type = cdr.getType().orNull();
 		seconds = cdr.getSeconds();
+		destination = cdr.getDestination();
 	}
 
 	@Override
@@ -65,6 +68,15 @@ public class MongoVoiceCdr extends AbstractMongoCdr implements VoiceCdr {
 
 	public void setConnected(boolean connected) {
 		this.connected = connected;
+	}
+
+	@Override
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 
 }

@@ -15,11 +15,14 @@ public class VoiceApplicabilityFilterImpl implements VoiceApplicabilityFilter {
 	private final Collection<CallConnectivityType> callConnectivityTypes;
 	
 	private final Collection<VoiceCdr.Type> cdrTypes;
+	
+	private final Collection<String> destinations;
 
-	public VoiceApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<VoiceCdr.Type> cdrTypes) {
+	public VoiceApplicabilityFilterImpl(Collection<String> sources, Collection<CallConnectivityType> callConnectivityTypes, Collection<VoiceCdr.Type> cdrTypes, Collection<String> destinations) {
 		this.sources = sources;
 		this.callConnectivityTypes = callConnectivityTypes;
 		this.cdrTypes = cdrTypes;
+		this.destinations = destinations;
 	}
 
 	@Override
@@ -37,4 +40,9 @@ public class VoiceApplicabilityFilterImpl implements VoiceApplicabilityFilter {
 		return Optional.fromNullable(cdrTypes);
 	}
 
+	@Override
+	public Optional<Collection<String>> getDestinations() {
+		return Optional.fromNullable(destinations);
+	}
+	
 }

@@ -33,6 +33,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(filter.getSources().get().isEmpty());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -41,10 +42,12 @@ public class VoiceApplicabilityFilterBuilderTest {
 				.source(VoiceApplicabilityFilterBuilder.ANY)
 				.callConnectivityType(VoiceApplicabilityFilterBuilder.ANY)
 				.cdrType(VoiceApplicabilityFilterBuilder.ANY)
+				.destination(VoiceApplicabilityFilterBuilder.ANY)
 				.build();
 		assertFalse(filter.getSources().isPresent());
 		assertFalse(filter.getCallConnectivityTypes().isPresent());
 		assertFalse(filter.getCdrTypes().isPresent());
+		assertFalse(filter.getDestinations().isPresent());
 	}
 	
 	@Test
@@ -56,6 +59,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals("source1", filter.getSources().get().iterator().next());
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -70,6 +74,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -83,6 +88,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -96,6 +102,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains("source2"));
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -107,6 +114,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(1, filter.getCallConnectivityTypes().get().size());
 		assertEquals(CallConnectivityType.OOTB, filter.getCallConnectivityTypes().get().iterator().next());
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -121,6 +129,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains(CallConnectivityType.OOTB));
 		assertTrue(set.contains(CallConnectivityType.DIY));
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -134,6 +143,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains(CallConnectivityType.OOTB));
 		assertTrue(set.contains(CallConnectivityType.DIY));
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -147,6 +157,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(set.contains(CallConnectivityType.OOTB));
 		assertTrue(set.contains(CallConnectivityType.DIY));
 		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -158,6 +169,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertEquals(1, filter.getCdrTypes().get().size());
 		assertEquals(VoiceCdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -172,6 +184,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, set.size());
 		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -185,6 +198,7 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, set.size());
 		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertTrue(filter.getDestinations().get().isEmpty());
 	}
 
 	@Test
@@ -198,6 +212,62 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, set.size());
 		assertTrue(set.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(set.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertTrue(filter.getDestinations().get().isEmpty());
+	}
+
+	@Test
+	public void destinationFilterMatchesOneDestinaion() {
+		final VoiceApplicabilityFilter filter = builder
+				.destination("Middle Earth")
+				.build();
+		assertTrue(filter.getSources().get().isEmpty());
+		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
+		assertTrue(filter.getCdrTypes().get().isEmpty());
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
+	}
+
+	@Test
+	public void twoDestinationsFilterMatchesTwoDestinations() {
+		final VoiceApplicabilityFilter filter = builder
+				.destination("Planet Jupiter")
+				.destination("Planet Saturn")
+				.build();
+		assertTrue(filter.getSources().get().isEmpty());
+		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
+		assertTrue(filter.getCdrTypes().get().isEmpty());
+		final Collection<String> set = filter.getDestinations().get();
+		assertEquals(2, set.size());
+		assertTrue(set.contains("Planet Jupiter"));
+		assertTrue(set.contains("Planet Saturn"));
+	}
+
+	@Test
+	public void twoVarargsDestinationsFilterMatchesTwoDestinations() {
+		final VoiceApplicabilityFilter filter = builder
+				.destination("Planet Jupiter", "Planet Saturn")
+				.build();
+		assertTrue(filter.getSources().get().isEmpty());
+		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
+		assertTrue(filter.getCdrTypes().get().isEmpty());
+		final Collection<String> set = filter.getDestinations().get();
+		assertEquals(2, set.size());
+		assertTrue(set.contains("Planet Jupiter"));
+		assertTrue(set.contains("Planet Saturn"));
+	}
+
+	@Test
+	public void twoCollectionDestinationsFilterMatchesTwoDestinations() {
+		final VoiceApplicabilityFilter filter = builder
+				.destination(Lists.newArrayList("Planet Jupiter", "Planet Saturn"))
+				.build();
+		assertTrue(filter.getSources().get().isEmpty());
+		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
+		assertTrue(filter.getCdrTypes().get().isEmpty());
+		final Collection<String> set = filter.getDestinations().get();
+		assertEquals(2, set.size());
+		assertTrue(set.contains("Planet Jupiter"));
+		assertTrue(set.contains("Planet Saturn"));
 	}
 
 	@Test
@@ -210,6 +280,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertTrue(filter.getCallConnectivityTypes().get().isEmpty());
 		assertEquals(1, filter.getCdrTypes().get().size());
 		assertEquals(VoiceCdr.Type.EXT_EXT, filter.getCdrTypes().get().iterator().next());
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -227,6 +299,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -244,6 +318,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -262,6 +338,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		assertEquals(2, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_MOBILE));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -278,6 +356,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -294,6 +374,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 
 	@Test
@@ -311,6 +393,8 @@ public class VoiceApplicabilityFilterBuilderTest {
 		final Collection<VoiceCdr.Type> cdrTypeSet = filter.getCdrTypes().get();
 		assertEquals(1, cdrTypeSet.size());
 		assertTrue(cdrTypeSet.contains(VoiceCdr.Type.EXT_EXT));
+		assertEquals(1, filter.getDestinations().get().size());
+		assertEquals("Middle Earth", filter.getDestinations().get().iterator().next());
 	}
 	
 }

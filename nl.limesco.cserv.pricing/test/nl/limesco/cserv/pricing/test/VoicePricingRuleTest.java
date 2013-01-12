@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.collect.Sets;
+
 @RunWith(Parameterized.class)
 public class VoicePricingRuleTest {
 
@@ -55,6 +57,7 @@ public class VoicePricingRuleTest {
 		applicability.setSourcesAsSet(Collections.singleton("source1"));
 		applicability.setCallConnectivityTypesAsSet(Collections.singleton(CallConnectivityType.OOTB));
 		applicability.setCdrTypesAsSet(Collections.singleton(VoiceCdr.Type.EXT_EXT));
+		applicability.setDestinationsAsSet(Sets.newHashSet("Middle Earth"));
 		
 		final VoicePricingImpl price = new VoicePricingImpl();
 		price.setPerCall(pricePerCall);

@@ -28,4 +28,9 @@ public class TransformedVoiceCdr extends AbstractTransformedCdr implements Voice
 		return input.getSeconds();
 	}
 
+	@Override
+	public String getDestination() {
+		return input.getDestination();
+	}
+
 }
