@@ -6,6 +6,11 @@ import java.util.Map;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrRetriever;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.cdr.transform.AbstractTransformedCdr;
+import nl.limesco.cserv.cdr.transform.TransformedDataCdr;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -21,98 +26,64 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 	}
 
 	private final class TransformCdrFunction implements Function<Cdr, Cdr> {
+		
 		public Cdr apply(final Cdr input) {
-			return new Cdr() {
-
-				@Override
-				public String getSource() {
-					return input.getSource();
+			if (input instanceof VoiceCdr) {
+				if (input.getCallId().endsWith("@sms")) {
+					return new TransformedVoiceToSmsCdr((VoiceCdr) input);
+				} else if (input.getCallId().endsWith("@data")) {
+					return new TransformedVoiceToDataCdr((VoiceCdr) input);
 				}
-
-				@Override
-				public String getCallId() {
-					return input.getCallId();
-				}
-
-				@Override
-				public Optional<String> getAccount() {
-					return input.getAccount();
-				}
-
-				@Override
-				public Calendar getTime() {
-					return input.getTime();
-				}
-
-				@Override
-				public String getFrom() {
-					return input.getFrom();
-				}
-
-				@Override
-				public String getTo() {
-					return input.getTo();
-				}
-
-				@Override
-				public boolean isConnected() {
-					return input.isConnected();
-				}
-
-				@Override
-				public Optional<Type> getType() {
-					final Optional<Type> inputType = input.getType();
-					if (inputType.isPresent()) {
-						return inputType;
-					}
-					
-					final Map<String, String> info = input.getAdditionalInfo();
-					if ("out".equals(info.get("10"))) {
-						if ("Netherlands - Fixed - PBX (Mobile-On-PBX)".equals(info.get("9"))) {
-							return Optional.of(Type.MOBILE_PBX);
-						} else if ("Netherlands - Mobile - Handset (Mobile-On-PBX)".equals(info.get("9"))) {
-							return Optional.of(Type.PBX_MOBILE);
-						} else if ("Netherlands - Mobile - Handset".equals(info.get("9"))) {
-							return Optional.of(Type.PBX_MOBILE);
-						} else {
-							return Optional.of(Type.MOBILE_EXT);
-						}
-					} else if ("in".equals(info.get("10"))) {
-						if ("Netherlands - Mobile - SpeakUp".equals(info.get("9"))) {
-							return Optional.of(Type.EXT_PBX);
-						}
-					}
-					
-					return Optional.absent();
-				}
-
-				@Override
-				public long getSeconds() {
-					return input.getSeconds();
-				}
-
-				@Override
-				public Map<String, String> getAdditionalInfo() {
-					return input.getAdditionalInfo();
-				}
-
-				@Override
-				public Optional<String> getInvoice() {
-					return input.getInvoice();
-				}
-
-				@Override
-				public Optional<String> getInvoiceBuilder() {
-					return input.getInvoiceBuilder();
-				}
-
-				@Override
-				public Optional<Cdr.Pricing> getPricing() {
-					return input.getPricing();
-				}
-				
-			};
+				return new TransformedSpeakUpVoiceCdr((VoiceCdr) input);
+			} else if (input instanceof SmsCdr) {
+				return new TransformedSpeakUpSmsCdr((SmsCdr) input);
+			} else if (input instanceof DataCdr) {
+				return new TransformedDataCdr((DataCdr) input);
+			} else {
+				throw new IllegalArgumentException("Cannot transform CDR");
+			}
 		}
 	}
+	
+	private final class TransformedVoiceToSmsCdr extends AbstractTransformedCdr implements SmsCdr {
+		private final VoiceCdr input;
 
+		private TransformedVoiceToSmsCdr(VoiceCdr input) {
+			super(input);
+			this.input = input;
+		}
+
+		@Override
+		public Optional<SmsCdr.Type> getType() {
+			final Map<String, String> info = input.getAdditionalInfo();
+			if ("out".equals(info.get("10"))) {
+				if ("Netherlands - Mobile - Mobile".equals(input.getDestination())) {
+					return Optional.of(SmsCdr.Type.MOBILE_EXT);
+				}
+			} else if ("in".equals(info.get("10"))) {
+				if ("Netherlands - Mobile - SpeakUp".equals(input.getDestination())) {
+					return Optional.of(SmsCdr.Type.EXT_MOBILE);
+				}
+			}
+			
+			return Optional.absent();
+		}
+
+	}
+
+	private final class TransformedVoiceToDataCdr extends AbstractTransformedCdr implements DataCdr {
+		private final VoiceCdr input;
+
+		private TransformedVoiceToDataCdr(VoiceCdr input) {
+			super(input);
+			this.input = input;
+		}
+
+		@Override
+		public long getKilobytes() {
+			return input.getSeconds();
+		}
+
+	}
+	
 }

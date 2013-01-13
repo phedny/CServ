@@ -1,5 +1,89 @@
 <?xml version='1.0' encoding='utf-8'?>
-<repository increment='1352037848013' name='Local' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
+<repository increment='1355041282339' name='Local' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
+  <resource>
+    <capability namespace='osgi.identity'>
+      <attribute name='osgi.identity' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='type' value='osgi.bundle'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.content'>
+      <attribute name='osgi.content' value='079b90dba26150a4dd3ca2e75d8d349de95a37c9e2ded2338d31fafe30300978'/>
+      <attribute name='url' value='org.mongodb.mongo-java-driver/org.mongodb.mongo-java-driver-2.10.1.jar'/>
+      <attribute name='size' type='Long' value='398520'/>
+      <attribute name='mime' value='application/vnd.osgi.bundle'/>
+    </capability>
+    <capability namespace='osgi.wiring.bundle'>
+      <attribute name='osgi.wiring.bundle' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.host'>
+      <attribute name='osgi.wiring.host' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='com.mongodb'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='com.mongodb.io'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='com.mongodb.util'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='com.mongodb.gridfs'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.bson'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.bson.util'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.bson.util.annotations'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.bson.types'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.bson.io'/>
+      <attribute name='version' type='Version' value='2.10.1.RELEASE'/>
+      <attribute name='bundle-symbolic-name' value='org.mongodb.mongo-java-driver'/>
+      <attribute name='bundle-version' type='Version' value='2.10.1.RELEASE'/>
+    </capability>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.management)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.net)'/>
+    </requirement>
+    <requirement namespace='osgi.wiring.package'>
+      <directive name='filter' value='(osgi.wiring.package=javax.net.ssl)'/>
+    </requirement>
+  </resource>
   <resource>
     <capability namespace='osgi.identity'>
       <attribute name='osgi.identity' value='com.springsource.org.apache.commons.collections'/>
@@ -763,9 +847,9 @@
       <attribute name='version' type='Version' value='1.9.0'/>
     </capability>
     <capability namespace='osgi.content'>
-      <attribute name='osgi.content' value='901f5efb04ad0bd95e7190c8ab04370731133ccb5414130be4ce24e2d355782f'/>
+      <attribute name='osgi.content' value='58f87f25852f84cfe8a3132615656227adbb6d47728e9b0c7773b9d5dced8d3a'/>
       <attribute name='url' value='jackson-core-asl/jackson-core-asl-1.9.0.jar'/>
-      <attribute name='size' type='Long' value='228286'/>
+      <attribute name='size' type='Long' value='228327'/>
       <attribute name='mime' value='application/vnd.osgi.bundle'/>
     </capability>
     <capability namespace='osgi.wiring.bundle'>
@@ -1606,9 +1690,9 @@
       <attribute name='version' type='Version' value='1.4.3.SNAPSHOT'/>
     </capability>
     <capability namespace='osgi.content'>
-      <attribute name='osgi.content' value='4656b18a8e24d096d1809860778d07206d206f8597eb2a9188856e5cfbab80cf'/>
+      <attribute name='osgi.content' value='d28506f5f64b1583f8ab8c1e31b5f36321b3d4a533c24ce744861453df90fb32'/>
       <attribute name='url' value='net.vz.mongodb.jackson.mongo-jackson-mapper/net.vz.mongodb.jackson.mongo-jackson-mapper-1.4.3.jar'/>
-      <attribute name='size' type='Long' value='94890'/>
+      <attribute name='size' type='Long' value='95373'/>
       <attribute name='mime' value='application/vnd.osgi.bundle'/>
     </capability>
     <capability namespace='osgi.wiring.bundle'>
@@ -1624,10 +1708,10 @@
       <attribute name='version' type='Version' value='1.4.3.SNAPSHOT'/>
       <attribute name='bundle-symbolic-name' value='net.vz.mongodb.jackson.mongo-jackson-mapper'/>
       <attribute name='bundle-version' type='Version' value='1.4.3.SNAPSHOT'/>
-      <directive name='uses' value='com.mongodb,org.bson,org.codehaus.jackson.map,org.codehaus.jackson.type,org.bson.types,org.codehaus.jackson'/>
+      <directive name='uses' value='com.mongodb,org.bson,org.codehaus.jackson.map,org.bson.types,org.codehaus.jackson,org.codehaus.jackson.type'/>
     </capability>
     <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(osgi.wiring.package=com.mongodb)'/>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=com.mongodb)(version&gt;=2.8.0)(!(version&gt;=3.0.0)))'/>
     </requirement>
     <requirement namespace='osgi.wiring.package'>
       <directive name='filter' value='(&amp;(osgi.wiring.package=de.undercouch.bson4jackson)(version&gt;=1.3.0)(!(version&gt;=2.0.0)))'/>
@@ -1639,13 +1723,13 @@
       <directive name='filter' value='(osgi.wiring.package=javax.persistence)'/>
     </requirement>
     <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(osgi.wiring.package=org.bson)'/>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.bson)(version&gt;=2.8.0)(!(version&gt;=3.0.0)))'/>
     </requirement>
     <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(osgi.wiring.package=org.bson.io)'/>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.bson.io)(version&gt;=2.8.0)(!(version&gt;=3.0.0)))'/>
     </requirement>
     <requirement namespace='osgi.wiring.package'>
-      <directive name='filter' value='(osgi.wiring.package=org.bson.types)'/>
+      <directive name='filter' value='(&amp;(osgi.wiring.package=org.bson.types)(version&gt;=2.8.0)(!(version&gt;=3.0.0)))'/>
     </requirement>
     <requirement namespace='osgi.wiring.package'>
       <directive name='filter' value='(&amp;(osgi.wiring.package=org.codehaus.jackson)(version&gt;=1.9.0)(!(version&gt;=2.0.0)))'/>
@@ -1863,9 +1947,9 @@
       <attribute name='version' type='Version' value='1.9.0'/>
     </capability>
     <capability namespace='osgi.content'>
-      <attribute name='osgi.content' value='88e16cd034f7ee3d428290e90e0753295a94717663e718b0dad69ae4d8099dd5'/>
+      <attribute name='osgi.content' value='d88f9397fbca8cc976dea7a46ad3b834d5d01f4c214fc5d2df7d0b62cdb7e8e0'/>
       <attribute name='url' value='jackson-mapper-asl/jackson-mapper-asl-1.9.0.jar'/>
-      <attribute name='size' type='Long' value='764075'/>
+      <attribute name='size' type='Long' value='764258'/>
       <attribute name='mime' value='application/vnd.osgi.bundle'/>
     </capability>
     <capability namespace='osgi.wiring.bundle'>
@@ -1888,7 +1972,7 @@
       <attribute name='version' type='Version' value='1.9.0'/>
       <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
       <attribute name='bundle-version' type='Version' value='1.9.0'/>
-      <directive name='uses' value='org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.map.deser,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.util,org.codehaus.jackson.map.deser.std,org.codehaus.jackson'/>
+      <directive name='uses' value='org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.map.deser,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson,org.codehaus.jackson.map.util,org.codehaus.jackson.map.deser.std'/>
     </capability>
     <capability namespace='osgi.wiring.package'>
       <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.exc'/>
@@ -1905,18 +1989,18 @@
       <directive name='uses' value='org.codehaus.jackson.map,org.codehaus.jackson.annotate'/>
     </capability>
     <capability namespace='osgi.wiring.package'>
-      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser.impl'/>
-      <attribute name='version' type='Version' value='1.9.0'/>
-      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
-      <attribute name='bundle-version' type='Version' value='1.9.0'/>
-      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.map.ser.std,org.codehaus.jackson,org.codehaus.jackson.map.ser,org.codehaus.jackson.type'/>
-    </capability>
-    <capability namespace='osgi.wiring.package'>
       <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser.std'/>
       <attribute name='version' type='Version' value='1.9.0'/>
       <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
       <attribute name='bundle-version' type='Version' value='1.9.0'/>
       <directive name='uses' value='org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.ser.impl,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.map.ser'/>
+    </capability>
+    <capability namespace='osgi.wiring.package'>
+      <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.ser.impl'/>
+      <attribute name='version' type='Version' value='1.9.0'/>
+      <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
+      <attribute name='bundle-version' type='Version' value='1.9.0'/>
+      <directive name='uses' value='org.codehaus.jackson.io,org.codehaus.jackson.map,org.codehaus.jackson.map.ser.std,org.codehaus.jackson,org.codehaus.jackson.map.ser,org.codehaus.jackson.type'/>
     </capability>
     <capability namespace='osgi.wiring.package'>
       <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.type'/>
@@ -1944,7 +2028,7 @@
       <attribute name='version' type='Version' value='1.9.0'/>
       <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
       <attribute name='bundle-version' type='Version' value='1.9.0'/>
-      <directive name='uses' value='org.codehaus.jackson.format,org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson.map.util,org.codehaus.jackson,org.codehaus.jackson.map.ser,org.codehaus.jackson.map.jsontype.impl'/>
+      <directive name='uses' value='org.codehaus.jackson.format,org.codehaus.jackson.schema,org.codehaus.jackson.map.annotate,org.codehaus.jackson.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.jsontype,org.codehaus.jackson,org.codehaus.jackson.map.util,org.codehaus.jackson.map.ser,org.codehaus.jackson.map.jsontype.impl'/>
     </capability>
     <capability namespace='osgi.wiring.package'>
       <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.deser'/>
@@ -1979,7 +2063,7 @@
       <attribute name='version' type='Version' value='1.9.0'/>
       <attribute name='bundle-symbolic-name' value='jackson-mapper-asl'/>
       <attribute name='bundle-version' type='Version' value='1.9.0'/>
-      <directive name='uses' value='org.codehaus.jackson.map.deser.impl,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson,org.codehaus.jackson.map.util'/>
+      <directive name='uses' value='org.codehaus.jackson.map.deser.impl,org.codehaus.jackson.map.annotate,org.codehaus.jackson.map.type,org.codehaus.jackson.type,org.codehaus.jackson.io,org.codehaus.jackson.node,org.codehaus.jackson.map,org.codehaus.jackson.map.deser,org.codehaus.jackson.util,org.codehaus.jackson.map.introspect,org.codehaus.jackson.map.util,org.codehaus.jackson'/>
     </capability>
     <capability namespace='osgi.wiring.package'>
       <attribute name='osgi.wiring.package' value='org.codehaus.jackson.map.jsontype.impl'/>

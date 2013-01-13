@@ -2,44 +2,19 @@ package nl.limesco.cserv.pricing.api;
 
 import java.util.Collection;
 
-import nl.limesco.cserv.cdr.api.Cdr;
-import nl.limesco.cserv.sim.api.CallConnectivityType;
+public interface ApplicabilityFilterBuilder<PR extends PricingRule> {
 
-public interface ApplicabilityFilterBuilder {
-	
 	static final Any ANY = new Any();
-	
-	ApplicabilityFilterBuilder source(Any any);
-	
-	ApplicabilityFilterBuilder source(String source);
-	
-	ApplicabilityFilterBuilder source(String... source);
-	
-	ApplicabilityFilterBuilder source(Collection<String> source);
 
-	ApplicabilityFilterBuilder callConnectivityType(Any any);
-	
-	ApplicabilityFilterBuilder callConnectivityType(CallConnectivityType callConnectivityType);
-	
-	ApplicabilityFilterBuilder callConnectivityType(CallConnectivityType... callConnectivityType);
-	
-	ApplicabilityFilterBuilder callConnectivityType(Collection<CallConnectivityType> callConnectivityType);
+	ApplicabilityFilterBuilder<PR> source(Any any);
 
-	ApplicabilityFilterBuilder cdrType(Any any);
-	
-	ApplicabilityFilterBuilder cdrType(Cdr.Type cdrType);
-	
-	ApplicabilityFilterBuilder cdrType(Cdr.Type... cdrType);
-	
-	ApplicabilityFilterBuilder cdrType(Collection<Cdr.Type> cdrType);
+	ApplicabilityFilterBuilder<PR> source(String source);
 
-	ApplicabilityFilterBuilder cdr(Cdr cdr);
+	ApplicabilityFilterBuilder<PR> source(String... source);
 
-	ApplicabilityFilterBuilder cdr(Cdr... cdr);
+	ApplicabilityFilterBuilder<PR> source(Collection<String> source);
 
-	ApplicabilityFilterBuilder cdr(Collection<Cdr> cdr);
-	
-	ApplicabilityFilter build();
+	ApplicabilityFilter<PR> build();
 
 	static final class Any {
 		private Any() {

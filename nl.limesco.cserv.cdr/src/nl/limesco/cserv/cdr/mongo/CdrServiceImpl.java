@@ -5,12 +5,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 
 import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
@@ -26,9 +28,9 @@ public class CdrServiceImpl implements CdrService {
 
 	private volatile MongoDBService mongoDBService;
 
-	private JacksonDBCollection<MongoCdr, String> collection() {
+	private JacksonDBCollection<AbstractMongoCdr, String> collection() {
 		final DBCollection dbCollection = mongoDBService.getDB().getCollection(COLLECTION);
-		final JacksonDBCollection<MongoCdr, String> collection = JacksonDBCollection.wrap(dbCollection, MongoCdr.class, String.class);
+		final JacksonDBCollection<AbstractMongoCdr, String> collection = JacksonDBCollection.wrap(dbCollection, AbstractMongoCdr.class, String.class);
 		return collection;
 	}
 	
@@ -43,13 +45,13 @@ public class CdrServiceImpl implements CdrService {
 	}
 	
 	@Override
-	public Optional<MongoCdr> getCdrById(String id) {
+	public Optional<AbstractMongoCdr> getCdrById(String id) {
 		checkNotNull(id);
 		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", new ObjectId(id))));
 	}
 
 	@Override
-	public Iterable<MongoCdr> getCdrByCallId(String source, String callId) {
+	public Iterable<AbstractMongoCdr> getCdrByCallId(String source, String callId) {
 		checkNotNull(source);
 		checkNotNull(callId);
 		return collection().find(new BasicDBObject().append("source", source).append("callId", callId));
@@ -57,30 +59,39 @@ public class CdrServiceImpl implements CdrService {
 
 	@Override
 	public Collection<? extends Cdr> getUnpricedCdrs() {
-		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.notExists("pricing")));
+		return Sets.newHashSet((Iterator<AbstractMongoCdr>) collection().find(DBQuery.notExists("pricing")));
 	}
 
 	@Override
 	public Collection<? extends Cdr> getUninvoicedCdrs() {
-		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.notExists("invoice")));
+		return Sets.newHashSet((Iterator<AbstractMongoCdr>) collection().find(DBQuery.notExists("invoice")));
 	}
 
 	@Override
 	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder) {
-		collection().update(DBQuery.is("account", account).notExists("invoice"),
+		collection().update(DBQuery.is("account", account).exists("pricing").notExists("invoice"),
 				new BasicDBObject("$set", new BasicDBObject("invoiceBuilder", builder)),
 				false, true /* multi */);
-		return Sets.newHashSet((Iterator<MongoCdr>) collection().find(DBQuery.is("invoiceBuilder", builder)));
+		return Sets.newHashSet((Iterator<AbstractMongoCdr>) collection().find(DBQuery.is("invoiceBuilder", builder)));
 	}
 
 	@Override
 	public void storeCdr(Cdr cdr) {
+		if (cdr instanceof VoiceCdr) {
+			collection().insert(new MongoVoiceCdr((VoiceCdr) cdr));
+		} else if (cdr instanceof SmsCdr) {
+			collection().insert(new MongoSmsCdr((SmsCdr) cdr));
+		} else if (cdr instanceof DataCdr) {
+			collection().insert(new MongoDataCdr((DataCdr) cdr));
+		}
+		
+		/*
 		final BasicDBObject query = new BasicDBObject()
 				.append("source", cdr.getSource())
 				.append("callId", cdr.getCallId());
 		
-		if (cdr.getType().isPresent()) {
-			query.append("type", cdr.getType().get().toString());
+		if (((VoiceCdr) cdr).getType().isPresent()) {
+			query.append("type", ((VoiceCdr) cdr).getType().get().toString());
 		} else {
 			query.append("type", new BasicDBObject().append("$exists", false));
 		}
@@ -90,8 +101,8 @@ public class CdrServiceImpl implements CdrService {
 				.append("time", cdr.getTime().getTime())
 				.append("from", cdr.getFrom())
 				.append("to", cdr.getTo())
-				.append("connected", cdr.isConnected())
-				.append("seconds", cdr.getSeconds());
+				.append("connected", ((VoiceCdr) cdr).isConnected())
+				.append("seconds", ((VoiceCdr) cdr).getSeconds());
 		
 		if (cdr.getAccount().isPresent()) {
 			doc.append("account", cdr.getAccount().get());
@@ -106,12 +117,13 @@ public class CdrServiceImpl implements CdrService {
 		}
 		
 		updateObj.append("$set", doc);
-		collection().update(query, updateObj, true /* upsert */, false);
+		collection().update(query, updateObj, true, false);
+		*/
 	}
 
 	@Override
 	public void storePricingForCdr(Cdr cdr, String pricingRuleId, long price, long cost) {
-		checkArgument(cdr instanceof MongoCdr);
+		checkArgument(cdr instanceof AbstractMongoCdr);
 		checkNotNull(pricingRuleId);
 		
 		final CdrPricingImpl pricing = new CdrPricingImpl();
@@ -119,10 +131,10 @@ public class CdrServiceImpl implements CdrService {
 		pricing.setComputedPrice(price);
 		pricing.setComputedCost(cost);
 		
-		((MongoCdr) cdr).setNullablePricing(pricing);
+		((AbstractMongoCdr) cdr).setNullablePricing(pricing);
 		
 		final BasicDBObject query = new BasicDBObject()
-				.append("_id", new ObjectId(((MongoCdr) cdr).getId()));
+				.append("_id", new ObjectId(((AbstractMongoCdr) cdr).getId()));
 		
 		final BasicDBObject doc = new BasicDBObject()
 				.append("pricing.pricingRuleId", pricingRuleId)

@@ -5,8 +5,8 @@ import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.AccountResourceExtension;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
 import nl.limesco.cserv.util.dm.UnavailableOSGiService;
-import nl.limesco.cserv.util.pdflatex.PdfLatex;
 
 import org.amdatu.template.processor.TemplateEngine;
 import org.apache.felix.dm.DependencyActivatorBase;
@@ -20,9 +20,8 @@ public class Activator extends DependencyActivatorBase {
 		manager.add(createComponent()
 				.setInterface(AccountResourceExtension.class.getName(), null)
 				.setImplementation(InvoiceResourceExtension.class)
-				.add(createServiceDependency().setService(PdfLatex.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(PdfLatex.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
 				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
-				.add(createServiceDependency().setService(TemplateEngine.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(TemplateEngine.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
+				.add(createServiceDependency().setService(InvoiceTransformationService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceTransformationService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 
 	@Override

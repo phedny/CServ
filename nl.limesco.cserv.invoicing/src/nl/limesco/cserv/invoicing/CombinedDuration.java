@@ -1,6 +1,6 @@
 package nl.limesco.cserv.invoicing;
 
-import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 
 public class CombinedDuration {
 
@@ -16,7 +16,7 @@ public class CombinedDuration {
 		return seconds;
 	}
 	
-	public void addCdr(Cdr cdr) {
+	public void addCdr(VoiceCdr cdr) {
 		count++;
 		seconds += cdr.getSeconds();
 	}

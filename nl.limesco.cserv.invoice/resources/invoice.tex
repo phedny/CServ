@@ -41,6 +41,9 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \end{flushright}
 
 \begin{flalign*}
+#if( $account.companyName != "" )
+\mbox{Bedrijf}       &: \mbox{$account.companyName} \\
+#end
 \mbox{Naam}          &: \mbox{$account.fullName.fullName} \\
 \mbox{Adres}         &: \mbox{$account.address.streetAddress} \\
 \mbox{Postcode}      &: \mbox{$account.address.postalCode} \\
@@ -52,16 +55,33 @@ Factuurdatum & $util.formatDate( $invoice.creationDate )
 \end{center}
 
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ | X | R | R | R | }
+\newcolumntype{A}{>{\raggedleft\arraybackslash}p{3.0cm}}
+\newcolumntype{B}{>{\raggedleft\arraybackslash}p{1.8cm}}
+\newcolumntype{S}{>{\raggedleft\arraybackslash}p{3.0cm}}
+\begin{tabularx}{\textwidth}{ | X | A | S | B | }
 \hline
 Omschrijving      & Aantal  & Stuksprijs & Bedrag \\
 \hline
 #foreach( $itemLine in $invoice.itemLines )
 #if( $itemLine.itemPrice )
-$itemLine.description & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.multilineDescription[0] & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+#foreach( $line in $itemLine.multilineDescription )
+#if( $foreach.index > 0 )
+$line & & & \\
+#end
+#end
 #elseif( $itemLine.pricePerCall )
-$itemLine.description & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.multilineDescription[0] & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+#if ( $itemLine.multilineDescription.size() > 1 )
+$itemLine.multilineDescription[1] & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
+#else
  & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
+#end
+#foreach( $line in $itemLine.multilineDescription )
+#if( $foreach.index > 1 )
+$line & & & \\
+#end
+#end
 #end
 \hline
 #end

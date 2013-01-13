@@ -15,11 +15,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
+import nl.limesco.cserv.pricing.api.SmsPricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.collect.Sets;
@@ -56,13 +56,44 @@ public class PricingResource {
 		public PricingSubResource(Calendar day) {
 			this.day = day;
 		}
-		
+
 		@GET
+		@Path("voice")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getAll() {
+		public String getVoice() {
 			try {
 				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
-				for (PricingRule rule : pricingService.getApplicablePricingRules(day)) {
+				for (VoicePricingRule rule : pricingService.getApplicablePricingRules(VoicePricingRule.class, day)) {
+					pricingRules.add(new RestPricingRule(rule));
+				}
+				return new ObjectMapper().writeValueAsString(pricingRules);
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+
+		@GET
+		@Path("sms")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String getSms() {
+			try {
+				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
+				for (SmsPricingRule rule : pricingService.getApplicablePricingRules(SmsPricingRule.class, day)) {
+					pricingRules.add(new RestPricingRule(rule));
+				}
+				return new ObjectMapper().writeValueAsString(pricingRules);
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+
+		@GET
+		@Path("data")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String getData() {
+			try {
+				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
+				for (DataPricingRule rule : pricingService.getApplicablePricingRules(DataPricingRule.class, day)) {
 					pricingRules.add(new RestPricingRule(rule));
 				}
 				return new ObjectMapper().writeValueAsString(pricingRules);

@@ -1,8 +1,13 @@
 package nl.limesco.cserv.invoice.mongo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import nl.limesco.cserv.invoice.api.ItemLine;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
@@ -15,6 +20,8 @@ public abstract class AbstractItemLine implements ItemLine {
 	
 	private String description;
 	
+	private List<String> multilineDescription;
+	
 	private long totalPrice;
 	
 	private double taxRate;
@@ -26,6 +33,31 @@ public abstract class AbstractItemLine implements ItemLine {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	@JsonIgnore
+	public List<String> getMultilineDescription() {
+		if (multilineDescription != null) {
+			return Collections.unmodifiableList(multilineDescription);
+		} else {
+			return Collections.singletonList(description);
+		}
+	}
+	
+	@JsonProperty("multilineDescription")
+	public List<String> getNullableMultilineDescription() {
+		return multilineDescription;
+	}
+	
+	public void setNullableMultilineDescription(List<String> multilineDescription) {
+		if (multilineDescription == null) {
+			this.multilineDescription = null;
+		} else {
+			final List<String> copy = new ArrayList<String>();
+			copy.addAll(multilineDescription);
+			this.multilineDescription = copy;
+		}
 	}
 
 	@Override

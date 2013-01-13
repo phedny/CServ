@@ -8,6 +8,12 @@ import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrRetriever;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
+import nl.limesco.cserv.cdr.transform.TransformedDataCdr;
+import nl.limesco.cserv.cdr.transform.TransformedSmsCdr;
+import nl.limesco.cserv.cdr.transform.TransformedVoiceCdr;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -26,97 +32,92 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 	}
 	
 	private final class TransformCdrFunction implements Function<Cdr, Cdr> {
+
+		public Optional<String> getAccount(Cdr input) {
+			final Optional<String> inputAccount = input.getAccount();
+			if (inputAccount.isPresent()) {
+				return inputAccount;
+			}
+			
+			final Map<String, String> info = input.getAdditionalInfo();
+			if (info == null || !info.containsKey("externalAccount")) {
+				return Optional.absent();
+			}
+			
+			final String externalAccount = info.get("externalAccount");
+			final Optional<? extends Account> account = accountService.getAccountByExternalAccount(input.getSource(), externalAccount);
+			if (account.isPresent()) {
+				return Optional.of(account.get().getId());
+			} else {
+				final Account newAccount = accountService.createAccount();
+				final Map<String, String> externalAccounts = Maps.newHashMap();
+				externalAccounts.put(input.getSource(), externalAccount);
+				newAccount.setExternalAccounts(externalAccounts);
+				accountService.updateAccount(newAccount);
+				return Optional.of(newAccount.getId());
+			}
+		}
+
 		public Cdr apply(final Cdr input) {
-			return new Cdr() {
-
-				@Override
-				public String getSource() {
-					return input.getSource();
-				}
-
-				@Override
-				public String getCallId() {
-					return input.getCallId();
-				}
-
-				@Override
-				public Optional<String> getAccount() {
-					final Optional<String> inputAccount = input.getAccount();
-					if (inputAccount.isPresent()) {
-						return inputAccount;
-					}
-					
-					final Map<String, String> info = input.getAdditionalInfo();
-					if (info == null || !info.containsKey("externalAccount")) {
-						return Optional.absent();
-					}
-					
-					final String externalAccount = info.get("externalAccount");
-					final Optional<? extends Account> account = accountService.getAccountByExternalAccount(input.getSource(), externalAccount);
-					if (account.isPresent()) {
-						return Optional.of(account.get().getId());
-					} else {
-						final Account newAccount = accountService.createAccount();
-						final Map<String, String> externalAccounts = Maps.newHashMap();
-						externalAccounts.put(input.getSource(), externalAccount);
-						newAccount.setExternalAccounts(externalAccounts);
-						accountService.updateAccount(newAccount);
-						return Optional.of(newAccount.getId());
-					}
-				}
-
-				@Override
-				public Calendar getTime() {
-					return input.getTime();
-				}
-
-				@Override
-				public String getFrom() {
-					return input.getFrom();
-				}
-
-				@Override
-				public String getTo() {
-					return input.getTo();
-				}
-
-				@Override
-				public boolean isConnected() {
-					return input.isConnected();
-				}
-
-				@Override
-				public Optional<Type> getType() {
-					return input.getType();
-				}
-
-				@Override
-				public long getSeconds() {
-					return input.getSeconds();
-				}
-
-				@Override
-				public Map<String, String> getAdditionalInfo() {
-					return input.getAdditionalInfo();
-				}
-
-				@Override
-				public Optional<String> getInvoice() {
-					return input.getInvoice();
-				}
-
-				@Override
-				public Optional<String> getInvoiceBuilder() {
-					return input.getInvoiceBuilder();
-				}
-
-				@Override
-				public Optional<Cdr.Pricing> getPricing() {
-					return input.getPricing();
-				}
-				
-			};
+			final Optional<String> account = getAccount(input);
+			if (input instanceof VoiceCdr) {
+				return new AccountTransformedVoiceCdr((VoiceCdr) input, account);
+			} else if (input instanceof SmsCdr) {
+				return new AccountTransformedSmsCdr((SmsCdr) input, account);
+			} else if (input instanceof DataCdr) {
+				return new AccountTransformedDataCdr((DataCdr) input, account);
+			} else {
+				throw new IllegalArgumentException("Cannot transform CDR");
+			}
 		}
 	}
 
+	private class AccountTransformedVoiceCdr extends TransformedVoiceCdr {
+		
+		private final Optional<String> account;
+		
+		private AccountTransformedVoiceCdr(VoiceCdr input, Optional<String> account) {
+			super(input);
+			this.account = account;
+		}
+
+		@Override
+		public Optional<String> getAccount() {
+			return account;
+		}
+
+	}
+
+	private class AccountTransformedSmsCdr extends TransformedSmsCdr {
+		
+		private final Optional<String> account;
+		
+		private AccountTransformedSmsCdr(SmsCdr input, Optional<String> account) {
+			super(input);
+			this.account = account;
+		}
+
+		@Override
+		public Optional<String> getAccount() {
+			return account;
+		}
+
+	}
+
+	private class AccountTransformedDataCdr extends TransformedDataCdr {
+		
+		private final Optional<String> account;
+		
+		private AccountTransformedDataCdr(DataCdr input, Optional<String> account) {
+			super(input);
+			this.account = account;
+		}
+
+		@Override
+		public Optional<String> getAccount() {
+			return account;
+		}
+
+	}
+	
 }

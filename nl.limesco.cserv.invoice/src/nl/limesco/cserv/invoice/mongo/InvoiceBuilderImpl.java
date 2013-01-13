@@ -70,8 +70,14 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 
 	@Override
 	public InvoiceBuilder normalItemLine(String description, long itemCount, long itemPrice, double taxRate) {
+		return normalItemLine(description, null, itemCount, itemPrice, taxRate);
+	}
+	
+	@Override
+	public InvoiceBuilder normalItemLine(String description, List<String> multilineDescription, long itemCount, long itemPrice, double taxRate) {
 		final NormalItemLineImpl itemLine = new NormalItemLineImpl();
 		itemLine.setDescription(description);
+		itemLine.setNullableMultilineDescription(multilineDescription);
 		itemLine.setItemCount(itemCount);
 		itemLine.setItemPrice(itemPrice);
 		itemLine.setTaxRate(taxRate);
@@ -79,7 +85,7 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 		itemLines.add(itemLine);
 		return this;
 	}
-	
+
 	private InvoiceBuilder durationItemLine(DurationItemLine origItemLine) {
 		final DurationItemLineImpl itemLine = new DurationItemLineImpl();
 		itemLine.setDescription(origItemLine.getDescription());
@@ -95,8 +101,14 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 
 	@Override
 	public InvoiceBuilder durationItemLine(String description, long pricePerCall, long pricePerMinute, long numberOfCalls, long numberOfSeconds, double taxRate) {
+		return durationItemLine(description, null, pricePerCall, pricePerMinute, numberOfCalls, numberOfSeconds, taxRate);
+	}
+
+	@Override
+	public InvoiceBuilder durationItemLine(String description, List<String> multilineDescription, long pricePerCall, long pricePerMinute, long numberOfCalls, long numberOfSeconds, double taxRate) {
 		final DurationItemLineImpl itemLine = new DurationItemLineImpl();
 		itemLine.setDescription(description);
+		itemLine.setNullableMultilineDescription(multilineDescription);
 		itemLine.setPricePerCall(pricePerCall);
 		itemLine.setPricePerMinute(pricePerMinute);
 		itemLine.setNumberOfCalls(numberOfCalls);

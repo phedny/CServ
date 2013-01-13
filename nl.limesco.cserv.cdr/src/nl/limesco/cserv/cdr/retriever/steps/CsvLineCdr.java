@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import nl.limesco.cserv.cdr.api.Cdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-public class CsvLineCdr implements Cdr {
+public class CsvLineCdr implements VoiceCdr {
 	
 	private final String source;
 	
@@ -31,6 +32,8 @@ public class CsvLineCdr implements Cdr {
 	
 	private final int seconds;
 	
+	private String destination;
+	
 	private final Map<String, String> unparsedColumns = Maps.newHashMap();
 
 	public CsvLineCdr(String source, String[] fields, String[] values) throws ParseException {
@@ -42,6 +45,7 @@ public class CsvLineCdr implements Cdr {
 		SimpleDateFormat timePattern = null;
 		String from = null;
 		String to = null;
+		String destination = null;
 		String seconds = null;
 		
 		for (int i = 0; i < fields.length; i++) {
@@ -56,6 +60,8 @@ public class CsvLineCdr implements Cdr {
 					from = value;
 				} else if ("to".equals(field)) {
 					to = value;
+				} else if ("destination".equals(field)) {
+					destination = value;
 				} else if ("seconds".equals(field)) {
 					seconds = value;
 				} else if (field.startsWith("time ")) {
@@ -73,10 +79,12 @@ public class CsvLineCdr implements Cdr {
 		checkNotNull(callId);
 		checkNotNull(from);
 		checkNotNull(to);
+		checkNotNull(destination);
 		
 		this.callId = callId;
 		this.from = from;
 		this.to = to;
+		this.destination = destination;
 		if (Strings.isNullOrEmpty(seconds)) {
 			this.seconds = 0;
 			this.connected = false;
@@ -118,6 +126,11 @@ public class CsvLineCdr implements Cdr {
 		return to;
 	}
 
+	@Override
+	public String getDestination() {
+		return destination;
+	}
+	
 	@Override
 	public boolean isConnected() {
 		return connected;

@@ -2,29 +2,39 @@ package nl.limesco.cserv.invoicing;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
+import nl.limesco.cserv.cdr.api.DataCdr;
+import nl.limesco.cserv.cdr.api.SmsCdr;
+import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
-import nl.limesco.cserv.pricing.api.Pricing;
-import nl.limesco.cserv.pricing.api.PricingRule;
+import nl.limesco.cserv.pricing.api.DataPricing;
+import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
+import nl.limesco.cserv.pricing.api.SmsPricing;
+import nl.limesco.cserv.pricing.api.SmsPricingRule;
+import nl.limesco.cserv.pricing.api.VoicePricing;
+import nl.limesco.cserv.pricing.api.VoicePricingRule;
 import nl.limesco.cserv.sim.api.MonthedInvoice;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimService;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class InvoiceConstructor {
 
@@ -48,6 +58,17 @@ public class InvoiceConstructor {
 	public Invoice constructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
 		
 		final UUID builderUUID = UUID.randomUUID();
+
+		/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
+		final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(accountId);
+		if (sims.isEmpty()) {
+			return null;
+		}
+
+		if (sims.size() > 1) {
+			return null; // XXX: for now, until #67 is fixed
+		}
+		final Sim accountSim = sims.iterator().next();
 		
 		// Compute end of subscription period
 		final Calendar endOfSubscriptionPeriod = (Calendar) day.clone();
@@ -88,6 +109,7 @@ public class InvoiceConstructor {
 				monthStart.setTimeInMillis(0);
 				monthStart.set(Calendar.YEAR, lastMonthlyFeesInvoice.get().getYear());
 				monthStart.set(Calendar.MONTH, lastMonthlyFeesInvoice.get().getMonth());
+				monthStart.add(Calendar.MONTH, 1);
 				itemStart = monthStart;
 			} else {
 				itemStart = contractStartDate.get();
@@ -131,14 +153,30 @@ public class InvoiceConstructor {
 			final long monthlyPrice = subscription.getKey().getApnType().getMonthlyPrice();
 			final long itemPrice = computePartialMonthPrice(end.get(Calendar.DAY_OF_MONTH), subscription.getKey().getDays(), monthlyPrice);
 			final String description = String.format("Vaste kosten %s - %s (%s)", formattedStart, formattedEnd, formattedApnType);
-			builder.normalItemLine(description, subscription.getValue().intValue(), itemPrice, 0.21);
+			final String multiLine1 = String.format("Vaste kosten (%s)", formattedApnType);
+			final String multiLine2 = String.format("%s - %s", formattedStart, formattedEnd);
+			builder.normalItemLine(description, Arrays.asList(multiLine1, multiLine2), subscription.getValue().intValue(), itemPrice, 0.21);
 		}
 		
-		// Include the CDRs
-		final Map<String, CombinedDuration> durations = Maps.newHashMap();
+		// Split CDRs into types
+		final Set<VoiceCdr> voiceCdrs = Sets.newHashSet();
+		final Set<SmsCdr> smsCdrs = Sets.newHashSet();
+		final Set<DataCdr> dataCdrs = Sets.newHashSet();
 		for (Cdr cdr : cdrs) {
+			if (cdr instanceof VoiceCdr) {
+				voiceCdrs.add((VoiceCdr) cdr);
+			} else if (cdr instanceof SmsCdr) {
+				smsCdrs.add((SmsCdr) cdr);
+			} else if (cdr instanceof DataCdr) {
+				dataCdrs.add((DataCdr) cdr);
+			}
+		}
+		
+		// Include the voice CDRs
+		final Map<String, CombinedDuration> durations = Maps.newHashMap();
+		for (VoiceCdr cdr : voiceCdrs) {
 			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
-			if (!pricing.isPresent()) {
+			if (!pricing.isPresent() || !cdr.isConnected()) {
 				continue;
 			}
 			
@@ -150,18 +188,98 @@ public class InvoiceConstructor {
 		}
 		
 		for (Entry<String, CombinedDuration> duration : durations.entrySet()) {
-			final Optional<? extends PricingRule> pricingRule = pricingService.getPricingRuleById(duration.getKey());
+			final Optional<? extends VoicePricingRule> pricingRule = pricingService.getPricingRuleById(VoicePricingRule.class, duration.getKey());
 			if (!pricingRule.isPresent()) {
 				continue;
 			}
 			
-			final Pricing price = pricingRule.get().getPrice();
+			final VoicePricing price = pricingRule.get().getPrice();
 			if (pricingRule.get().isHidden() && price.getPerCall() == 0 && price.getPerMinute() == 0) {
 				continue;
 			}
 			
 			final CombinedDuration cd = duration.getValue();
 			builder.durationItemLine("Bellen " + pricingRule.get().getDescription(), price.getPerCall(), price.getPerMinute(), cd.getCount(), cd.getSeconds(), 0.21);
+		}
+
+		// Include the SMS CDRs
+		final Map<String, Integer> smsRules = Maps.newHashMap();
+		for (SmsCdr cdr : smsCdrs) {
+			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
+			if (!pricing.isPresent()) {
+				continue;
+			}
+			
+			final String pricingRuleId = pricing.get().getPricingRuleId();
+			if (smsRules.containsKey(pricingRuleId)) {
+				smsRules.put(pricingRuleId, Integer.valueOf(1 + smsRules.get(pricingRuleId).intValue()));
+			} else {
+				smsRules.put(pricingRuleId, Integer.valueOf(1));
+			}
+		}
+		
+		for (Entry<String, Integer> smsRuleEntry : smsRules.entrySet()) {
+			final Optional<? extends SmsPricingRule> pricingRule = pricingService.getPricingRuleById(SmsPricingRule.class, smsRuleEntry.getKey());
+			if (!pricingRule.isPresent()) {
+				continue;
+			}
+			
+			final SmsPricing price = pricingRule.get().getPrice();
+			if (pricingRule.get().isHidden() && price.getPerSms() == 0) {
+				continue;
+			}
+			
+			builder.normalItemLine(pricingRule.get().getDescription(), smsRuleEntry.getValue().intValue(), price.getPerSms(), 0.21);
+		}
+
+		// Include the data CDRs
+		final Map<RuleAndMonth, MonthlyBundleUsage> dataRules = Maps.newHashMap();
+		for (DataCdr cdr : dataCdrs) {
+			final Optional<Cdr.Pricing> pricing = cdr.getPricing();
+			if (!pricing.isPresent()) {
+				continue;
+			}
+
+			/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
+			final Calendar cdrTime = cdr.getTime();
+			final boolean inContract;
+			if (accountSim.getContractStartDate().isPresent()) {
+				inContract = accountSim.getContractStartDate().get().before(cdrTime);
+			} else {
+				inContract = false;
+			}
+			final RuleAndMonth ruleAndMonth = new RuleAndMonth(cdrTime.get(Calendar.YEAR), cdrTime.get(Calendar.MONTH), pricing.get().getPricingRuleId(), inContract);
+			if (!dataRules.containsKey(ruleAndMonth)) {
+				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(accountSim.getApnType().getBundleKilobytes()));
+			}
+			dataRules.get(ruleAndMonth).add(cdr.getKilobytes());
+		}
+		
+		for (Entry<RuleAndMonth, MonthlyBundleUsage> dataRuleEntry : dataRules.entrySet()) {
+			final RuleAndMonth ruleAndMonth = dataRuleEntry.getKey();
+			final Optional<? extends DataPricingRule> pricingRule = pricingService.getPricingRuleById(DataPricingRule.class, ruleAndMonth.getRule());
+			if (!pricingRule.isPresent()) {
+				continue;
+			}
+			
+			final DataPricing price = pricingRule.get().getPrice();
+			if (pricingRule.get().isHidden() && price.getPerKilobyte() == 0) {
+				continue;
+			}
+			
+			final MonthlyBundleUsage monthlyUsage = dataRuleEntry.getValue();
+			if (monthlyUsage.getBundle() > 0 && monthlyUsage.getCount() > 0 && ruleAndMonth.isInContract()) {
+				final String description = String.format("%s (bundel %02d-%4d)", pricingRule.get().getDescription(), 1 + ruleAndMonth.getMonth() % 12, ruleAndMonth.getMonth() / 12);
+				builder.normalItemLine(description, Math.min(monthlyUsage.getCount(), monthlyUsage.getBundle()), 0, 0.21);
+			}
+			if (monthlyUsage.getCount() > monthlyUsage.getBundle() || !ruleAndMonth.isInContract()) {
+				final String description2 = String.format("%s (%02d-%4d)", pricingRule.get().getDescription(), 1 + ruleAndMonth.getMonth() % 12, ruleAndMonth.getMonth() / 12);
+				if (ruleAndMonth.isInContract()) {
+					builder.normalItemLine(description2, monthlyUsage.getCount() - monthlyUsage.getBundle(), price.getPerKilobyte(), 0.21);
+				} else {
+					builder.normalItemLine(description2, monthlyUsage.getCount(), price.getPerKilobyte(), 0.21);
+				}
+			}
 		}
 		
 		// Include the cost contribution
@@ -170,19 +288,21 @@ public class InvoiceConstructor {
 		}
 		
 		final Invoice invoice = builder.build();
-		invoiceService.storeInvoice(invoice);
+		if (invoice.getTotalWithTaxes() > 0) {
+			invoiceService.storeInvoice(invoice);
 		
-		for (Sim sim : simActivations) {
-			sim.setActivationInvoiceId(invoice.getId());
-			simService.storeActivationInvoiceId(sim);
+			for (Sim sim : simActivations) {
+				sim.setActivationInvoiceId(invoice.getId());
+				simService.storeActivationInvoiceId(sim);
+			}
+			
+			for (Sim sim : subscriptionFees) {
+				sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
+				simService.storeLastMonthlyFeesInvoice(sim);
+			}
+			
+			cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
 		}
-		
-		for (Sim sim : subscriptionFees) {
-			sim.setLastMonthlyFeesInvoice(new MonthedInvoice(day.get(Calendar.YEAR), day.get(Calendar.MONTH), invoice.getId()));
-			simService.storeLastMonthlyFeesInvoice(sim);
-		}
-		
-		cdrService.setInvoiceIdForBuilder(builderUUID.toString(), invoice.getId());
 		
 		return invoice;
 	}
