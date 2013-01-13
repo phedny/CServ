@@ -1,6 +1,7 @@
 package nl.limesco.cserv.invoice.api;
 
 import java.util.Calendar;
+import java.util.List;
 
 public interface InvoiceBuilder {
 
@@ -16,7 +17,11 @@ public interface InvoiceBuilder {
 
 	InvoiceBuilder normalItemLine(String description, long itemCount, long itemPrice, double taxRate);
 
+	InvoiceBuilder normalItemLine(String description, List<String> multilineDescription, long itemCount, long itemPrice, double taxRate);
+
 	InvoiceBuilder durationItemLine(String description, long pricePerCall, long pricePerMinute, long numberOfCalls, long numberOfSeconds, double taxRate);
+
+	InvoiceBuilder durationItemLine(String description, List<String> multilineDescription, long pricePerCall, long pricePerMinute, long numberOfCalls, long numberOfSeconds, double taxRate);
 
 	Invoice build();
 

@@ -2,6 +2,9 @@ package nl.limesco.cserv.invoice.mongo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.ItemLine;
@@ -43,7 +46,37 @@ public class InvoiceBuilderTest {
 		assertEquals("desc", itemLine.getDescription());
 		assertEquals(23, itemLine.getTotalPrice());
 	}
-	
+
+	@Test
+	public void normalItemLineHasDefaultMultilineDescription() {
+		final ItemLine itemLine = builder.normalItemLine("desc", 4, 14, 0.1).build().getItemLines().get(0);
+		assertEquals(1, itemLine.getMultilineDescription().size());
+		assertEquals("desc", itemLine.getMultilineDescription().get(0));
+	}
+
+	@Test
+	public void durationItemLineHasDefaultMultilineDescription() {
+		final ItemLine itemLine = builder.durationItemLine("desc", 4, 10, 2, 90, 0.1).build().getItemLines().get(0);
+		assertEquals(1, itemLine.getMultilineDescription().size());
+		assertEquals("desc", itemLine.getMultilineDescription().get(0));
+	}
+
+	@Test
+	public void normalItemLineHasMultilineDescription() {
+		final ItemLine itemLine = builder.normalItemLine("desc", Arrays.asList("Line 1", "Line 2"), 4, 14, 0.1).build().getItemLines().get(0);
+		assertEquals(2, itemLine.getMultilineDescription().size());
+		assertEquals("Line 1", itemLine.getMultilineDescription().get(0));
+		assertEquals("Line 2", itemLine.getMultilineDescription().get(1));
+	}
+
+	@Test
+	public void durationItemLineHasMultilineDescription() {
+		final ItemLine itemLine = builder.durationItemLine("desc", Arrays.asList("Line 1", "Line 2"), 4, 10, 2, 90, 0.1).build().getItemLines().get(0);
+		assertEquals(2, itemLine.getMultilineDescription().size());
+		assertEquals("Line 1", itemLine.getMultilineDescription().get(0));
+		assertEquals("Line 2", itemLine.getMultilineDescription().get(1));
+	}
+
 	@Test
 	public void complexInvoiceCanBeCreated() {
 		final Invoice invoice = builder.id("id").accountId("acc")
