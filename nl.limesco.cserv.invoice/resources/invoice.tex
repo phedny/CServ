@@ -64,10 +64,24 @@ Omschrijving      & Aantal  & Stuksprijs & Bedrag \\
 \hline
 #foreach( $itemLine in $invoice.itemLines )
 #if( $itemLine.itemPrice )
-$itemLine.description & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.multilineDescription[0] & $itemLine.itemCount & $util.formatPriceFull( $invoice.currency, $itemLine.itemPrice ) & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+#foreach( $line in $itemLine.multilineDescription )
+#if( $foreach.index > 0 )
+$line & & & \\
+#end
+#end
 #elseif( $itemLine.pricePerCall )
-$itemLine.description & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+$itemLine.multilineDescription[0] & $itemLine.numberOfCalls gesprekken & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerCall ) / gesprek & $util.formatPrice( $invoice.currency, $itemLine.totalPrice ) \\
+#if ( $itemLine.multilineDescription.size() > 1 )
+$itemLine.multilineDescription[1] & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
+#else
  & $util.formatDuration( $itemLine.numberOfSeconds ) & $util.formatPriceFull( $invoice.currency, $itemLine.pricePerMinute ) / minuut & \\
+#end
+#foreach( $line in $itemLine.multilineDescription )
+#if( $foreach.index > 1 )
+$line & & & \\
+#end
+#end
 #end
 \hline
 #end
