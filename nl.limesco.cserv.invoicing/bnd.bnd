@@ -6,6 +6,8 @@
 	nl.limesco.cserv.sim.api;version=latest,\
 	nl.limesco.cserv.pricing.api;version=latest,\
 	nl.limesco.cserv.cdr.api;version=latest,\
-	com.google.guava
+	com.google.guava,\
+	nl.limesco.cserv.lib.email.api;version=latest,\
+	nl.limesco.cserv.lib.email.wrappedlibrary
 Bundle-Activator: nl.limesco.cserv.invoicing.Activator
 Private-Package: nl.limesco.cserv.invoicing
