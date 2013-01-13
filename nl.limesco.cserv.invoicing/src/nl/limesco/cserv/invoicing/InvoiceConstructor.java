@@ -2,6 +2,7 @@ package nl.limesco.cserv.invoicing;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
@@ -152,7 +153,9 @@ public class InvoiceConstructor {
 			final long monthlyPrice = subscription.getKey().getApnType().getMonthlyPrice();
 			final long itemPrice = computePartialMonthPrice(end.get(Calendar.DAY_OF_MONTH), subscription.getKey().getDays(), monthlyPrice);
 			final String description = String.format("Vaste kosten %s - %s (%s)", formattedStart, formattedEnd, formattedApnType);
-			builder.normalItemLine(description, subscription.getValue().intValue(), itemPrice, 0.21);
+			final String multiLine1 = String.format("Vaste kosten (%s)", formattedApnType);
+			final String multiLine2 = String.format("%s - %s", formattedStart, formattedEnd);
+			builder.normalItemLine(description, Arrays.asList(multiLine1, multiLine2), subscription.getValue().intValue(), itemPrice, 0.21);
 		}
 		
 		// Split CDRs into types
