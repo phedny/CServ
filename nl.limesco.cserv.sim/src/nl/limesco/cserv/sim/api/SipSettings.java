@@ -6,6 +6,7 @@ public class SipSettings {
 	private String authenticationUsername;
 	private String password;
 	private String uri;
+	private String speakupTrunkPassword;
 	private int expiry;
 	
 	public String getRealm() {
@@ -37,6 +38,12 @@ public class SipSettings {
 	}
 	public void setUri(String uri) {
 		this.uri = uri;
+	}
+	public String getSpeakupTrunkPassword() {
+		return speakupTrunkPassword;
+	}
+	public void setSpeakupTrunkPassword(String speakupTrunkPassword) {
+		this.speakupTrunkPassword = speakupTrunkPassword;
 	}
 	public int getExpiry() {
 		return expiry;
