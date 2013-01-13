@@ -41,7 +41,10 @@ public class AccountChecker {
 		DUMMY_DEACTIVATE("Dummy account, proposed deactivation"),
 		EXTERNAL_DUMMY_MERGE("Dummy account with external references, proposed merge with real account"),
 		ASK_CONFIRMATION("Ask the user for confirmation"),
-		PROCESS_CONFIRMATION("Process user confirmation");
+		PROCESS_CONFIRMATION("Process user confirmation"),
+		ADMINISTRATIVE_CONFIRMATION("Immediately set account to confirmed state"),
+		NO_CONTACT_INFO("It's impossible to get contact information, disable this account"),
+		GET_CONTACT_INFO("Get contact information, e.g. e-mail address, for account");
 		
 		private String explanation;
 		private ProposedChangeIdentifier(String explanation) {
@@ -93,8 +96,16 @@ public class AccountChecker {
 		case UNCONFIRMED:
 			if(account.getEmail() != null && !account.getEmail().isEmpty()) {
 				ProposedChange c = new ProposedChange(ProposedChangeIdentifier.ASK_CONFIRMATION);
-				//c.changes.put("state", AccountState.CONFIRMATION_REQUESTED.toString());
-				c.changes.put("state", "CONFIRMATION_REQUEST");
+				c.changes.put("state", AccountState.CONFIRMATION_REQUESTED.toString());
+				proposedChanges.add(c);
+				c = new ProposedChange(ProposedChangeIdentifier.ADMINISTRATIVE_CONFIRMATION);
+				c.changes.put("state", AccountState.CONFIRMED.toString());
+				proposedChanges.add(c);
+			} else {
+				ProposedChange c = new ProposedChange(ProposedChangeIdentifier.GET_CONTACT_INFO);
+				proposedChanges.add(c);
+				c = new ProposedChange(ProposedChangeIdentifier.NO_CONTACT_INFO);
+				c.changes.put("state", AccountState.CONFIRMATION_IMPOSSIBLE.toString());
 				proposedChanges.add(c);
 			}
 			break;
