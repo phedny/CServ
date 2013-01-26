@@ -28,6 +28,7 @@ import nl.limesco.cserv.sim.api.CallConnectivityType;
 import nl.limesco.cserv.sim.api.PortingState;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
+import nl.limesco.cserv.sim.api.SimChecker;
 import nl.limesco.cserv.sim.api.SimService;
 import nl.limesco.cserv.sim.api.SimState;
 
@@ -197,6 +198,27 @@ public class SimResource {
 				sim.setCallConnectivityType(cct);
 				sim.setPortingState(ps);
 				simService.storeSim(sim);
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@GET
+		@Path("validate")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String validateSim(@Context HttpServletRequest request) {		
+			authorizationService.requireUserRole(request, Role.ADMIN);
+			try {
+				SimChecker c = new SimChecker(this.sim);
+				c.run();
+				if(c.isSound()) {
+					throw new WebApplicationException(Status.NO_CONTENT);
+				}
+				return new ObjectMapper().writeValueAsString(c.getProposedChanges());
 			} catch(JsonGenerationException e) {
 				throw new WebApplicationException(e);
 			} catch(JsonMappingException e) {
