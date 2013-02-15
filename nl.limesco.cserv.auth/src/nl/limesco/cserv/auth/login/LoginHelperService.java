@@ -17,4 +17,6 @@ public interface LoginHelperService {
 
 	Optional<String> getUsername(String token) throws TokenProviderException, InvalidTokenException;
 
+	String generateHashedPassword(String password);
+	boolean verifyHashedPassword(String hash, String password);
 }
