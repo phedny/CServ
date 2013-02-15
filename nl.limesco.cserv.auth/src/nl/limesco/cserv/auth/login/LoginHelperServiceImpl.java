@@ -37,7 +37,14 @@ public class LoginHelperServiceImpl implements LoginHelperService {
 		checkNotNull(username);
 		checkNotNull(password);
 		
-		final Role role = userAdmin.getRole(username);
+		final Role role;
+		try {
+			role = userAdmin.getRole(username);
+		} catch(ClassCastException e) {
+			System.out.println("Class cast exception in retrieving user role: see CServ Bug #77 to fix your database");
+			return Optional.absent();
+		}
+		
 		if (role == null || role.getType() != Role.USER) {
 			return Optional.absent();
 		}
