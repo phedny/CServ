@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.vz.mongodb.jackson.Id;
+import nl.limesco.cserv.invoice.api.CostInvoice;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.ItemLine;
@@ -23,7 +24,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class InvoiceImpl implements Invoice {
+public class CostInvoiceImpl implements CostInvoice {
 	
 	CommonInvoiceImpl commonInvoiceImpl = new CommonInvoiceImpl();
 	
@@ -51,11 +52,11 @@ public class InvoiceImpl implements Invoice {
 	}
 	
 	@Override
-	public String getCostInvoiceId() {
+	public String getCustomerInvoiceId() {
 		return commonInvoiceImpl.correspondingInvoiceId;
 	}
 	
-	public void setCostInvoiceId(String invoiceId) {
+	public void setCustomerInvoiceId(String invoiceId) {
 		commonInvoiceImpl.correspondingInvoiceId = invoiceId;
 	}
 
@@ -110,47 +111,15 @@ public class InvoiceImpl implements Invoice {
 	}
 
 	@Override
-	@JsonSerialize(contentAs = TaxLineImpl.class)
-	@JsonDeserialize(contentAs = TaxLineImpl.class)
-	public List<? extends TaxLine> getTaxLines() {
-		return Collections.unmodifiableList(commonInvoiceImpl.taxLines);
-	}
-
-	public void setTaxLines(List<TaxLine> taxLines) {
-		commonInvoiceImpl.setTaxLines(taxLines);
-	}
-
-	public void setTaxLines() {
-		commonInvoiceImpl.setTaxLines();
-	}
-	
-	@Override
-	public long getTotalWithoutTaxes() {
+	public long getTotal() {
 		return commonInvoiceImpl.totalWithoutTaxes;
 	}
 
-	public void setTotalWithoutTaxes(long totalWithoutTaxes) {
-		commonInvoiceImpl.totalWithoutTaxes = totalWithoutTaxes;
+	public void setTotal(long total) {
+		commonInvoiceImpl.totalWithoutTaxes = total;
 	}
 	
-	public void setTotalWithoutTaxes() {
-		commonInvoiceImpl.setTotalWithoutTaxes();
-	}
-
-	@Override
-	public long getTotalWithTaxes() {
-		return commonInvoiceImpl.totalWithTaxes;
-	}
-
-	public void setTotalWithTaxes(long totalWithTaxes) {
-		commonInvoiceImpl.totalWithTaxes = totalWithTaxes;
-	}
-	
-	public void setTotalWithTaxes() {
-		commonInvoiceImpl.setTotalWithTaxes();
-	}
-	
-	public void setTaxLinesAndTotals() {
+	public void setTotals() {
 		commonInvoiceImpl.setTaxLinesAndTotals();
 	}
 
