@@ -144,7 +144,7 @@ public class InvoiceResource {
 				}
 			}
 			
-			final Invoice invoice = builder.build();
+			final Invoice invoice = builder.buildInvoice();
 			invoiceService.storeInvoice(invoice);
 			return Response.created(new URI(account.getId() + "/invoices/" + invoice.getId())).build();
 			

@@ -287,7 +287,7 @@ public class InvoiceConstructor {
 			builder.normalItemLine("Bijdrage vaste kosten", numberOfMonthForCostContribution, CONTRIBUTION_PRICE, 0.21);
 		}
 		
-		final Invoice invoice = builder.build();
+		final Invoice invoice = builder.buildInvoice();
 		if (invoice.getTotalWithTaxes() > 0) {
 			invoiceService.storeInvoice(invoice);
 		

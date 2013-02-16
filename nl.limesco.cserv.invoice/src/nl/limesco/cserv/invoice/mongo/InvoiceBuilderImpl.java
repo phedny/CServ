@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import nl.limesco.cserv.invoice.api.CostInvoice;
 import nl.limesco.cserv.invoice.api.DurationItemLine;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
@@ -13,36 +14,36 @@ import nl.limesco.cserv.invoice.api.NormalItemLine;
 
 public class InvoiceBuilderImpl implements InvoiceBuilder {
 
-	private final InvoiceImpl invoice;
+	private final CommonInvoiceImpl invoice;
 	
 	private final List<ItemLine> itemLines;
 	
 	public InvoiceBuilderImpl() {
-		invoice = new InvoiceImpl();
+		invoice = new CommonInvoiceImpl();
 		itemLines = new ArrayList<ItemLine>();
 	}
 	
 	@Override
 	public InvoiceBuilder id(String id) {
-		invoice.setId(id);
+		invoice.id = id;
 		return this;
 	}
 
 	@Override
 	public InvoiceBuilder accountId(String accountId) {
-		invoice.setAccountId(accountId);
+		invoice.accountId = accountId;
 		return this;
 	}
 
 	@Override
 	public InvoiceBuilder creationDate(Calendar creationDate) {
-		invoice.setCreationDate(creationDate);
+		invoice.creationDate = creationDate;
 		return this;
 	}
 
 	@Override
 	public InvoiceBuilder currency(InvoiceCurrency currency) {
-		invoice.setCurrency(currency);
+		invoice.currency = currency;
 		return this;
 	}
 
@@ -119,12 +120,26 @@ public class InvoiceBuilderImpl implements InvoiceBuilder {
 		return this;
 	}
 
-	@Override
-	public Invoice build() {
+	private void finalizeInvoice() {
 		invoice.setItemLines(itemLines);
 		invoice.setTaxLinesAndTotals();
 		assert invoice.isSound();
-		return invoice;
+	}
+	
+	@Override
+	public Invoice buildInvoice() {
+		finalizeInvoice();
+		InvoiceImpl finalInvoice = new InvoiceImpl();
+		finalInvoice.setCommonInvoiceImpl(invoice);
+		return finalInvoice;
+	}
+	
+	@Override
+	public CostInvoice buildCostInvoice() {
+		finalizeInvoice();
+		CostInvoiceImpl finalInvoice = new CostInvoiceImpl();
+		finalInvoice.setCommonInvoiceImpl(invoice);
+		return finalInvoice;
 	}
 
 }
