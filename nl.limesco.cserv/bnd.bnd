@@ -35,7 +35,9 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)',\
-	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.transform)'
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.transform)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.lib.swagger)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.rest)',
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.6
 -runbundles: nl.limesco.cserv.invoice.api;version=latest,\
@@ -106,17 +108,19 @@
 	nl.limesco.cserv.cdr.api;version=latest,\
 	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
 	nl.limesco.cserv.sim.rest;version=latest,\
-	org.amdatu.legacy.tenantuseradmin;version=latest
+	org.amdatu.legacy.tenantuseradmin;version=latest,\
+	nl.limesco.cserv.lib.swagger;version=latest,\
+	nl.limesco.cserv.rest;version=latest,
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	org.apache.felix.dependencymanager,\
 	nl.limesco.cserv.ideal.api;version=latest,\
 	nl.limesco.cserv.lib.quartz.wrappedlibrary,\
 	nl.limesco.cserv.lib.quartz.api;version=latest,\
+	nl.limesco.cserv.lib.swagger;version=latest,\
 	nl.limesco.cserv.cdr.api;version=latest,\
 	nl.limesco.cserv.invoice.api;version=latest,\
 	com.google.guava
 -runproperties: felix.fileinstall.dir=conf/
 -runvm: -ea
-Bundle-Activator: nl.limesco.cserv.Activator
-Private-Package: nl.limesco.cserv
+-sub: *.bnd

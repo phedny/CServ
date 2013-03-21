@@ -1,0 +1,2 @@
+Private-Package: nl.limesco.cserv
+Bundle-Activator: nl.limesco.cserv.Activator
