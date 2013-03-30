@@ -56,6 +56,18 @@ public class InvoiceConstructor {
 	private volatile SimService simService;
 
 	public Invoice constructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
+		// Prevent multiple invoice generations from happening simultaneously
+		cdrService.lock();
+		invoiceService.lock();
+		try {
+			return lockedConstructInvoiceForAccount(day, accountId);
+		} finally {
+			invoiceService.unlock();
+			cdrService.unlock();
+		}
+	}
+	
+	private Invoice lockedConstructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
 		
 		final UUID builderUUID = UUID.randomUUID();
 
