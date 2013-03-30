@@ -70,15 +70,18 @@ public class InvoiceConstructor {
 		}
 		final Sim accountSim = sims.iterator().next();
 		
-		// Compute end of subscription period
+		// Until when will we be processing monthly costs?
+		// (normally "day" is today, so endOfSubscriptionPeriod will be the end of this month)
 		final Calendar endOfSubscriptionPeriod = (Calendar) day.clone();
 		endOfSubscriptionPeriod.set(Calendar.DAY_OF_MONTH, 1);
 		endOfSubscriptionPeriod.add(Calendar.MONTH, 1);
 		endOfSubscriptionPeriod.add(Calendar.DAY_OF_MONTH, -1);
 		
-		// Collect everything we need
+		// all activated SIMs which did not have an activation invoice yet
 		final Collection<? extends Sim> simActivations = simService.getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(accountId);
+		// all activated SIMs which were not invoiced yet on or after this day
 		final Collection<? extends Sim> subscriptionFees = simService.getActivatedSimsLastInvoicedBeforeByOwnerAccountId(day, accountId);
+		// all CDR's which were not invoiced yet (XXX #67) (XXX only until given day)
 		final Collection<? extends Cdr> cdrs = cdrService.getUninvoicedCdrsForAccount(accountId, builderUUID.toString());
 		
 		// Start building the invoice
@@ -92,7 +95,7 @@ public class InvoiceConstructor {
 			builder.normalItemLine("Activatie SIM-kaart", simActivations.size(), ACTIVATION_PRICE, 0.21);
 		}
 		
-		// Include the subscription fees
+		// Include the subscription fees for all SIMs and for all past months
 		int numberOfMonthForCostContribution = 0;
 		final Map<SubscriptionKey, Integer> subscriptions = Maps.newHashMap();
 		for (Sim sim : subscriptionFees) {
@@ -102,6 +105,8 @@ public class InvoiceConstructor {
 			}
 			
 			final Optional<MonthedInvoice> lastMonthlyFeesInvoice = sim.getLastMonthlyFeesInvoice();
+			// itemStart: the next month of monthly fees invoice, i.e.
+			// the month after the last monthly fees invoice, otherwise date of start of contract
 			final Calendar itemStart;
 			if (lastMonthlyFeesInvoice.isPresent()) {
 				final Calendar monthStart = Calendar.getInstance();
@@ -115,6 +120,9 @@ public class InvoiceConstructor {
 				itemStart = contractStartDate.get();
 			}
 			
+			// compute subscription costs starting with itemStart, ending in end of that month;
+			// repeat this until we go past the endOfSubscriptionPeriod (end of this month)
+			// this will accumulate subscription costs for all past months
 			Calendar start = (Calendar) itemStart.clone();
 			while (true) {
 				final Calendar end = (Calendar) start.clone();
@@ -140,10 +148,12 @@ public class InvoiceConstructor {
 				} else {
 					start = (Calendar) end.clone();
 					start.add(Calendar.DAY_OF_MONTH, 1);
+					assert(start.get(Calendar.DAY_OF_MONTH) == 1);
 				}
 			}
 		}
 		
+		// Process item lines for subscription fees for all SIMs and all past months
 		for (Entry<SubscriptionKey, Integer> subscription : subscriptions.entrySet()) {
 			final String formattedStart = DAY_FORMAT.format(subscription.getKey().getStart().getTime());
 			final Calendar end = (Calendar) subscription.getKey().getStart();
