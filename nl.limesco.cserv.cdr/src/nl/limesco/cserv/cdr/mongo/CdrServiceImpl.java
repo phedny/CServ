@@ -81,13 +81,15 @@ public class CdrServiceImpl implements CdrService {
 
 	@Override
 	public void storeCdr(Cdr cdr) {
-		if (cdr instanceof VoiceCdr) {
-			collection().insert(new MongoVoiceCdr((VoiceCdr) cdr));
-		} else if (cdr instanceof SmsCdr) {
-			collection().insert(new MongoSmsCdr((SmsCdr) cdr));
-		} else if (cdr instanceof DataCdr) {
-			collection().insert(new MongoDataCdr((DataCdr) cdr));
-		}
+		lock();
+		try {
+			if (cdr instanceof VoiceCdr) {
+				collection().insert(new MongoVoiceCdr((VoiceCdr) cdr));
+			} else if (cdr instanceof SmsCdr) {
+				collection().insert(new MongoSmsCdr((SmsCdr) cdr));
+			} else if (cdr instanceof DataCdr) {
+				collection().insert(new MongoDataCdr((DataCdr) cdr));
+			}
 		
 		/*
 		final BasicDBObject query = new BasicDBObject()
@@ -123,6 +125,10 @@ public class CdrServiceImpl implements CdrService {
 		updateObj.append("$set", doc);
 		collection().update(query, updateObj, true, false);
 		*/
+		
+		} finally {
+			unlock();
+		}
 	}
 
 	@Override
