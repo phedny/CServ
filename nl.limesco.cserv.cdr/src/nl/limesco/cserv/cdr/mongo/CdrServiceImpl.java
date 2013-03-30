@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
@@ -27,6 +29,8 @@ public class CdrServiceImpl implements CdrService {
 	private static final String COLLECTION = "cdr";
 
 	private volatile MongoDBService mongoDBService;
+	
+	private Lock lock = new ReentrantLock();
 
 	private JacksonDBCollection<AbstractMongoCdr, String> collection() {
 		final DBCollection dbCollection = mongoDBService.getDB().getCollection(COLLECTION);
@@ -154,4 +158,13 @@ public class CdrServiceImpl implements CdrService {
 				false, true /* multi */);
 	}
 
+	@Override
+	public void lock() {
+		lock.lock();
+	}
+	
+	@Override
+	public void unlock() {
+		lock.unlock();
+	}
 }
