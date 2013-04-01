@@ -77,7 +77,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 		for (String accountId : accounts) {
 			logService.log(LogService.LOG_INFO, "Constructing invoice for " + accountId);
 			try {
-				final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, accountId);
+				final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, accountId, false);
 				if (invoice != null) {
 					final Optional<? extends Account> account = accountService.getAccountById(accountId);
 					final byte[] pdf = invoiceTransformationService.transformToPdf(invoice, account.get());

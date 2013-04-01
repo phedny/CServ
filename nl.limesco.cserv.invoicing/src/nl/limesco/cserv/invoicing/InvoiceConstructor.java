@@ -55,19 +55,19 @@ public class InvoiceConstructor {
 	
 	private volatile SimService simService;
 
-	public Invoice constructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
+	public Invoice constructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException {
 		// Prevent multiple invoice generations from happening simultaneously
 		cdrService.lock();
 		invoiceService.lock();
 		try {
-			return lockedConstructInvoiceForAccount(day, accountId);
+			return lockedConstructInvoiceForAccount(day, accountId, dry_run);
 		} finally {
 			invoiceService.unlock();
 			cdrService.unlock();
 		}
 	}
 	
-	private Invoice lockedConstructInvoiceForAccount(Calendar day, String accountId) throws IdAllocationException {
+	private Invoice lockedConstructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException {
 		
 		final UUID builderUUID = UUID.randomUUID();
 
@@ -310,7 +310,7 @@ public class InvoiceConstructor {
 		}
 		
 		final Invoice invoice = builder.buildInvoice();
-		if (invoice.getTotalWithTaxes() > 0) {
+		if (!dry_run && invoice.getTotalWithTaxes() > 0) {
 			invoiceService.storeInvoice(invoice);
 		
 			for (Sim sim : simActivations) {
