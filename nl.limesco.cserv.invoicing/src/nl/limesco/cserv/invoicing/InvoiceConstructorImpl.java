@@ -19,6 +19,7 @@ import nl.limesco.cserv.cdr.api.VoiceCdr;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
+import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.pricing.api.DataPricing;
@@ -36,8 +37,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class InvoiceConstructor {
-
+public class InvoiceConstructorImpl implements InvoiceConstructor {
+	
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd-MM-yyyy") {{
 		setTimeZone(TimeZone.getTimeZone("UTC"));
 	}};
@@ -55,6 +56,7 @@ public class InvoiceConstructor {
 	
 	private volatile SimService simService;
 
+	@Override
 	public Invoice constructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException {
 		// Prevent multiple invoice generations from happening simultaneously
 		cdrService.lock();

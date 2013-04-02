@@ -3,6 +3,7 @@ package nl.limesco.cserv.invoicing;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.cdr.api.CdrService;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
+import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
 import nl.limesco.cserv.pricing.api.PricingService;
@@ -28,6 +29,13 @@ public class Activator extends DependencyActivatorBase {
 				.add(createServiceDependency().setService(CdrService.class).setRequired(true))
 				.add(createServiceDependency().setService(InvoiceTransformationService.class).setRequired(true))
 				.add(createServiceDependency().setService(LogService.class).setRequired(false)));
+		manager.add(createComponent()
+				.setInterface(InvoiceConstructor.class.getName(), null)
+				.setImplementation(InvoiceConstructorImpl.class)
+				.add(createServiceDependency().setService(InvoiceService.class).setRequired(true))
+				.add(createServiceDependency().setService(PricingService.class).setRequired(true))
+				.add(createServiceDependency().setService(SimService.class).setRequired(true))
+				.add(createServiceDependency().setService(CdrService.class).setRequired(true)));
 	}
 
 	@Override

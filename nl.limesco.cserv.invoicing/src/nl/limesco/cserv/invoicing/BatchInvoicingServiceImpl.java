@@ -36,7 +36,7 @@ import com.google.common.collect.Sets;
 
 public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 	
-	private final InvoiceConstructor invoiceConstructor;
+	private final InvoiceConstructorImpl invoiceConstructor;
 
 	private volatile AccountService accountService;
 	
@@ -53,10 +53,10 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 	private volatile LogService logService;
 	
 	public BatchInvoicingServiceImpl() {
-		this(new InvoiceConstructor());
+		this(new InvoiceConstructorImpl());
 	}
 	
-	public BatchInvoicingServiceImpl(InvoiceConstructor invoiceConstructor) {
+	public BatchInvoicingServiceImpl(InvoiceConstructorImpl invoiceConstructor) {
 		this.invoiceConstructor = invoiceConstructor;
 	}
 
