@@ -9,6 +9,7 @@
 				<fileset dir=".">
 					<include name="*/build.xml" />
 					<exclude name="cnf/build.xml" />
+					<exclude name="nl.limesco.cserv/build.xml" />
 				</fileset>
 			</subant>
 		</sequential>
