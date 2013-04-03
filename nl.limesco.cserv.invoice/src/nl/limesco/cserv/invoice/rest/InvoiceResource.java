@@ -3,7 +3,12 @@ package nl.limesco.cserv.invoice.rest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,6 +25,7 @@ import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
+import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
@@ -38,13 +44,20 @@ public class InvoiceResource {
 	
 	private final InvoiceTransformationService invoiceTransformationService;
 	
+	private final InvoiceConstructor invoiceConstructor;
+	
 	private final Account account;
 	
 	private final boolean admin;
 	
-	public InvoiceResource(InvoiceService invoiceService, InvoiceTransformationService invoiceTransformationService, Account account, boolean admin) {
+	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("dd-MM-yyyy") {{
+		setTimeZone(TimeZone.getTimeZone("UTC"));
+	}};
+	
+	public InvoiceResource(InvoiceService invoiceService, InvoiceTransformationService invoiceTransformationService, InvoiceConstructor invoiceConstructor, Account account, boolean admin) {
 		this.invoiceService = invoiceService;
 		this.invoiceTransformationService = invoiceTransformationService;
+		this.invoiceConstructor = invoiceConstructor;
 		this.account = account;
 		this.admin = admin;
 	}
@@ -117,43 +130,30 @@ public class InvoiceResource {
 		}
 		
 		try {
-			final Invoice inputInvoice = invoiceService.createInvoiceFromJson(json);
-			if (inputInvoice.getId() != null) {
-				// Invoice must not have an ID
-				throw new WebApplicationException(Status.BAD_REQUEST);
-			} else if (inputInvoice.getAccountId() != null && !inputInvoice.getAccountId().equals(account.getId())) {
-				// Invoice must have either no accountId set or the correct one
-				throw new WebApplicationException(Status.BAD_REQUEST);
+			boolean dry_run;
+			ObjectMapper om = new ObjectMapper();
+			Map<String,String> req = om.readValue(json, Map.class);
+			
+			Calendar day = Calendar.getInstance();
+			day.setTime(DAY_FORMAT.parse(req.get("date")));
+			dry_run = !req.get("dry-run").equals("false");
+			
+			final Invoice invoice = invoiceConstructor.constructInvoiceForAccount(day, account.getId(), dry_run);
+			assert(invoice.getAccountId().equals(account.getId()));
+			if(dry_run) {
+				assert(invoice.getId() == null);
+				return Response.ok(invoiceTransformationService.transformToJson(invoice), "application/json").build();
 			}
-			
-			final InvoiceCurrency currency;
-			if (inputInvoice.getCurrency() != null) {
-				currency = inputInvoice.getCurrency();
-			} else {
-				currency = InvoiceCurrency.EUR; // Default currency
-			}
-			
-			// Build the new invoice
-			final InvoiceBuilder builder = invoiceService.buildInvoice()
-					.accountId(account.getId())
-					.currency(currency);
-			
-			if (inputInvoice.getItemLines() != null) {
-				for (ItemLine itemLine : inputInvoice.getItemLines()) {
-					builder.itemLine(itemLine);
-				}
-			}
-			
-			final Invoice invoice = builder.build();
-			invoiceService.storeInvoice(invoice);
+			assert(invoice.getId() != null);
 			return Response.created(new URI(account.getId() + "/invoices/" + invoice.getId())).build();
-			
 		} catch (IOException e) {
 			throw new WebApplicationException(e);
 		} catch (URISyntaxException e) {
 			throw new WebApplicationException(e);
 		} catch (IdAllocationException e) {
 			throw new WebApplicationException(e, Status.CONFLICT);
+		} catch (ParseException e) {
+			throw new WebApplicationException(e);
 		}
 	}
 	

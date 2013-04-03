@@ -22,4 +22,21 @@ public interface CdrService {
 
 	void setInvoiceIdForBuilder(String builder, String invoiceId);
 
+	/**
+	 * Lock the CdrService. This should be done when one starts a process that
+	 * requires CDR information to be consistent (such as invoice generation)
+	 * or will change CDR information so that it might not be consistent anymore.
+	 * 
+	 * Locking is not required when simply requesting CDR's information,
+	 * unless that information must be guaranteed to be the same later in the
+	 * code.
+	 * 
+	 * @see InvoiceService.lock().
+	 */
+	void lock();
+	
+	/**
+	 * Unlock the CdrService.
+	 */
+	void unlock();
 }

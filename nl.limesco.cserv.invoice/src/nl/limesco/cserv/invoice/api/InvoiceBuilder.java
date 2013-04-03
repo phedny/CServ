@@ -23,6 +23,7 @@ public interface InvoiceBuilder {
 
 	InvoiceBuilder durationItemLine(String description, List<String> multilineDescription, long pricePerCall, long pricePerMinute, long numberOfCalls, long numberOfSeconds, double taxRate);
 
-	Invoice build();
+	Invoice buildInvoice();
+	CostInvoice buildCostInvoice();
 
 }

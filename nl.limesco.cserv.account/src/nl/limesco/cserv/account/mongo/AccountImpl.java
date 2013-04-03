@@ -28,7 +28,7 @@ public class AccountImpl implements Account {
 	
 	public AccountImpl() {
 		this.externalAccounts = new HashMap<String,String>();
-		this.state = AccountState.UNCONFIRMED;
+		this.state = AccountState.UNPAID;
 	}
 	
 	@ObjectId

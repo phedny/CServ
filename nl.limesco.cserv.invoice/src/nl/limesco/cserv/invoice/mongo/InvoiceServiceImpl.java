@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.DBCursor;
@@ -39,6 +41,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	private static final int NUMBER_OF_SAVE_TIMES = 5;
 	
 	private volatile MongoDBService mongoDBService;
+	
+	private Lock lock = new ReentrantLock();
 
 	private JacksonDBCollection<InvoiceImpl, String> collection() {
 		final DBCollection dbCollection = mongoDBService.getDB().getCollection(COLLECTION);
@@ -116,6 +120,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Override
 	public Invoice createInvoiceFromJson(String json) throws IOException {
 		return new ObjectMapper().readValue(json, InvoiceImpl.class);
+	}
+	
+	@Override
+	public void lock() {
+		lock.lock();
+	}
+	
+	@Override
+	public void unlock() {
+		lock.unlock();
 	}
 
 }

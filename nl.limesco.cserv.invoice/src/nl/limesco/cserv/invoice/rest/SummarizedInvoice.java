@@ -1,5 +1,7 @@
 package nl.limesco.cserv.invoice.rest;
 
+import java.util.Calendar;
+
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 
@@ -12,6 +14,8 @@ public class SummarizedInvoice {
 	private long totalWithoutTaxes;
 	
 	private long totalWithTaxes;
+	
+	private Calendar creationDate;
 
 	public SummarizedInvoice() {
 	}
@@ -21,6 +25,7 @@ public class SummarizedInvoice {
 		currency = invoice.getCurrency();
 		totalWithoutTaxes = invoice.getTotalWithoutTaxes();
 		totalWithTaxes = invoice.getTotalWithTaxes();
+		creationDate = invoice.getCreationDate();
 	}
 	
 	public String getId() {
@@ -53,6 +58,14 @@ public class SummarizedInvoice {
 
 	public void setTotalWithTaxes(long totalWithTaxes) {
 		this.totalWithTaxes = totalWithTaxes;
+	}
+	
+	public Calendar getCreationDate() {
+		return creationDate;
+	}
+	
+	public void setCreationDate(Calendar creationDate) {
+		this.creationDate = creationDate;
 	}
 	
 }

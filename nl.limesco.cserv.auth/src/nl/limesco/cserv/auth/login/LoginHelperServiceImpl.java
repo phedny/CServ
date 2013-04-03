@@ -3,6 +3,7 @@ package nl.limesco.cserv.auth.login;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.SortedMap;
 
 import org.amdatu.auth.tokenprovider.InvalidTokenException;
@@ -17,9 +18,12 @@ import org.osgi.service.useradmin.UserAdmin;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import com.google.common.hash.Hashing;
 
 public class LoginHelperServiceImpl implements LoginHelperService {
 
+	public static final String HASH_METHOD = "sha256salt";
+	
 	private volatile UserAdmin userAdmin;
 	
 	private volatile TokenProvider tokenProvider;
@@ -37,14 +41,36 @@ public class LoginHelperServiceImpl implements LoginHelperService {
 		checkNotNull(username);
 		checkNotNull(password);
 		
-		final Role role = userAdmin.getRole(username);
+		final Role role;
+		try {
+			role = userAdmin.getRole(username);
+		} catch(ClassCastException e) {
+			System.out.println("Class cast exception in retrieving user role: see CServ Bug #77 to fix your database");
+			return Optional.absent();
+		}
+		
 		if (role == null || role.getType() != Role.USER) {
 			return Optional.absent();
 		}
 		
 		final User user = (User) role;
 		final String actualPassword = (String) user.getCredentials().get("password");
-		if (!password.equals(actualPassword)) {
+		final String hashedPassword = (String) user.getCredentials().get("hashedpassword");
+		
+		boolean passwordOk = false;
+		if(hashedPassword != null && verifyHashedPassword(hashedPassword, password)) {
+			passwordOk = true;
+		}
+		
+		if(actualPassword != null && password.equals(actualPassword)) {
+			passwordOk = true;
+			// Transition from plain-text passwords to hashed passwords
+			user.getCredentials().put("hashedpassword", generateHashedPassword(actualPassword));
+			user.getCredentials().remove("password");
+			assert(verifyHashedPassword((String)user.getCredentials().get("hashedpassword"), password));
+		}
+		
+		if(!passwordOk) {
 			return Optional.absent();
 		}
 		
@@ -61,6 +87,46 @@ public class LoginHelperServiceImpl implements LoginHelperService {
 		} else {
 			return Optional.absent();
 		}
+	}
+	
+	private String generateHashedPassword(String password, String salt) {
+		return Hashing.sha256().hashString(password + salt).toString();
+	}
+	
+	@Override
+	public String generateHashedPassword(String password) {
+		assert(password.length() >= 4);
+		String salt = "";
+		final Random random = new Random();
+		for(int i = 0; i < 20; ++i) {
+			int n = random.nextInt(62);
+			if(n < 10)      salt += (char) (0x30 + n);      // numerics
+			else if(n < 36) salt += (char) (0x41 + n - 10); // uppercase
+			else            salt += (char) (0x61 + n - 36); // lowercase
+		}
+		final String hashed = generateHashedPassword(password, salt);
+		return HASH_METHOD + "!" + salt + "!" + hashed;
+	}
+
+	@Override
+	public boolean verifyHashedPassword(String hash, String password) {
+		if(hash == null) return false;
+		
+		final int firstM = hash.indexOf('!');
+		if(firstM == -1) return false;
+		if(firstM == hash.length()) return false;
+		final int secondM = hash.indexOf('!', firstM + 1);
+		if(secondM == -1) return false;
+		
+		final String method    = hash.substring(0, firstM);
+		if(!method.equals(HASH_METHOD)) {
+			System.out.println("Database salting method not understood: " + method);
+			return false;
+		}
+		final String salt      = hash.substring(firstM + 1, secondM);
+		final String realHash  = hash.substring(secondM + 1);
+		final String checkHash = generateHashedPassword(password, salt);
+		return checkHash.equals(realHash);
 	}
 
 	private static final class LoginParameters {

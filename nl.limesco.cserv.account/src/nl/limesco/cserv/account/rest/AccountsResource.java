@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -143,6 +144,27 @@ public class AccountsResource {
 		public String getAccount() {
 			try {
 				return new ObjectMapper().writeValueAsString(this.account);
+			} catch(JsonGenerationException e) {
+				throw new WebApplicationException(e);
+			} catch(JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch(IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
+		
+		@PUT
+		@Consumes(MediaType.APPLICATION_JSON)
+		public void updateAccount(String json) {
+			if(!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			try {
+				Account data = accountService.createAccountFromJson(json);
+				if(data.getId() == null || !data.getId().equals(account.getId())) {
+					throw new WebApplicationException(Status.BAD_REQUEST);
+				}
+				accountService.updateAccount(data);
 			} catch(JsonGenerationException e) {
 				throw new WebApplicationException(e);
 			} catch(JsonMappingException e) {

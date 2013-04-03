@@ -3,25 +3,21 @@ package nl.limesco.cserv.invoice.api;
 import java.util.Calendar;
 import java.util.List;
 
-public interface Invoice {
+public interface CostInvoice {
 
 	String getId();
 	
 	String getAccountId();
 	
-	String getCostInvoiceId();
+	String getCustomerInvoiceId();
 	
 	Calendar getCreationDate();
 	
 	InvoiceCurrency getCurrency();
 	
 	List<? extends ItemLine> getItemLines();
-	
-	List<? extends TaxLine> getTaxLines();
-	
-	long getTotalWithoutTaxes();
-	
-	long getTotalWithTaxes();
+
+	long getTotal();
 	
 	boolean isSound();
 
