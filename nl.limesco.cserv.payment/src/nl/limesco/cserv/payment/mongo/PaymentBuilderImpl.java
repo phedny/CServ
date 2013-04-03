@@ -15,7 +15,7 @@ public class PaymentBuilderImpl implements PaymentBuilder {
 		payment = new PaymentImpl();
 		payment.setAmount(0);
 		payment.setCurrency(InvoiceCurrency.EUR);
-		payment.setStatus(PaymentStatus.Open);
+		payment.setStatus(PaymentStatus.OPEN);
 	}
 
 	public PaymentBuilderImpl(Payment copy) {

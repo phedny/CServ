@@ -21,7 +21,7 @@ public class PaymentBuilderTest {
 	@Test
 	public void canCreateEmptyPayment() {
 		Payment p = builderImpl.build();
-		assertEquals(p.getStatus(), PaymentStatus.Open);
+		assertEquals(p.getStatus(), PaymentStatus.OPEN);
 	}
 	
 	

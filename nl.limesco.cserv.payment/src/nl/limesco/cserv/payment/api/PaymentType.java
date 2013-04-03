@@ -1,8 +1,8 @@
 package nl.limesco.cserv.payment.api;
 
 public enum PaymentType {
-	Administrative,
-	IDeal,
-	DirectDebit,
-	WireTransfer
+	ADMINISTRATIVE,
+	IDEAL,
+	DIRECT_DEBIT,
+	WIRE_TRANSFER
 }

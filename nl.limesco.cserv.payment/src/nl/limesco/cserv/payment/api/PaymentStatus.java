@@ -1,9 +1,9 @@
 package nl.limesco.cserv.payment.api;
 
 public enum PaymentStatus {
-	Open,
-	Completed,
-	Verified,
-	Cancelled,
-	Chargeback
+	OPEN,
+	COMPLETED,
+	VERIFIED,
+	CANCELLED,
+	CHARGEBACK
 }
