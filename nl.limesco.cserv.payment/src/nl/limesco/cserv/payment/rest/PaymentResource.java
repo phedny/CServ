@@ -3,6 +3,7 @@ package nl.limesco.cserv.payment.rest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -43,22 +44,14 @@ public class PaymentResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getPayments() {
-		try {
-			return new ObjectMapper().writeValueAsString(paymentService.getPaymentsByAccountId(account.getId()));
-		} catch(JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch(JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch(IOException e) {
-			throw new WebApplicationException(e);
-		}
+	public Collection<? extends Payment> getPayments() {
+		return paymentService.getPaymentsByAccountId(account.getId());
 	}
 	
 	@GET
 	@Path("{paymentId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getPaymentById(@PathParam("paymentId") String id) {
+	public Payment getPaymentById(@PathParam("paymentId") String id) {
 		final Optional<? extends Payment> optionalPayment = paymentService.getPaymentById(id);
 		if (!optionalPayment.isPresent()) {
 			throw new WebApplicationException(Status.NOT_FOUND);
@@ -69,15 +62,7 @@ public class PaymentResource {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 		
-		try {
-			return new ObjectMapper().writeValueAsString(payment);
-		} catch (JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch (JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch (IOException e) {
-			throw new WebApplicationException(e);
-		}
+		return payment;
 	}
 	
 	@POST

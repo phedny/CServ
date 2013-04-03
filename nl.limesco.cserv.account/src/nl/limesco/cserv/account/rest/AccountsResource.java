@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountChecker;
+import nl.limesco.cserv.account.api.AccountChecker.ProposedChange;
 import nl.limesco.cserv.account.api.AccountResourceExtension;
 import nl.limesco.cserv.account.api.AccountService;
 import nl.limesco.cserv.account.api.AccountState;
@@ -74,7 +76,7 @@ public class AccountsResource {
 	@Path("find")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String findAccounts(String json, @Context HttpServletRequest request) {
+	public Collection<? extends Account> findAccounts(String json, @Context HttpServletRequest request) {
 		authorizationService.requireUserRole(request, Role.ADMIN);
 		
 		try {
@@ -89,9 +91,7 @@ public class AccountsResource {
 			} else {
 				throw new WebApplicationException(Status.BAD_REQUEST);
 			}
-			return om.writeValueAsString(accounts);
-		} catch(JsonGenerationException e) {
-			throw new WebApplicationException(e);
+			return accounts;
 		} catch(JsonMappingException e) {
 			throw new WebApplicationException(e);
 		} catch(IOException e) {
@@ -141,16 +141,8 @@ public class AccountsResource {
 	
 		@GET
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getAccount() {
-			try {
-				return new ObjectMapper().writeValueAsString(this.account);
-			} catch(JsonGenerationException e) {
-				throw new WebApplicationException(e);
-			} catch(JsonMappingException e) {
-				throw new WebApplicationException(e);
-			} catch(IOException e) {
-				throw new WebApplicationException(e);
-			}
+		public Account getAccount() {
+			return this.account;
 		}
 		
 		@PUT
@@ -235,25 +227,17 @@ public class AccountsResource {
 		@GET
 		@Path("validate")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String validateAccount() {
+		public Set<ProposedChange> validateAccount() {
 			if(!admin) {
 				throw new WebApplicationException(Status.NOT_FOUND);
 			}
 			
-			try {
-				AccountChecker c = new AccountChecker(this.account);
-				c.run();
-				if(c.isSound()) {
-					throw new WebApplicationException(Status.NO_CONTENT);
-				}
-				return new ObjectMapper().writeValueAsString(c.getProposedChanges());
-			} catch(JsonGenerationException e) {
-				throw new WebApplicationException(e);
-			} catch(JsonMappingException e) {
-				throw new WebApplicationException(e);
-			} catch(IOException e) {
-				throw new WebApplicationException(e);
+			AccountChecker c = new AccountChecker(this.account);
+			c.run();
+			if(c.isSound()) {
+				throw new WebApplicationException(Status.NO_CONTENT);
 			}
+			return c.getProposedChanges();
 		}
 	}
 

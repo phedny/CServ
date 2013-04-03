@@ -1,6 +1,5 @@
 package nl.limesco.cserv.pricing.rest;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,8 +18,6 @@ import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
 import nl.limesco.cserv.pricing.api.SmsPricingRule;
 import nl.limesco.cserv.pricing.api.VoicePricingRule;
-
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.collect.Sets;
 
@@ -60,46 +57,34 @@ public class PricingResource {
 		@GET
 		@Path("voice")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getVoice() {
-			try {
-				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
-				for (VoicePricingRule rule : pricingService.getApplicablePricingRules(VoicePricingRule.class, day)) {
-					pricingRules.add(new RestPricingRule(rule));
-				}
-				return new ObjectMapper().writeValueAsString(pricingRules);
-			} catch (IOException e) {
-				throw new WebApplicationException(e);
+		public Collection<RestPricingRule> getVoice() {
+			final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
+			for (VoicePricingRule rule : pricingService.getApplicablePricingRules(VoicePricingRule.class, day)) {
+				pricingRules.add(new RestPricingRule(rule));
 			}
+			return pricingRules;
 		}
 
 		@GET
 		@Path("sms")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getSms() {
-			try {
-				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
-				for (SmsPricingRule rule : pricingService.getApplicablePricingRules(SmsPricingRule.class, day)) {
-					pricingRules.add(new RestPricingRule(rule));
-				}
-				return new ObjectMapper().writeValueAsString(pricingRules);
-			} catch (IOException e) {
-				throw new WebApplicationException(e);
+		public Collection<RestPricingRule> getSms() {
+			final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
+			for (SmsPricingRule rule : pricingService.getApplicablePricingRules(SmsPricingRule.class, day)) {
+				pricingRules.add(new RestPricingRule(rule));
 			}
+			return pricingRules;
 		}
 
 		@GET
 		@Path("data")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getData() {
-			try {
-				final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
-				for (DataPricingRule rule : pricingService.getApplicablePricingRules(DataPricingRule.class, day)) {
-					pricingRules.add(new RestPricingRule(rule));
-				}
-				return new ObjectMapper().writeValueAsString(pricingRules);
-			} catch (IOException e) {
-				throw new WebApplicationException(e);
+		public Collection<RestPricingRule> getData() {
+			final Collection<RestPricingRule> pricingRules = Sets.newHashSet();
+			for (DataPricingRule rule : pricingService.getApplicablePricingRules(DataPricingRule.class, day)) {
+				pricingRules.add(new RestPricingRule(rule));
 			}
+			return pricingRules;
 		}
 		
 	}
