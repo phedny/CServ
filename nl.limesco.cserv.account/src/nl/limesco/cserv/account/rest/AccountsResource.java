@@ -1,10 +1,13 @@
 package nl.limesco.cserv.account.rest;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -34,6 +38,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.osgi.service.log.LogService;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
@@ -46,6 +51,8 @@ public class AccountsResource {
 	private volatile WebAuthorizationService authorizationService;
 	
 	private volatile AccountService accountService;
+	
+	private volatile LogService logService;
 
 	public void extensionAdded(AccountResourceExtension extension) {
 		final Path pathAnnotation = extension.getClass().getAnnotation(Path.class);
@@ -141,10 +148,43 @@ public class AccountsResource {
 	
 		@GET
 		@Produces(MediaType.APPLICATION_JSON)
-		public Account getAccount() {
-			return this.account;
+		public Account getAccount(@QueryParam("includeExtensions") boolean includeExtensions) {
+			if (includeExtensions) {
+				final Map<String, Object> accountExtensions = Maps.newHashMap();
+				for (Entry<String, AccountResourceExtension> entry : extensions.entrySet()) {
+					final Object extension = entry.getValue().getAccountResourceExtention(account, admin);
+					Method method = findDefaultMethod(extension);
+					if (method != null) {
+						try {
+							Object result = method.invoke(extension);
+							accountExtensions.put(entry.getKey(), result);
+						} catch (IllegalArgumentException e) {
+							throw new RuntimeException(e); // This should be impossible
+						} catch (IllegalAccessException e) {
+							throw new RuntimeException(e); // This should be impossible
+						} catch (InvocationTargetException e) {
+							logService.log(LogService.LOG_WARNING, "Uncaught exception thrown; account: "
+									+ account.getId() + ", extension: " + entry.getKey(), e.getCause());
+						}
+					}
+				}
+				return new AccountWithExtensions(account, accountExtensions);
+			} else {
+				return account;
+			}
 		}
 		
+		private Method findDefaultMethod(Object extension) {
+			for (Method method : extension.getClass().getDeclaredMethods()) {
+				GET getAnnotation = method.getAnnotation(GET.class);
+				Path pathAnnotation = method.getAnnotation(Path.class);
+				if (method.getParameterTypes().length == 0 && getAnnotation != null && pathAnnotation == null) {
+					return method;
+				}
+			}
+			return null;
+		}
+
 		@PUT
 		@Consumes(MediaType.APPLICATION_JSON)
 		public void updateAccount(String json) {
