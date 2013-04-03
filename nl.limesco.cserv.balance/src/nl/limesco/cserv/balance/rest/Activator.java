@@ -19,7 +19,7 @@ public class Activator extends DependencyActivatorBase {
 		manager.add(createComponent()
 				.setInterface(AccountResourceExtension.class.getName(), null)
 				.setImplementation(BalanceResourceExtension.class)
-				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(PaymentService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
+				.add(createServiceDependency().setService(InvoiceService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
 				.add(createServiceDependency().setService(PaymentService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(PaymentService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 
