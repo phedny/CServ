@@ -34,6 +34,7 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoicing)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.rest)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.balance.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.transform)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
@@ -83,6 +84,7 @@
 	org.amdatu.mongo;version='[1.0.3,1.0.4)',\
 	org.apache.felix.log;version='[1.0.1,1.0.2)',\
 	nl.limesco.cserv.payment.rest;version=latest,\
+	nl.limesco.cserv.balance.rest;version=latest,\
 	nl.limesco.cserv.pricing.rest;version=latest,\
 	nl.limesco.cserv.auth.login;version=latest,\
 	nl.limesco.cserv.payment.mongo;version=latest,\

@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.balance.rest.Activator
+Private-Package: nl.limesco.cserv.balance.rest

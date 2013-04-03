@@ -1,0 +1,12 @@
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	org.apache.felix.dependencymanager,\
+	nl.limesco.cserv.util.dm;version=latest,\
+	nl.limesco.cserv.account.api;version=latest,\
+	nl.limesco.cserv.invoice.api;version=latest,\
+	nl.limesco.cserv.payment.api;version=latest,\
+	org.amdatu.web.rest.jaxrs,\
+	jackson-core-asl,\
+	jackson-mapper-asl,\
+	com.google.guava
+-sub: *.bnd
