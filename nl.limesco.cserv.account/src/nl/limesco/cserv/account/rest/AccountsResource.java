@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -41,6 +42,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.osgi.service.log.LogService;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @Path("accounts")
@@ -83,7 +85,7 @@ public class AccountsResource {
 	@Path("find")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<? extends Account> findAccounts(String json, @Context HttpServletRequest request) {
+	public Collection<? extends Account> findAccounts(String json, @QueryParam("includeExtensions") boolean includeExtensions, @Context HttpServletRequest request) {
 		authorizationService.requireUserRole(request, Role.ADMIN);
 		
 		try {
@@ -98,7 +100,16 @@ public class AccountsResource {
 			} else {
 				throw new WebApplicationException(Status.BAD_REQUEST);
 			}
-			return accounts;
+			
+			if (includeExtensions) {
+				final List<Account> extendedAccounts = Lists.newArrayList();
+				for (Account account : accounts) {
+					extendedAccounts.add(addExtensionsToAccount(account, true));
+				}
+				return extendedAccounts;
+			} else {
+				return accounts;
+			}
 		} catch(JsonMappingException e) {
 			throw new WebApplicationException(e);
 		} catch(IOException e) {
@@ -134,7 +145,41 @@ public class AccountsResource {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
+
+	private AccountWithExtensions addExtensionsToAccount(Account account, boolean admin) {
+		final Map<String, Object> accountExtensions = Maps.newHashMap();
+		for (Entry<String, AccountResourceExtension> entry : extensions.entrySet()) {
+			final Object extension = entry.getValue().getAccountResourceExtention(account, admin);
+			Method method = findDefaultMethod(extension);
+			if (method != null) {
+				try {
+					Object result = method.invoke(extension);
+					accountExtensions.put(entry.getKey(), result);
+				} catch (IllegalArgumentException e) {
+					throw new RuntimeException(e); // This should be impossible
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e); // This should be impossible
+				} catch (InvocationTargetException e) {
+					logService.log(LogService.LOG_WARNING, "Uncaught exception thrown; account: "
+							+ account.getId() + ", extension: " + entry.getKey(), e.getCause());
+				}
+			}
+		}
+		AccountWithExtensions account2 = new AccountWithExtensions(account, accountExtensions);
+		return account2;
+	}
 	
+	private Method findDefaultMethod(Object extension) {
+		for (Method method : extension.getClass().getDeclaredMethods()) {
+			GET getAnnotation = method.getAnnotation(GET.class);
+			Path pathAnnotation = method.getAnnotation(Path.class);
+			if (method.getParameterTypes().length == 0 && getAnnotation != null && pathAnnotation == null) {
+				return method;
+			}
+		}
+		return null;
+	}
+
 	public class AccountResource {
 		
 		private final Account account;
@@ -150,39 +195,10 @@ public class AccountsResource {
 		@Produces(MediaType.APPLICATION_JSON)
 		public Account getAccount(@QueryParam("includeExtensions") boolean includeExtensions) {
 			if (includeExtensions) {
-				final Map<String, Object> accountExtensions = Maps.newHashMap();
-				for (Entry<String, AccountResourceExtension> entry : extensions.entrySet()) {
-					final Object extension = entry.getValue().getAccountResourceExtention(account, admin);
-					Method method = findDefaultMethod(extension);
-					if (method != null) {
-						try {
-							Object result = method.invoke(extension);
-							accountExtensions.put(entry.getKey(), result);
-						} catch (IllegalArgumentException e) {
-							throw new RuntimeException(e); // This should be impossible
-						} catch (IllegalAccessException e) {
-							throw new RuntimeException(e); // This should be impossible
-						} catch (InvocationTargetException e) {
-							logService.log(LogService.LOG_WARNING, "Uncaught exception thrown; account: "
-									+ account.getId() + ", extension: " + entry.getKey(), e.getCause());
-						}
-					}
-				}
-				return new AccountWithExtensions(account, accountExtensions);
+				return addExtensionsToAccount(account, admin);
 			} else {
 				return account;
 			}
-		}
-		
-		private Method findDefaultMethod(Object extension) {
-			for (Method method : extension.getClass().getDeclaredMethods()) {
-				GET getAnnotation = method.getAnnotation(GET.class);
-				Path pathAnnotation = method.getAnnotation(Path.class);
-				if (method.getParameterTypes().length == 0 && getAnnotation != null && pathAnnotation == null) {
-					return method;
-				}
-			}
-			return null;
 		}
 
 		@PUT
