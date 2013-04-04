@@ -74,7 +74,7 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		final UUID builderUUID = UUID.randomUUID();
 
 		/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
-		final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(accountId);
+		final Collection<? extends Sim> sims = simService.getActiveSimsByOwnerAccountId(accountId);
 		if (sims.isEmpty()) {
 			return null;
 		}
@@ -131,7 +131,11 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 				monthStart.add(Calendar.MONTH, 1);
 				itemStart = monthStart;
 			} else {
-				itemStart = contractStartDate.get();
+				// First day of the month after the contractStartDate
+				itemStart = (Calendar)contractStartDate.get().clone();
+				itemStart.setTimeZone(TimeZone.getTimeZone("UTC"));
+				itemStart.add(Calendar.MONTH, 1);
+				itemStart.set(Calendar.DAY_OF_MONTH, 1);
 			}
 			
 			// compute subscription costs starting with itemStart, ending in end of that month;

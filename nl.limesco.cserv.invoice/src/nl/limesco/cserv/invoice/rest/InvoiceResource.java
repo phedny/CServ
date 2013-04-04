@@ -22,14 +22,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
-import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
-import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
-import nl.limesco.cserv.invoice.api.ItemLine;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -46,6 +44,8 @@ public class InvoiceResource {
 	
 	private final InvoiceConstructor invoiceConstructor;
 	
+	private final BatchInvoicingService batchInvoicingService;
+	
 	private final Account account;
 	
 	private final boolean admin;
@@ -54,10 +54,11 @@ public class InvoiceResource {
 		setTimeZone(TimeZone.getTimeZone("UTC"));
 	}};
 	
-	public InvoiceResource(InvoiceService invoiceService, InvoiceTransformationService invoiceTransformationService, InvoiceConstructor invoiceConstructor, Account account, boolean admin) {
+	public InvoiceResource(InvoiceService invoiceService, InvoiceTransformationService invoiceTransformationService, InvoiceConstructor invoiceConstructor, BatchInvoicingService batchInvoicingService, Account account, boolean admin) {
 		this.invoiceService = invoiceService;
 		this.invoiceTransformationService = invoiceTransformationService;
 		this.invoiceConstructor = invoiceConstructor;
+		this.batchInvoicingService = batchInvoicingService;
 		this.account = account;
 		this.admin = admin;
 	}
@@ -122,6 +123,8 @@ public class InvoiceResource {
 		}
 		
 		try {
+			batchInvoicingService.computePricingForUnpricedCdrs();
+			
 			boolean dry_run;
 			ObjectMapper om = new ObjectMapper();
 			Map<String,String> req = om.readValue(json, Map.class);
