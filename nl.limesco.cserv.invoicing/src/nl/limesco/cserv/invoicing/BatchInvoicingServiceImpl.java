@@ -109,7 +109,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 		}
 	}
 
-	private void computePricingForUnpricedCdrs() {
+	public void computePricingForUnpricedCdrs() {
 		for (Cdr cdr : cdrService.getUnpricedCdrs()) {
 			try {
 				if (!cdr.getAccount().isPresent()) {
