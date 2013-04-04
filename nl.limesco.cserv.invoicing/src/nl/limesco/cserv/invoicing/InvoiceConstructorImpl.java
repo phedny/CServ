@@ -74,7 +74,7 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		final UUID builderUUID = UUID.randomUUID();
 
 		/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
-		final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(accountId);
+		final Collection<? extends Sim> sims = simService.getActiveSimsByOwnerAccountId(accountId);
 		if (sims.isEmpty()) {
 			return null;
 		}

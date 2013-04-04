@@ -117,7 +117,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 				}
 				
 				/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
-				final Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(cdr.getAccount().get());
+				final Collection<? extends Sim> sims = simService.getActiveSimsByOwnerAccountId(cdr.getAccount().get());
 				if (sims.isEmpty()) {
 					continue;
 				}
