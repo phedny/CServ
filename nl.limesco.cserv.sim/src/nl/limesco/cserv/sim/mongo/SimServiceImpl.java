@@ -44,6 +44,15 @@ public class SimServiceImpl implements SimService {
 	}
 
 	@Override
+	public Collection<? extends Sim> getActiveSimsByOwnerAccountId(String accountId) {
+		checkNotNull(accountId);
+		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery.and(
+				DBQuery.is("ownerAccountId", accountId),
+				DBQuery.is("state", SimState.ACTIVATED.toString())));
+		return Sets.newHashSet((Iterator<SimImpl>) invoiceCursor);
+	}
+	
+	@Override
 	public Collection<? extends Sim> getUnallocatedSims() {
 		final DBCursor<SimImpl> cursor = collection().find(DBQuery.is("state", SimState.STOCK));
 		return Sets.newHashSet((Iterator<SimImpl>) cursor);
