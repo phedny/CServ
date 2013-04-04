@@ -34,12 +34,14 @@ public class AccountChecker {
 		if(this.ran) return;
 		checkDummyAccount();
 		checkStateProperties();
+		checkExternalReferences();
 		this.ran = true;
 	}
 	
 	public static enum ProposedChangeIdentifier {
 		DUMMY_DEACTIVATE("Dummy account, proposed deactivation"),
 		EXTERNAL_DUMMY_MERGE("Dummy account with external references, proposed merge with real account"),
+		NO_EXTERNAL_REF("Account has SIMs but no external SpeakUp reference, so can't be matched with CDRs"),
 		ASK_CONFIRMATION("Ask the user for confirmation"),
 		PROCESS_CONFIRMATION("Process user confirmation"),
 		ADMINISTRATIVE_CONFIRMATION("Immediately set account to confirmed state"),
@@ -119,6 +121,14 @@ public class AccountChecker {
 		case DEACTIVATED:
 			// nothing to be done
 			break;
+		}
+	}
+	
+	protected void checkExternalReferences() {
+		// TODO, issue #74: does this account have an activated SIM?
+		if(!account.getExternalAccounts().containsKey("speakup")) {
+			ProposedChange c = new ProposedChange(ProposedChangeIdentifier.NO_EXTERNAL_REF);
+			proposedChanges.add(c);
 		}
 	}
 }
