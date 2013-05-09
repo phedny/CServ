@@ -14,5 +14,6 @@
 	nl.limesco.cserv.util.pdflatex;version=latest,\
 	nl.limesco.cserv.lib.poi,\
 	javax.servlet,\
-	org.mockito.mockito-all
+	org.mockito.mockito-all,\
+	nl.limesco.cserv.auth.api;version=latest
 -sub: *.bnd
