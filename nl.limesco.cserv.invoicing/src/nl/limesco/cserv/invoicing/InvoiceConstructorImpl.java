@@ -91,12 +91,19 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		endOfSubscriptionPeriod.add(Calendar.MONTH, 1);
 		endOfSubscriptionPeriod.add(Calendar.DAY_OF_MONTH, -1);
 		
+		// Until when will we be processing CDRs? -> start of this month
+		final Calendar endOfCdrPeriod = (Calendar) day.clone();
+		endOfCdrPeriod.set(Calendar.HOUR_OF_DAY, 0);
+		endOfCdrPeriod.set(Calendar.MINUTE, 0);
+		endOfCdrPeriod.set(Calendar.SECOND, 0);
+		endOfCdrPeriod.set(Calendar.DAY_OF_MONTH, 1);
+		
 		// all activated SIMs which did not have an activation invoice yet
 		final Collection<? extends Sim> simActivations = simService.getActivatedSimsWithoutActivationInvoiceByOwnerAccountId(accountId);
 		// all activated SIMs which were not invoiced yet on or after this day
 		final Collection<? extends Sim> subscriptionFees = simService.getActivatedSimsLastInvoicedBeforeByOwnerAccountId(day, accountId);
-		// all CDR's which were not invoiced yet (XXX #67) (XXX only until given day)
-		final Collection<? extends Cdr> cdrs = cdrService.getUninvoicedCdrsForAccount(accountId, builderUUID.toString());
+		// all CDR's which were not invoiced yet (XXX #67)
+		final Collection<? extends Cdr> cdrs = cdrService.getUninvoicedCdrsForAccount(accountId, builderUUID.toString(), endOfCdrPeriod);
 		
 		// Start building the invoice
 		final InvoiceBuilder builder = invoiceService.buildInvoice()

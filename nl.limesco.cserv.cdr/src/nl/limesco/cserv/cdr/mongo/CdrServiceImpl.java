@@ -3,6 +3,7 @@ package nl.limesco.cserv.cdr.mongo;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
@@ -72,8 +73,8 @@ public class CdrServiceImpl implements CdrService {
 	}
 
 	@Override
-	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder) {
-		collection().update(DBQuery.is("account", account).exists("pricing").notExists("invoice"),
+	public Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder, Calendar until) {
+		collection().update(DBQuery.is("account", account).exists("pricing").notExists("invoice").lessThan("time", until.getTime()),
 				new BasicDBObject("$set", new BasicDBObject("invoiceBuilder", builder)),
 				false, true /* multi */);
 		return Sets.newHashSet((Iterator<AbstractMongoCdr>) collection().find(DBQuery.is("invoiceBuilder", builder)));

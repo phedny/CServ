@@ -1,5 +1,6 @@
 package nl.limesco.cserv.cdr.api;
 
+import java.util.Calendar;
 import java.util.Collection;
 
 import com.google.common.base.Optional;
@@ -14,7 +15,7 @@ public interface CdrService {
 	
 	Collection<? extends Cdr> getUninvoicedCdrs();
 
-	Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder);
+	Collection<? extends Cdr> getUninvoicedCdrsForAccount(String account, String builder, Calendar until);
 
 	void storeCdr(Cdr cdr);
 	
