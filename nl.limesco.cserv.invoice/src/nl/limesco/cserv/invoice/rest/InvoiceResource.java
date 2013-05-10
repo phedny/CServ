@@ -65,7 +65,7 @@ public class InvoiceResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getInvoices() {
+	public List<SummarizedInvoice> getInvoices() {
 		final List<SummarizedInvoice> summarizedInvoices = Lists.newArrayList();
 		for (Invoice invoice : invoiceService.getInvoicesByAccountId(account.getId())) {
 			if (!invoice.isSound()) {
@@ -74,15 +74,7 @@ public class InvoiceResource {
 			summarizedInvoices.add(new SummarizedInvoice(invoice));
 		}
 		
-		try {
-			return new ObjectMapper().writeValueAsString(summarizedInvoices);
-		} catch (JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch (JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch (IOException e) {
-			throw new WebApplicationException(e);
-		}
+		return summarizedInvoices;
 	}
 	
 	@GET

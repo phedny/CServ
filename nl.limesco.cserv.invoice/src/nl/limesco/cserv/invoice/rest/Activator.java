@@ -4,8 +4,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
 import nl.limesco.cserv.account.api.AccountResourceExtension;
+import nl.limesco.cserv.auth.api.WebAuthorizationService;
 import nl.limesco.cserv.invoice.api.BatchInvoicingService;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
+import nl.limesco.cserv.invoice.api.InvoiceReportService;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
 import nl.limesco.cserv.util.dm.UnavailableOSGiService;
@@ -25,6 +27,12 @@ public class Activator extends DependencyActivatorBase {
 				.add(createServiceDependency().setService(InvoiceTransformationService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceTransformationService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
 				.add(createServiceDependency().setService(InvoiceConstructor.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceConstructor.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE)))
 				.add(createServiceDependency().setService(BatchInvoicingService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(BatchInvoicingService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
+		
+		manager.add(createComponent()
+				.setInterface(Object.class.getName(), null)
+				.setImplementation(InvoiceReportResource.class)
+				.add(createServiceDependency().setService(WebAuthorizationService.class).setRequired(true))
+				.add(createServiceDependency().setService(InvoiceReportService.class).setRequired(false).setDefaultImplementation(UnavailableOSGiService.newInstance(InvoiceReportService.class, WebApplicationException.class, Status.SERVICE_UNAVAILABLE))));
 	}
 
 	@Override

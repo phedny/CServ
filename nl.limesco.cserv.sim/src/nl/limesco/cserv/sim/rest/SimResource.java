@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -29,6 +30,7 @@ import nl.limesco.cserv.sim.api.PortingState;
 import nl.limesco.cserv.sim.api.Sim;
 import nl.limesco.cserv.sim.api.SimApnType;
 import nl.limesco.cserv.sim.api.SimChecker;
+import nl.limesco.cserv.sim.api.SimChecker.ProposedChange;
 import nl.limesco.cserv.sim.api.SimService;
 import nl.limesco.cserv.sim.api.SimState;
 
@@ -85,35 +87,17 @@ public class SimResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getMySims(String json, @Context HttpServletRequest request) {
+	public Collection<? extends Sim> getMySims(String json, @Context HttpServletRequest request) {
 		String accountId = authorizationService.requiredAccountId(request);
-		Collection<? extends Sim> sims = simService.getSimsByOwnerAccountId(accountId);
-		try {
-			return new ObjectMapper().writeValueAsString(sims);
-		} catch(JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch(JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch(IOException e) {
-			throw new WebApplicationException(e);
-		}
+		return simService.getSimsByOwnerAccountId(accountId);
 	}
 	
 	@GET
 	@Path("/unallocated")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getUnallocatedSims(@Context HttpServletRequest request) {
+	public Collection<? extends Sim> getUnallocatedSims(@Context HttpServletRequest request) {
 		authorizationService.requireUserRole(request, Role.ADMIN);
-		Collection<? extends Sim> sims = simService.getUnallocatedSims();
-		try {
-			return new ObjectMapper().writeValueAsString(sims);
-		} catch(JsonGenerationException e) {
-			throw new WebApplicationException(e);
-		} catch(JsonMappingException e) {
-			throw new WebApplicationException(e);
-		} catch(IOException e) {
-			throw new WebApplicationException(e);
-		}
+		return simService.getUnallocatedSims();
 	}
 	
 	public class SimSubResource {
@@ -125,16 +109,8 @@ public class SimResource {
 	
 		@GET
 		@Produces(MediaType.APPLICATION_JSON)
-		public String getSim() {
-			try {
-				return new ObjectMapper().writeValueAsString(this.sim);
-			} catch(JsonGenerationException e) {
-				throw new WebApplicationException(e);
-			} catch(JsonMappingException e) {
-				throw new WebApplicationException(e);
-			} catch(IOException e) {
-				throw new WebApplicationException(e);
-			}
+		public Sim getSim() {
+			return sim;
 		}
 		
 		@PUT
@@ -210,22 +186,14 @@ public class SimResource {
 		@GET
 		@Path("validate")
 		@Produces(MediaType.APPLICATION_JSON)
-		public String validateSim(@Context HttpServletRequest request) {		
+		public Set<ProposedChange> validateSim(@Context HttpServletRequest request) {		
 			authorizationService.requireUserRole(request, Role.ADMIN);
-			try {
-				SimChecker c = new SimChecker(this.sim);
-				c.run();
-				if(c.isSound()) {
-					throw new WebApplicationException(Status.NO_CONTENT);
-				}
-				return new ObjectMapper().writeValueAsString(c.getProposedChanges());
-			} catch(JsonGenerationException e) {
-				throw new WebApplicationException(e);
-			} catch(JsonMappingException e) {
-				throw new WebApplicationException(e);
-			} catch(IOException e) {
-				throw new WebApplicationException(e);
+			SimChecker c = new SimChecker(this.sim);
+			c.run();
+			if(c.isSound()) {
+				throw new WebApplicationException(Status.NO_CONTENT);
 			}
+			return c.getProposedChanges();
 		}
 	}
 

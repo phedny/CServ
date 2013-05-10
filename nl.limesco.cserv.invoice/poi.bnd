@@ -1,0 +1,2 @@
+Private-Package: nl.limesco.cserv.invoice.poi
+Bundle-Activator: nl.limesco.cserv.invoice.poi.Activator

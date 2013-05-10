@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.DBQuery;
+import net.vz.mongodb.jackson.DBQuery.Query;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import net.vz.mongodb.jackson.WriteResult;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
@@ -60,6 +61,18 @@ public class InvoiceServiceImpl implements InvoiceService {
 	public Collection<? extends Invoice> getInvoicesByAccountId(String accountId) {
 		checkNotNull(accountId);
 		final DBCursor<InvoiceImpl> invoiceCursor = collection().find(new BasicDBObject().append("accountId", accountId));
+		return Lists.newArrayList((Iterator<InvoiceImpl>) invoiceCursor);
+	}
+
+	@Override
+	public Collection<? extends Invoice> getInvoicesByPeriod(Calendar start, Calendar end) {
+		checkNotNull(start);
+		checkNotNull(end);
+		
+		final DBCursor<InvoiceImpl> invoiceCursor = collection().find(DBQuery
+				.greaterThanEquals("creationDate", start.getTime())
+				.lessThan("creationDate", end.getTime())
+				);
 		return Lists.newArrayList((Iterator<InvoiceImpl>) invoiceCursor);
 	}
 

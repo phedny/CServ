@@ -1,6 +1,7 @@
 package nl.limesco.cserv.invoice.api;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
 
 import com.google.common.base.Optional;
@@ -10,6 +11,8 @@ public interface InvoiceService {
 	Optional<? extends Invoice> getInvoiceById(String id);
 
 	Collection<? extends Invoice> getInvoicesByAccountId(String accountId);
+	
+	Collection<? extends Invoice> getInvoicesByPeriod(Calendar start, Calendar end);
 	
 	Invoice storeInvoice(Invoice invoice) throws IdAllocationException;
 	
