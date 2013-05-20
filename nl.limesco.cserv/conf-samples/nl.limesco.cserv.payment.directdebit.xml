@@ -1,0 +1,12 @@
+<MetaData xmlns:metatype='http://www.osgi.org/xmlns/metatype/v1.0.0'>
+  <OCD name='ocd' id='ocd'>
+    <AD id='creditor_id' type='STRING' cardinality='0' />
+  </OCD>
+  <Designate pid='nl.limesco.cserv.payment.directdebit' bundle="osgi-dp:nl.limesco.cserv.payment.directdebit">
+    <Object ocdref='ocd'>
+      <Attribute adref='creditor_id'>
+        <Value><![CDATA[]]></Value>
+      </Attribute>
+    </Object>
+  </Designate>
+</MetaData>

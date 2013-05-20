@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.payment.directdebit.rest.Activator
+Private-Package: nl.limesco.cserv.payment.directdebit.rest

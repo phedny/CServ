@@ -1,0 +1,2 @@
+Bundle-Activator: nl.limesco.cserv.payment.directdebit.mongo.Activator
+Private-Package: nl.limesco.cserv.payment.directdebit.mongo

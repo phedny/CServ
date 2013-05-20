@@ -37,7 +37,9 @@
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.balance.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.sim.rest)',\
 	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.transform)',\
-	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.poi)'
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.invoice.poi)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.directdebit.mongo)',\
+	osgi.identity;filter:='(osgi.identity=nl.limesco.cserv.payment.directdebit.rest)'
 -runfw: org.apache.felix.framework;version='[4.0.3,4.0.3]'
 -runee: JavaSE-1.7
 -runproperties: felix.fileinstall.dir=conf/
@@ -83,6 +85,9 @@
 	nl.limesco.cserv.lib.quartz.scheduler;version=latest,\
 	nl.limesco.cserv.lib.quartz.wrappedlibrary;version='[2.1.6,2.1.7)',\
 	nl.limesco.cserv.payment.api;version=latest,\
+	nl.limesco.cserv.payment.directdebit.api;version=latest,\
+	nl.limesco.cserv.payment.directdebit.mongo;version=latest,\
+	nl.limesco.cserv.payment.directdebit.rest;version=latest,\
 	nl.limesco.cserv.payment.mongo;version=latest,\
 	nl.limesco.cserv.payment.rest;version=latest,\
 	nl.limesco.cserv.pricing.api;version=latest,\
