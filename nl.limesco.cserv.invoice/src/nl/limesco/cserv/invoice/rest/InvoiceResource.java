@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -28,8 +29,9 @@ import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
+import nl.limesco.cserv.invoice.api.QueuedItemLine;
 
-import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -96,6 +98,36 @@ public class InvoiceResource {
 	@Produces("application/pdf")
 	public byte[] getInvoiceByIdAsPdf(@PathParam("invoiceId") String id) {
 		return invoiceTransformationService.transformToPdf(getInvoiceByIdForRest(id), account);
+	}
+	
+	@GET
+	@Path("queuedItemLines")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<? extends QueuedItemLine> getQueuedItemLines() {
+		if (!admin) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+		return invoiceService.getQueuedItemLinesByAccountId(account.getId());
+	}
+	
+	@POST
+	@Path("queueItemLine")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response queueItemLine(String body) {
+		if(!admin) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+		try {
+			QueuedItemLine itemLine = invoiceService.createQueuedItemLineFromJson(body);
+			invoiceService.addQueuedItemLineToAccountId(itemLine);
+			return Response.status(Status.ACCEPTED).build();
+		} catch (JsonParseException e) {
+			throw new WebApplicationException(e);
+		} catch (JsonMappingException e) {
+			throw new WebApplicationException(e);
+		} catch (IOException e) {
+			throw new WebApplicationException(e);
+		}
 	}
 	
 	private Invoice getInvoiceByIdForRest(String id) {

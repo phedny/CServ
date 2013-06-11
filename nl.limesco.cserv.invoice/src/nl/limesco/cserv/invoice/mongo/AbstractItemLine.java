@@ -14,7 +14,8 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
 	@JsonSubTypes.Type(value = NormalItemLineImpl.class, name = "normal"),
-	@JsonSubTypes.Type(value = DurationItemLineImpl.class, name = "duration")
+	@JsonSubTypes.Type(value = DurationItemLineImpl.class, name = "duration"),
+	@JsonSubTypes.Type(value = QueuedItemLineImpl.class, name = "queued")
 })
 public abstract class AbstractItemLine implements ItemLine {
 	

@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.DBQuery;
-import net.vz.mongodb.jackson.DBQuery.Query;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import net.vz.mongodb.jackson.WriteResult;
 import nl.limesco.cserv.invoice.api.IdAllocationException;
 import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.QueuedItemLine;
 
 import org.amdatu.mongo.MongoDBService;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,6 +36,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	private static final Pattern PREFIX_PATTERN = Pattern.compile("[A-Za-z0-9]+");
 
 	private static final String COLLECTION = "invoices";
+	private static final String ITEMLINE_QUEUE_COLLECTION = "queued_itemlines";
 	
 	private static final int INVOICE_ID_LENGTH = 9; 
 	
@@ -134,6 +135,36 @@ public class InvoiceServiceImpl implements InvoiceService {
 	public Invoice createInvoiceFromJson(String json) throws IOException {
 		return new ObjectMapper().readValue(json, InvoiceImpl.class);
 	}
+	
+	private JacksonDBCollection<QueuedItemLineImpl, String> queuedItemLinesCollection() {
+		final DBCollection dbCollection = mongoDBService.getDB().getCollection(ITEMLINE_QUEUE_COLLECTION);
+		final JacksonDBCollection<QueuedItemLineImpl, String> collection = JacksonDBCollection.wrap(dbCollection, QueuedItemLineImpl.class, String.class);
+		return collection;
+	}
+
+	@Override
+	public Collection<? extends QueuedItemLine> getQueuedItemLinesByAccountId(String accountId) {
+		checkNotNull(accountId);
+		final DBCursor<QueuedItemLineImpl> invoiceCursor = queuedItemLinesCollection().find(new BasicDBObject().append("queuedForAccountId", accountId));
+		return Lists.newArrayList((Iterator<QueuedItemLineImpl>) invoiceCursor);
+	}
+
+	@Override
+	public void clearQueuedItemLinesByAccountId(String accountId) {
+		queuedItemLinesCollection().remove(new BasicDBObject().append("accountId", accountId));
+	}
+	
+	@Override
+	public QueuedItemLine createQueuedItemLineFromJson(String json) throws IOException {
+		return new ObjectMapper().readValue(json, QueuedItemLineImpl.class);
+	}
+
+	@Override
+	public void addQueuedItemLineToAccountId(QueuedItemLine itemLine) {
+		QueuedItemLineImpl impl = (QueuedItemLineImpl) itemLine;
+		impl.setTotalPrice();
+		queuedItemLinesCollection().insert(impl);
+	} 
 	
 	@Override
 	public void lock() {
