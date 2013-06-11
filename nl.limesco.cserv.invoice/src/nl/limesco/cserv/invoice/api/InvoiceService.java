@@ -19,6 +19,11 @@ public interface InvoiceService {
 	InvoiceBuilder buildInvoice();
 	
 	Invoice createInvoiceFromJson(String json) throws IOException;
+	QueuedItemLine createQueuedItemLineFromJson(String json) throws IOException;
+	
+	Collection<? extends QueuedItemLine> getQueuedItemLinesByAccountId(String accountId);
+	void clearQueuedItemLinesByAccountId(String accountId);
+	void addQueuedItemLineToAccountId(QueuedItemLine itemLine);
 	
 	/**
 	 * Lock the InvoiceService. This should be done when one starts a process
