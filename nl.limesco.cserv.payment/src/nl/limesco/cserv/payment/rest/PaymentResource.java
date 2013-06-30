@@ -96,7 +96,7 @@ public class PaymentResource {
 			
 			final Payment payment = builder.build();
 			paymentService.updatePayment(payment);
-			return Response.created(new URI(account.getId() + "/payments/" + payment.getId())).build();
+			return Response.created(new URI("/accounts/" + account.getId() + "/payments/" + payment.getId())).build();
 			
 		} catch (IOException e) {
 			throw new WebApplicationException(e);

@@ -77,7 +77,7 @@ public class SimResource {
 				throw new WebApplicationException(Status.CONFLICT);
 			}
 			simService.storeSim(newSim);
-			return Response.created(new URI(newSim.getIccid())).build();
+			return Response.created(new URI("/sims/" + newSim.getIccid())).build();
 		} catch (IOException e) {
 			throw new WebApplicationException(e);
 		} catch (URISyntaxException e) {

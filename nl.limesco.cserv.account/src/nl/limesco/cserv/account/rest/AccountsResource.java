@@ -129,7 +129,7 @@ public class AccountsResource {
 				throw new WebApplicationException(Status.BAD_REQUEST);
 			}
 			accountService.updateAccount(newAccount);
-			return Response.created(new URI(newAccount.getId())).build();
+			return Response.created(new URI("/accounts/" + newAccount.getId())).build();
 		} catch (IOException e) {
 			throw new WebApplicationException(e);
 		} catch (URISyntaxException e) {
