@@ -95,7 +95,8 @@ public class SimServiceImpl implements SimService {
 	public Collection<? extends Sim> getActivatedSimsLastInvoicedBeforeByOwnerAccountId(Calendar monthCal, String accountId) {
 		int year = monthCal.get(Calendar.YEAR);
 		int month = monthCal.get(Calendar.MONTH);
-		final DBCursor<SimImpl> invoiceCursor = collection().find(DBQuery.is("ownerAccountId", accountId).or(
+		final DBCursor<SimImpl> invoiceCursor = collection().find(
+			DBQuery.is("ownerAccountId", accountId).is("state", "ACTIVATED").or(
 				DBQuery.notExists("lastMonthlyFeesInvoice"),
 				DBQuery.lessThan("lastMonthlyFeesInvoice.year", year),
 				DBQuery.and(
