@@ -76,10 +76,9 @@ public class CsvLineCdr implements VoiceCdr {
 			}
 		}
 		
-		checkNotNull(callId);
-		checkNotNull(from);
-		checkNotNull(to);
-		checkNotNull(destination);
+		if(callId == null || from == null || to == null || destination == null) {
+			throw new IllegalArgumentException("A field was NULL in CsvLineCdr; maybe the cdr configuration is incomplete?");
+		}
 		
 		this.callId = callId;
 		this.from = from;
