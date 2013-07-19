@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
@@ -109,6 +110,48 @@ public class SimServiceImpl implements SimService {
 	public Optional<? extends Sim> getSimByIccid(String iccid) {
 		checkNotNull(iccid);
 		return Optional.fromNullable(collection().findOne(new BasicDBObject().append("_id", iccid)));
+	}
+	
+	private Collection<String> getPhoneNumberVariations(String phoneNumber) {
+		Collection<String> list = new ArrayList<String>();
+		phoneNumber.replace("-",  "");
+		if(phoneNumber.startsWith("06")) {
+			phoneNumber = phoneNumber.substring(2);
+		} else if(phoneNumber.startsWith("316")) {
+			phoneNumber = phoneNumber.substring(3);
+		} else if(phoneNumber.startsWith("+316")) {
+			phoneNumber = phoneNumber.substring(4);
+		} else {
+			throw new NumberFormatException("Number prefix format not recognised");
+		}
+		if(phoneNumber.length() != 8) {
+			throw new NumberFormatException("Number base format not recognised");
+		}
+		// This is the list of ways in which the given phone number may be
+		// stored in the database -- preferably in the order of likeliness,
+		// with the most likely storing candidate above.
+		list.add("316" + phoneNumber);
+		list.add("06-" + phoneNumber);
+		list.add("06" + phoneNumber);
+		list.add("316-" + phoneNumber);
+		return list;
+	}
+	
+	private SimImpl getSimByLiteralPhoneNumber(String phoneNumber) {
+		return collection().findOne(new BasicDBObject().append("phoneNumber", phoneNumber));
+	}
+	
+	@Override
+	public Optional<? extends Sim> getSimByPhoneNumber(String phoneNumber) {
+		checkNotNull(phoneNumber);
+		Collection<String> variations = getPhoneNumberVariations(phoneNumber);
+		for(String num : variations) {
+			final SimImpl si = getSimByLiteralPhoneNumber(num);
+			if(si != null) {
+				return Optional.of(si);
+			}
+		}
+		return Optional.absent();
 	}
 
 	@Override
