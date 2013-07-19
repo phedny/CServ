@@ -22,6 +22,7 @@ import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.QueuedItemLine;
 import nl.limesco.cserv.pricing.api.DataPricing;
 import nl.limesco.cserv.pricing.api.DataPricingRule;
 import nl.limesco.cserv.pricing.api.PricingService;
@@ -110,6 +111,12 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 				.accountId(accountId)
 				.creationDate(day)
 				.currency(InvoiceCurrency.EUR);
+		
+		// Include the queued item lines
+		final Collection<? extends QueuedItemLine> queuedItemLines = invoiceService.getQueuedItemLinesByAccountId(accountId);
+		for(QueuedItemLine line : queuedItemLines) {
+			builder.itemLine(line);
+		}
 		
 		// Include the activations
 		if (!simActivations.isEmpty()) {
@@ -325,7 +332,7 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		}
 		
 		final Invoice invoice = builder.buildInvoice();
-		if (!dry_run && invoice.getTotalWithTaxes() > 0) {
+		if (!dry_run && !invoice.getItemLines().isEmpty()) {
 			invoiceService.storeInvoice(invoice);
 		
 			for (Sim sim : simActivations) {

@@ -171,7 +171,9 @@ public class InvoiceResource {
 				assert(invoice.getId() == null);
 				return Response.ok(invoiceTransformationService.transformToJson(invoice), "application/json").build();
 			}
-			assert(invoice.getId() != null);
+			if(invoice.getId() == null) {
+				return Response.noContent().build();
+			}
 			return Response.created(new URI("/accounts/" + account.getId() + "/invoices/" + invoice.getId())).build();
 		} catch (IOException e) {
 			throw new WebApplicationException(e);
