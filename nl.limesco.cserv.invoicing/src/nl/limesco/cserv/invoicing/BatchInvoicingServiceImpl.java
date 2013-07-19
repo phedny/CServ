@@ -122,6 +122,7 @@ public class BatchInvoicingServiceImpl implements BatchInvoicingService {
 					continue;
 				}
 				
+				/* XXX: Issue #37 and #67 -- for now, just assume a user has only same-typed SIMs */
 				final Sim sim = sims.iterator().next();
 				final Optional<CallConnectivityType> callConnectivityType = sim.getCallConnectivityType();
 				if (!callConnectivityType.isPresent()) {

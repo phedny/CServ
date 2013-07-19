@@ -22,6 +22,7 @@ import nl.limesco.cserv.invoice.api.InvoiceBuilder;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceCurrency;
 import nl.limesco.cserv.invoice.api.InvoiceService;
+import nl.limesco.cserv.invoice.api.PhoneNumberMissingException;
 import nl.limesco.cserv.invoice.api.QueuedItemLine;
 import nl.limesco.cserv.pricing.api.DataPricing;
 import nl.limesco.cserv.pricing.api.DataPricingRule;
@@ -56,9 +57,9 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 	private volatile CdrService cdrService;
 	
 	private volatile SimService simService;
-
+	
 	@Override
-	public Invoice constructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException {
+	public Invoice constructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException, PhoneNumberMissingException {
 		// Prevent multiple invoice generations from happening simultaneously
 		cdrService.lock();
 		invoiceService.lock();
@@ -70,20 +71,9 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		}
 	}
 	
-	private Invoice lockedConstructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException {
+	private Invoice lockedConstructInvoiceForAccount(Calendar day, String accountId, boolean dry_run) throws IdAllocationException, PhoneNumberMissingException {
 		
 		final UUID builderUUID = UUID.randomUUID();
-
-		/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
-		final Collection<? extends Sim> sims = simService.getActiveSimsByOwnerAccountId(accountId);
-		if (sims.isEmpty()) {
-			return null;
-		}
-
-		if (sims.size() > 1) {
-			return null; // XXX: for now, until #67 is fixed
-		}
-		final Sim accountSim = sims.iterator().next();
 		
 		// Until when will we be processing monthly costs?
 		// (normally "day" is today, so endOfSubscriptionPeriod will be the end of this month)
@@ -284,17 +274,27 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 				continue;
 			}
 
-			/* XXX: This is not right, must be fixed by issue #37 .. with the current situation the result is correct */
+			final Sim thisSim;
+			{
+				final Optional<? extends Sim> optSim = simService.getSimByPhoneNumber(cdr.getFrom());
+				if(!optSim.isPresent()) {
+					throw new PhoneNumberMissingException(cdr.getFrom());
+				}
+				thisSim = optSim.get();
+			}
+			
+			assert(thisSim.getOwnerAccountId().equals(cdr.getAccount().get()));
+			
 			final Calendar cdrTime = cdr.getTime();
 			final boolean inContract;
-			if (accountSim.getContractStartDate().isPresent()) {
-				inContract = accountSim.getContractStartDate().get().before(cdrTime);
+			if (thisSim.getContractStartDate().isPresent()) {
+				inContract = thisSim.getContractStartDate().get().before(cdrTime);
 			} else {
 				inContract = false;
 			}
 			final RuleAndMonth ruleAndMonth = new RuleAndMonth(cdrTime.get(Calendar.YEAR), cdrTime.get(Calendar.MONTH), pricing.get().getPricingRuleId(), inContract);
 			if (!dataRules.containsKey(ruleAndMonth)) {
-				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(accountSim.getApnType().getBundleKilobytes()));
+				dataRules.put(ruleAndMonth, new MonthlyBundleUsage(thisSim.getApnType().getBundleKilobytes()));
 			}
 			dataRules.get(ruleAndMonth).add(cdr.getKilobytes());
 		}

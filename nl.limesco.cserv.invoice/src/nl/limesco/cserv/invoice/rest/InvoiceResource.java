@@ -29,6 +29,7 @@ import nl.limesco.cserv.invoice.api.Invoice;
 import nl.limesco.cserv.invoice.api.InvoiceConstructor;
 import nl.limesco.cserv.invoice.api.InvoiceService;
 import nl.limesco.cserv.invoice.api.InvoiceTransformationService;
+import nl.limesco.cserv.invoice.api.PhoneNumberMissingException;
 import nl.limesco.cserv.invoice.api.QueuedItemLine;
 
 import org.codehaus.jackson.JsonParseException;
@@ -183,6 +184,8 @@ public class InvoiceResource {
 			throw new WebApplicationException(e, Status.CONFLICT);
 		} catch (ParseException e) {
 			throw new WebApplicationException(e);
+		} catch (PhoneNumberMissingException e) {
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
