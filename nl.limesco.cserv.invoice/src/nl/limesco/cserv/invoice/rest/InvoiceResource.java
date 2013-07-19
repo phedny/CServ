@@ -172,7 +172,7 @@ public class InvoiceResource {
 				return Response.ok(invoiceTransformationService.transformToJson(invoice), "application/json").build();
 			}
 			assert(invoice.getId() != null);
-			return Response.created(new URI(account.getId() + "/invoices/" + invoice.getId())).build();
+			return Response.created(new URI("/accounts/" + account.getId() + "/invoices/" + invoice.getId())).build();
 		} catch (IOException e) {
 			throw new WebApplicationException(e);
 		} catch (URISyntaxException e) {

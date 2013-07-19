@@ -95,6 +95,7 @@ public class AccountChecker {
 	
 	protected void checkStateProperties() {
 		switch(account.getState()) {
+		case UNPAID:
 		case UNCONFIRMED:
 			if(account.getEmail() != null && !account.getEmail().isEmpty()) {
 				ProposedChange c = new ProposedChange(ProposedChangeIdentifier.ASK_CONFIRMATION);
