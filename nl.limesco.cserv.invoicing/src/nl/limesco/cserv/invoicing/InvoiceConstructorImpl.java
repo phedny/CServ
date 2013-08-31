@@ -283,7 +283,9 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 				thisSim = optSim.get();
 			}
 			
-			assert(thisSim.getOwnerAccountId().equals(cdr.getAccount().get()));
+			assert(thisSim.getOwnerAccountId().isPresent());
+			assert(cdr.getAccount().isPresent());
+			assert(thisSim.getOwnerAccountId().get().equals(cdr.getAccount().get()));
 			
 			final Calendar cdrTime = cdr.getTime();
 			final boolean inContract;
