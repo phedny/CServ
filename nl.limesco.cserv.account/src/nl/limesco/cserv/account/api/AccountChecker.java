@@ -82,14 +82,9 @@ public class AccountChecker {
 		|| account.getFullName().getLastName() == null
 		|| account.getFullName().getLastName().isEmpty()) {
 			// It's not a real account, because essential properties are unset
-			if(account.getExternalAccounts().isEmpty()) {
-				ProposedChange c = new ProposedChange(ProposedChangeIdentifier.DUMMY_DEACTIVATE);
-				c.changes.put("state", AccountState.DEACTIVATED.toString());
-				proposedChanges.add(c);
-			} else {
-				ProposedChange c = new ProposedChange(ProposedChangeIdentifier.EXTERNAL_DUMMY_MERGE);
-				proposedChanges.add(c);
-			}
+			ProposedChange c = new ProposedChange(ProposedChangeIdentifier.DUMMY_DEACTIVATE);
+			c.changes.put("state", AccountState.DEACTIVATED.toString());
+			proposedChanges.add(c);
 		}
 	}
 	
@@ -112,11 +107,17 @@ public class AccountChecker {
 				proposedChanges.add(c);
 			}
 			break;
-		case CONFIRMATION_REQUESTED:
+		case CONFIRMATION_REQUESTED: {
 			ProposedChange c = new ProposedChange(ProposedChangeIdentifier.PROCESS_CONFIRMATION);
 			c.changes.put("state", AccountState.CONFIRMED.toString());
 			proposedChanges.add(c);
 			break;
+		}
+		case EXTERNAL_STUB: {
+			ProposedChange c = new ProposedChange(ProposedChangeIdentifier.EXTERNAL_DUMMY_MERGE);
+			proposedChanges.add(c);
+			break;
+		}
 		case CONFIRMED:
 		case CONFIRMATION_IMPOSSIBLE:
 		case DEACTIVATED:

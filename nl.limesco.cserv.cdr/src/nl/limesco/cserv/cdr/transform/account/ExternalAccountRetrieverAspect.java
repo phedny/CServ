@@ -6,6 +6,7 @@ import java.util.Map;
 
 import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.account.api.AccountService;
+import nl.limesco.cserv.account.api.AccountState;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrRetriever;
 import nl.limesco.cserv.cdr.api.DataCdr;
@@ -50,6 +51,7 @@ public class ExternalAccountRetrieverAspect implements CdrRetriever {
 				return Optional.of(account.get().getId());
 			} else {
 				final Account newAccount = accountService.createAccount();
+				newAccount.setState(AccountState.EXTERNAL_STUB);
 				final Map<String, String> externalAccounts = Maps.newHashMap();
 				externalAccounts.put(input.getSource(), externalAccount);
 				newAccount.setExternalAccounts(externalAccounts);
