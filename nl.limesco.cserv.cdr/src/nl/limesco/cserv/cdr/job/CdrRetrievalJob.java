@@ -111,6 +111,7 @@ public class CdrRetrievalJob implements Job {
 			final Calendar retrievalStarted = Calendar.getInstance();
 			final String formattedDay = DAY_FORMAT.format(day.getTime());
 			logService.log(LogService.LOG_INFO, "Retrieving CDRs from " + source + " for day " + formattedDay);
+			cdrService.lock();
 			try {
 				for (Cdr cdr : retriever.retrieveCdrsForDay(day)) {
 					cdrService.storeCdr(cdr);
@@ -119,6 +120,8 @@ public class CdrRetrievalJob implements Job {
 				jobStateService.updateJobState(source, day, retrievalStarted);
 			} catch (IOException e) {
 				logService.log(LogService.LOG_WARNING, "Failed to retrieve CDRs from " + source + " for day " + formattedDay, e);
+			} finally {
+				cdrService.unlock();
 			}
 		}
 	}
