@@ -20,4 +20,6 @@ public interface AccountService {
 
 	Account createAccountFromJson(String json) throws IOException;
 	
+	void mergeExternalAccount(Account account, Account external) throws IllegalArgumentException;
+	
 }

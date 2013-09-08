@@ -295,6 +295,35 @@ public class AccountsResource {
 			}
 			return c.getProposedChanges();
 		}
+		
+		@POST
+		@Path("mergeIntoAccount")
+		@Consumes(MediaType.APPLICATION_JSON)
+		public void mergeIntoAccount(String json) {
+			if(!admin) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+			
+			// This is an external references account
+			// json contains a real account without external references
+			// we merge this account into the real account
+			
+			try {
+				Map<String,String> req = new ObjectMapper().readValue(json, Map.class);
+				Optional<? extends Account> optionalAccount = accountService.getAccountById(req.get("account"));
+				if(!optionalAccount.isPresent()) {
+					throw new WebApplicationException(Status.NOT_FOUND);
+				}
+
+				accountService.mergeExternalAccount(optionalAccount.get(), account);
+			} catch (JsonParseException e) {
+				throw new WebApplicationException(e);
+			} catch (JsonMappingException e) {
+				throw new WebApplicationException(e);
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			}
+		}
 	}
 
 }

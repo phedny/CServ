@@ -3,6 +3,8 @@ package nl.limesco.cserv.cdr.api;
 import java.util.Calendar;
 import java.util.Collection;
 
+import nl.limesco.cserv.account.api.Account;
+
 import com.google.common.base.Optional;
 
 public interface CdrService {
@@ -23,6 +25,8 @@ public interface CdrService {
 
 	void setInvoiceIdForBuilder(String builder, String invoiceId);
 
+	void moveCdrs(Account accountFrom, Account accountTo);
+	
 	/**
 	 * Lock the CdrService. This should be done when one starts a process that
 	 * requires CDR information to be consistent (such as invoice generation)

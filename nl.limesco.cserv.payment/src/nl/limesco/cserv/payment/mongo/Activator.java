@@ -1,5 +1,6 @@
 package nl.limesco.cserv.payment.mongo;
 
+import nl.limesco.cserv.account.api.AccountMergeHelper;
 import nl.limesco.cserv.payment.api.PaymentService;
 
 import org.amdatu.mongo.MongoDBService;
@@ -15,6 +16,10 @@ public class Activator extends DependencyActivatorBase {
 				.setInterface(PaymentService.class.getName(), null)
 				.setImplementation(PaymentServiceImpl.class)
 				.add(createServiceDependency().setService(MongoDBService.class).setRequired(true)));
+		manager.add(createComponent()
+				.setInterface(AccountMergeHelper.class.getName(), null)
+				.setImplementation(PaymentAccountMergeHelper.class)
+				.add(createServiceDependency().setService(PaymentService.class).setRequired(true)));
 	}
 
 	@Override

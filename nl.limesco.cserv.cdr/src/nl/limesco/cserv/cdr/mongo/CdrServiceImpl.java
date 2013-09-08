@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import net.vz.mongodb.jackson.DBQuery;
 import net.vz.mongodb.jackson.JacksonDBCollection;
+import nl.limesco.cserv.account.api.Account;
 import nl.limesco.cserv.cdr.api.Cdr;
 import nl.limesco.cserv.cdr.api.CdrService;
 import nl.limesco.cserv.cdr.api.DataCdr;
@@ -173,5 +174,17 @@ public class CdrServiceImpl implements CdrService {
 	@Override
 	public void unlock() {
 		lock.unlock();
+	}
+
+	@Override
+	public void moveCdrs(Account accountFrom, Account accountTo) {
+		lock();
+		try {
+			collection().update(DBQuery.is("account", accountFrom.getId()),
+					new BasicDBObject("$set", new BasicDBObject("account", accountTo.getId())),
+					false, true /* multi */);
+		} finally {
+			unlock();
+		}
 	}
 }

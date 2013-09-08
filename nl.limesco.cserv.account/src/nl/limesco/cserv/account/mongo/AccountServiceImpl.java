@@ -4,14 +4,19 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import net.vz.mongodb.jackson.DBCursor;
 import net.vz.mongodb.jackson.JacksonDBCollection;
 import nl.limesco.cserv.account.api.Account;
+import nl.limesco.cserv.account.api.AccountMergeHelper;
 import nl.limesco.cserv.account.api.AccountService;
+import nl.limesco.cserv.account.api.AccountState;
 
 import org.amdatu.mongo.MongoDBService;
 import org.bson.types.ObjectId;
@@ -29,6 +34,8 @@ public class AccountServiceImpl implements AccountService {
 	private static final Pattern EXTERNAL_SYSTEM_PATTERN = Pattern.compile("[a-z]+");
 	
 	private volatile MongoDBService mongoDBService;
+
+	private List<AccountMergeHelper> mergeHelpers = new ArrayList<AccountMergeHelper>();
 
 	private JacksonDBCollection<AccountImpl, String> collection() {
 		final DBCollection dbCollection = mongoDBService.getDB().getCollection(COLLECTION);
@@ -91,6 +98,40 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account createAccountFromJson(String json) throws IOException {
 		return new ObjectMapper().readValue(json, AccountImpl.class);
+	}
+	
+	public void mergeHelperAdded(AccountMergeHelper helper) {
+		mergeHelpers.add(helper);
+	}
+	
+	public void mergeHelperRemoved(AccountMergeHelper helper) {
+		mergeHelpers.remove(helper);
+	}
+	
+	@Override
+	public void mergeExternalAccount(Account actual, Account external) throws IllegalArgumentException {
+		// Sanity checks:
+		if(external.getState() != AccountState.EXTERNAL_STUB) throw new IllegalArgumentException("External Account must be of EXTERNAL_STUB state");
+		if(actual.getState() == AccountState.EXTERNAL_STUB) throw new IllegalArgumentException("Real Account must not be of EXTERNAL_STUB state");
+		if(external.getExternalAccounts().size() == 0) throw new IllegalArgumentException("External Account must have external references");
+		for(Map.Entry<String, String> entry : external.getExternalAccounts().entrySet()) {
+			if(actual.getExternalAccounts().containsKey(entry.getKey())) {
+				throw new IllegalArgumentException("Real Account already has one of ExternalAccount's external references: " + entry.getKey());
+			}
+			actual.getExternalAccounts().put(entry.getKey(), entry.getValue());
+		}
+		
+		for(AccountMergeHelper mergeHelper : mergeHelpers) {
+			// Will throw if the merge is not allowed.
+			mergeHelper.verifyAccountMerge(external, actual);
+		}
+		
+		for(AccountMergeHelper mergeHelper : mergeHelpers) {
+			mergeHelper.mergeAccount(external, actual);
+		}
+
+		updateAccount(actual);
+		collection().remove(new BasicDBObject().append("_id", new ObjectId(external.getId())));
 	}
 
 }

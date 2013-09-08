@@ -1,5 +1,6 @@
 package nl.limesco.cserv.sim.mongo;
 
+import nl.limesco.cserv.account.api.AccountMergeHelper;
 import nl.limesco.cserv.sim.api.SimService;
 
 import org.amdatu.mongo.MongoDBService;
@@ -15,6 +16,10 @@ public class Activator extends DependencyActivatorBase {
 				.setInterface(SimService.class.getName(), null)
 				.setImplementation(SimServiceImpl.class)
 				.add(createServiceDependency().setService(MongoDBService.class).setRequired(true)));
+		manager.add(createComponent()
+				.setInterface(AccountMergeHelper.class.getName(), null)
+				.setImplementation(SimAccountMergeHelper.class)
+				.add(createServiceDependency().setService(SimService.class).setRequired(true)));
 	}
 
 	@Override

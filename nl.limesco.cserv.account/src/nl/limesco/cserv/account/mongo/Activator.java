@@ -1,5 +1,6 @@
 package nl.limesco.cserv.account.mongo;
 
+import nl.limesco.cserv.account.api.AccountMergeHelper;
 import nl.limesco.cserv.account.api.AccountService;
 
 import org.amdatu.mongo.MongoDBService;
@@ -14,7 +15,8 @@ public class Activator extends DependencyActivatorBase {
 		manager.add(createComponent()
 				.setInterface(AccountService.class.getName(), null)
 				.setImplementation(AccountServiceImpl.class)
-				.add(createServiceDependency().setService(MongoDBService.class).setRequired(true)));
+				.add(createServiceDependency().setService(MongoDBService.class).setRequired(true))
+				.add(createServiceDependency().setService(AccountMergeHelper.class).setRequired(false).setCallbacks("mergeHelperAdded", "mergeHelperRemoved")));
 	}
 
 	@Override
