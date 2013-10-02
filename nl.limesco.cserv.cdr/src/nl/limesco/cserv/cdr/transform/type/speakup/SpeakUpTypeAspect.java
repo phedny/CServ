@@ -73,9 +73,9 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 					throw new IllegalArgumentException("SMS Direction is IN, but Destination is not recognised");
 				}
 				return Optional.of(SmsCdr.Type.EXT_MOBILE);
+			} else {
+				throw new IllegalArgumentException("SMS Direction is not recognised");
 			}
-			
-			return Optional.absent();
 		}
 
 	}

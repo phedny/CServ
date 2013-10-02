@@ -86,9 +86,13 @@ public class CdrServiceImpl implements CdrService {
 		lock();
 		try {
 			if (cdr instanceof VoiceCdr) {
-				collection().insert(new MongoVoiceCdr((VoiceCdr) cdr));
+				MongoVoiceCdr mcdr = new MongoVoiceCdr((VoiceCdr) cdr);
+				assert(mcdr.getType().isPresent());
+				collection().insert(mcdr);
 			} else if (cdr instanceof SmsCdr) {
-				collection().insert(new MongoSmsCdr((SmsCdr) cdr));
+				MongoSmsCdr mcdr = new MongoSmsCdr((SmsCdr) cdr);
+				assert(mcdr.getType().isPresent());
+				collection().insert(mcdr);
 			} else if (cdr instanceof DataCdr) {
 				collection().insert(new MongoDataCdr((DataCdr) cdr));
 			}

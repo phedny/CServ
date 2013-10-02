@@ -254,9 +254,7 @@ public class InvoiceConstructorImpl implements InvoiceConstructor {
 		
 		for (Entry<String, Integer> smsRuleEntry : smsRules.entrySet()) {
 			final Optional<? extends SmsPricingRule> pricingRule = pricingService.getPricingRuleById(SmsPricingRule.class, smsRuleEntry.getKey());
-			if (!pricingRule.isPresent()) {
-				continue;
-			}
+			assert(pricingRule.isPresent());
 			
 			final SmsPricing price = pricingRule.get().getPrice();
 			if (pricingRule.get().isHidden() && price.getPerSms() == 0) {
