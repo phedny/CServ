@@ -57,13 +57,22 @@ public class SpeakUpTypeAspect implements CdrRetriever {
 		public Optional<SmsCdr.Type> getType() {
 			final Map<String, String> info = input.getAdditionalInfo();
 			if ("out".equals(info.get("10"))) {
-				if ("Netherlands - Mobile - Mobile".equals(input.getDestination())) {
-					return Optional.of(SmsCdr.Type.MOBILE_EXT);
+				// By now, the CID shows this is an SMS message and the Direction is "out"
+				// Previously, Destination would also be set to "Netherlands - Mobile - Mobile" in this case
+				// Since October 19 2012, Destination seems to be empty. We only allow these two values:
+				if(!input.getDestination().equals("Netherlands - Mobile - Mobile")
+				&& !input.getDestination().equals("")) {
+					throw new IllegalArgumentException("SMS Direction is OUT, but Destination is not recognised");
 				}
+				return Optional.of(SmsCdr.Type.MOBILE_EXT);
 			} else if ("in".equals(info.get("10"))) {
-				if ("Netherlands - Mobile - SpeakUp".equals(input.getDestination())) {
-					return Optional.of(SmsCdr.Type.EXT_MOBILE);
+				// Same as above: direction is "in", Destination would be set to "Netherlands - Mobile - SpeakUp"
+				// but is empty since October 19 2012. We also allow only these two values here.
+				if(!input.getDestination().equals("Netherlands - Mobile - SpeakUp")
+				&& !input.getDestination().equals("")) {
+					throw new IllegalArgumentException("SMS Direction is IN, but Destination is not recognised");
 				}
+				return Optional.of(SmsCdr.Type.EXT_MOBILE);
 			}
 			
 			return Optional.absent();
